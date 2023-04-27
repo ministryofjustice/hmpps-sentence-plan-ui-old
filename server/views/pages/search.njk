@@ -1,0 +1,42 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set pageTitle = applicationName + " - Search for a person" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+
+<form method="POST">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {{ govukInput({
+      label: {
+        text: "Who is this sentence plan for?",
+        classes: "govuk-label--l",
+        isPageHeading: true
+      },
+      hint: {
+        text: "Search using case reference number (CRN), name, aliases, date of birth..."
+      },
+      value: query,
+      id: "search",
+      name: "search",
+      classes: "govuk-!-width-two-thirds",
+      autocomplete: "off",
+      errorMessage: errorMessage
+    }) }}
+
+    {{ govukButton({ text: "Search" }) }}
+</form>
+
+{% if results | length %}
+    <p data-qa="result-summary">Showing {{ page.from }} to {{ page.to }} of {{ page.totalResults }} results.</p>
+    {{ govukTable({ firstCellIsHeader: true, head: headers, rows: results }) }}
+    {{ govukPagination({ previous: { href: page.prev }, next: { href: page.next }, items: page.items }) }}
+{% elif query != null %}
+    <p>There are no results for your search. Try refining your query above.</p>
+{% endif %}
+{% endblock %}
