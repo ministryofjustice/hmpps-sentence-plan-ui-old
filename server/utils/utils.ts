@@ -21,3 +21,30 @@ export const initialiseName = (fullName?: string): string | null => {
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
 }
+
+export const pagination = (
+  currentPage: number,
+  totalPages: number,
+  totalResults: number,
+  pathFn: (pageNumber: number) => string,
+  maxPagesToShow = 7,
+) => {
+  const firstPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1)
+  const lastPage = Math.min(currentPage + Math.floor(maxPagesToShow / 2), totalPages)
+  return {
+    totalResults,
+    from: (currentPage - 1) * 10 + 1,
+    to: Math.min(currentPage * 10, totalResults),
+    next: currentPage < totalPages ? pathFn(currentPage + 1) : null,
+    prev: currentPage > 1 ? pathFn(currentPage - 1) : null,
+    items: [
+      ...(firstPage > 1 ? [{ ellipsis: true }] : []),
+      ...Array.from({ length: lastPage - firstPage + 1 }, (_, i) => firstPage + i).map(pageNumber => ({
+        number: pageNumber,
+        current: currentPage === pageNumber,
+        href: pathFn(pageNumber),
+      })),
+      ...(lastPage < totalPages ? [{ ellipsis: true }] : []),
+    ],
+  }
+}

@@ -5,35 +5,65 @@
 User interface for the HMPPS Sentence Plan service.
 The back-end API code can be found in https://github.com/ministryofjustice/hmpps-sentence-plan
 
-## Running the app
-The easiest way to run the app is to use docker compose to create the service and all dependencies. 
+* Dev: https://sentence-plan-dev.hmpps.service.justice.gov.uk
 
+## Get started
+### Pre-requisites
+
+You'll need [Node 18.x](https://nodejs.org/download/release/latest-v18.x). 
+If you're using [nvm](https://github.com/nvm-sh/nvm)/[fnm](https://github.com/Schniz/fnm) to manage your Node versions, run:
 ```shell
-docker-compose pull
-docker-compose up
+nvm install --latest-npm
 ```
 
-### Dependencies
-The app requires: 
-* hmpps-auth - for authentication
-* redis - session store and token caching
+Once you have the right Node version, install the package dependencies: 
+```shell
+npm install
+```
 
-### Running the app for development
+### Run the service
 
-To start the main services excluding the example typescript template app: 
+To run the service locally, with dependencies in Docker:
 
 ```shell
+# Start the dependencies only
 docker-compose up --scale=app=0
+
+# Start the UI service and watch for changes
+npm run start:dev
 ```
 
-Install dependencies using `npm install`, ensuring you are using `node v18.x` and `npm v9.x`
+Open http://localhost:3000 in your browser, and login as `AUTH_USER`.
 
-Note: Using `nvm` (or [fnm](https://github.com/Schniz/fnm)), run `nvm install --latest-npm` within the repository folder to use the correct version of node, and the latest version of npm. This matches the `engines` config in `package.json` and the CircleCI build config.
+### Integrate with dev services
 
-And then, to build the assets and start the app with nodemon:
+Alternatively, you can integrate your local UI with the dev/test services deployed on MOJ Cloud Platform using a personal HMPPS Auth client.
+If you don't already have a personal client, request one in the [#hmpps-auth-audit-registers](https://mojdt.slack.com/archives/C02S71KUBED) Slack channel.
 
-`npm run start:dev`
+Create an `.env` file at the root of the project:
+```properties
+NODE_ENV=development
+REDIS_HOST=localhost
+HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
+PROBATION_SEARCH_API_URL=https://probation-offender-search-dev.hmpps.service.justice.gov.uk
 
+# Add your personal client credentials below:
+API_CLIENT_ID=clientid
+API_CLIENT_SECRET=clientsecret
+SYSTEM_CLIENT_ID=clientid
+SYSTEM_CLIENT_SECRET=clientsecret
+```
+
+Then, start the UI service:
+```shell
+# Start Redis only
+docker-compose up redis
+
+# Start the UI service and watch for changes
+npm run start:dev
+```
+
+## Testing
 ### Run linter
 
 `npm run lint`
@@ -44,24 +74,29 @@ And then, to build the assets and start the app with nodemon:
 
 ### Running integration tests
 
-For local running, start a test db, redis, and wiremock instance by:
+To run the Cypress integration tests locally:
 
-`docker-compose -f docker-compose-test.yml up`
+```shell
+# Start dependencies
+docker-compose -f docker-compose-test.yml up
 
-Then run the server in test mode by:
+# Start the UI in test mode
+npm run start-feature:dev
 
-`npm run start-feature` (or `npm run start-feature:dev` to run with nodemon)
+# Run the tests in headless mode:
+npm run int-test
 
-And then either, run tests in headless mode with:
-
-`npm run int-test`
- 
-Or run tests with the cypress UI:
-
-`npm run int-test-ui`
-
+# Or, run the tests with the Cypress UI:
+npm run int-test-ui
+```
 
 ### Dependency Checks
 
 The template project has implemented some scheduled checks to ensure that key dependencies are kept up to date.
 If these are not desired in the cloned project, remove references to `check_outdated` job from `.circleci/config.yml`
+
+## Support
+
+For any issues or questions, please contact the Probation Integration team via
+the [#probation-integration-tech](https://mojdt.slack.com/archives/C02HQ4M2YQN) Slack channel. Or feel free to create
+a [new issue](https://github.com/ministryofjustice/hmpps-sentence-plan-ui/issues/new) in this repository.

@@ -1,19 +1,17 @@
 version: '3.1'
-services:
 
+services:
   redis:
-    image: 'redis:6.2'
+    image: redis:7
     networks:
       - hmpps_int
     ports:
-      - '6379:6379'
+      - "6379:6379"
 
-  wiremock:
+  wiremock-test:
     image: wiremock/wiremock
     networks:
-    - hmpps_int
-    container_name: wiremock
-    restart: always
+      - hmpps_int
     ports:
       - "9091:8080"
 

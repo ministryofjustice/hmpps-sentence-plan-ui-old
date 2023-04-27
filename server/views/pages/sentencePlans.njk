@@ -1,0 +1,22 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+
+{% set pageTitle = applicationName + " - Sentence plans" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">Joe Bloggs
+                <span class="govuk-caption-xl">Tier: D2</span>
+                <span class="govuk-caption-xl">CRN: X123456</span>
+            </h1>
+        </div>
+    </div>
+
+    <p>Joe Bloggs does not have a sentence plan yet.</p>
+
+    {{ govukButton({ text: "Create a sentence plan", href: "/sentence-plans/X123456/create" }) }}
+{% endblock %}
