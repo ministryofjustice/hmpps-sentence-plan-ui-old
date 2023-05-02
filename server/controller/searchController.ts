@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import { pagination } from '../utils/utils'
+import { formatDate, pagination } from '../utils/utils'
 import ProbationSearchClient from '../data/probationSearchClient'
 
 export default class SearchController {
@@ -22,9 +22,9 @@ export default class SearchController {
       res.locals.query = query
       res.locals.headers = [{ text: 'Name' }, { text: 'CRN' }, { text: 'Date of Birth' }]
       res.locals.results = results.content?.map(result => [
-        { html: `<a href='/sentence-plans/${result.otherIds.crn}'>${result.firstName} ${result.surname}</a>` },
+        { html: `<a href='/case/${result.otherIds.crn}'>${result.firstName} ${result.surname}</a>` },
         { text: result.otherIds.crn },
-        { text: result.dateOfBirth },
+        { text: formatDate(result.dateOfBirth) },
       ])
       res.locals.page = pagination(
         currentPage,

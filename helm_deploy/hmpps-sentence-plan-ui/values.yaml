@@ -76,3 +76,4 @@ generic-service:
 
 generic-prometheus-alerts:
   targetApplication: hmpps-sentence-plan-ui
+  alertSeverity: probation-integration-notifications

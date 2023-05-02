@@ -1,0 +1,13 @@
+.moj-task-list__item {
+  &[data-actions]::before {
+    content: "(" attr(data-actions) " actions)";
+    text-align: right;
+    float: right;
+  }
+  &[data-actions="1"]::before { content: "(1 action)" }
+  &[data-actions="0"]::before { content: "(No actions)" }
+
+  .govuk-button {
+    margin-bottom: 0;
+  }
+}

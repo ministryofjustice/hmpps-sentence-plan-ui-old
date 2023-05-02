@@ -40,12 +40,18 @@ Open http://localhost:3000 in your browser, and login as `AUTH_USER`.
 Alternatively, you can integrate your local UI with the dev/test services deployed on MOJ Cloud Platform using a personal HMPPS Auth client.
 If you don't already have a personal client, request one in the [#hmpps-auth-audit-registers](https://mojdt.slack.com/archives/C02S71KUBED) Slack channel.
 
+You'll need the following roles:
+* `ROLE_COMMUNITY` for searching probation cases
+* `ROLE_SENTENCE_PLAN_RW` for accessing sentence plans and Delius case information
+
 Create an `.env` file at the root of the project:
 ```properties
 NODE_ENV=development
 REDIS_HOST=localhost
 HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
+SENTENCE_PLAN_API_URL=https://sentence-plan-api-dev.hmpps.service.justice.gov.uk
 PROBATION_SEARCH_API_URL=https://probation-offender-search-dev.hmpps.service.justice.gov.uk
+DELIUS_INTEGRATION_API_URL=https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk
 
 # Add your personal client credentials below:
 API_CLIENT_ID=clientid

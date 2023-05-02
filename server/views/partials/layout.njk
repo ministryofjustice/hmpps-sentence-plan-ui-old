@@ -23,6 +23,8 @@
 
 {% block header %}
   {% include "./header.njk" %}
+  {% include "./phaseBanner.njk" %}
+  {% block banner %}{% endblock %}
 {% endblock %}
 
 {% block bodyStart %}

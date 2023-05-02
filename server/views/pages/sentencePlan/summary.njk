@@ -1,0 +1,62 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "moj/components/task-list/macro.njk" import mojTaskList %}
+
+{% set pageTitle = applicationName + " - Create a sentence plan" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block content %}
+    {% if sentencePlan.status == 'Draft' %}
+        <h2 class="govuk-heading-xl">Create a sentence plan</h2>
+    {% else %}
+        <h2 class="govuk-heading-xl">Review a sentence plan</h2>
+    {% endif %}
+
+    <div class='govuk-!-width-two-thirds'>
+        {{ govukDetails({
+            summaryText: 'What should I include in a sentence plan?',
+            text: 'Details to be confirmed.'
+        }) }}
+
+        {{ mojTaskList({
+            sections: [
+                {
+                    heading: { text: 'Write about the individual', complete: false },
+                    items: [
+                        { text: 'Engagement and compliance', href: '/sentence-plan/' + sentencePlan.id + '/engagement-and-compliance', complete: true },
+                        { text: 'Something else', href: '#', complete: false }
+                    ]
+                },
+                {
+                    heading: { text: 'Set objectives' },
+                    items: [
+                        { text: 'Complete unpaid work', attributes: {'data-actions': '1'}, href: '/sentence-plan/' + sentencePlan.id + '/objective/1' },
+                        { text: 'Some other objective', attributes: {'data-actions': '3'}, href: '/sentence-plan/' + sentencePlan.id + '/objective/2' },
+                        { html: '<a href="/sentence-plan/' + sentencePlan.id + '/add-objective" role="button" class="govuk-button govuk-button--secondary">Add another</a> <a href="/sentence-plan/' + sentencePlan.id + '/reorder-objectives" role="button" class="govuk-button govuk-button--secondary">Re-order</a>' }
+                    ]
+                },
+                {
+                    heading: { text: 'Final information' },
+                    items: [
+                        { text: 'Your decisions', href: '/sentence-plan/' + sentencePlan.id + '/your-decisions' },
+                        { text: "Individual's comments", href: '/sentence-plan/' + sentencePlan.id + '/individuals-comments' }
+                    ]
+                },
+                {
+                    heading: { text: 'Check your answers' },
+                    items: [
+                        { text: 'Check your answers', href: '/sentence-plan/' + sentencePlan.id + '/check-your-answers' }
+                    ]
+                }
+            ]
+        }) }}
+
+    </div>
+{% endblock %}
