@@ -1,0 +1,259 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "POST",
+        "url": "/probation-search/phrase?page=0&size=10"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "content": [
+            {
+              "offenderId": 2500663692,
+              "firstName": "Joe",
+              "middleNames": [],
+              "surname": "Bloggs",
+              "dateOfBirth": "1980-01-01",
+              "gender": "Male",
+              "otherIds": {
+                "crn": "X000001"
+              },
+              "contactDetails": {
+                "phoneNumbers": [],
+                "emailAddresses": []
+              },
+              "offenderProfile": {
+                "offenderLanguages": {
+                  "requiresInterpreter": false
+                },
+                "previousConviction": {
+                  "detail": {}
+                },
+                "disabilities": [
+                  {
+                    "disabilityId": 2500095589,
+                    "disabilityType": {
+                      "code": "VI",
+                      "description": "Visual Impairment"
+                    },
+                    "startDate": "2022-04-03"
+                  },
+                  {
+                    "disabilityId": 2500095088,
+                    "disabilityType": {
+                      "code": "RM",
+                      "description": "Reduced Mobility"
+                    },
+                    "startDate": "2022-02-08"
+                  }
+                ]
+              },
+              "offenderManagers": [
+                {
+                  "staff": {
+                    "code": "N07UATU",
+                    "forenames": "Unallocated Staff(N07)",
+                    "surname": "Staff"
+                  },
+                  "partitionArea": "National Data",
+                  "softDeleted": false,
+                  "team": {
+                    "code": "N07UAT",
+                    "description": "Unallocated Team(N07)",
+                    "district": {
+                      "code": "N07UAT",
+                      "description": "Unallocated Level 3(N07)"
+                    },
+                    "borough": {
+                      "code": "N07UAT",
+                      "description": "Unallocated Level 2(N07)"
+                    }
+                  },
+                  "probationArea": {
+                    "code": "N07",
+                    "description": "London",
+                    "nps": false
+                  },
+                  "fromDate": "1900-01-01",
+                  "active": true,
+                  "allocationReason": {
+                    "code": "IN1",
+                    "description": "Initial Allocation"
+                  }
+                }
+              ],
+              "softDeleted": false,
+              "currentDisposal": "1",
+              "partitionArea": "National Data",
+              "currentRestriction": false,
+              "restrictionMessage": "This is a restricted offender record. Please contact a system administrator",
+              "currentExclusion": false,
+              "exclusionMessage": "You are excluded from viewing this offender record. Please contact a system administrator",
+              "highlight": {
+                "firstName": ["Joe"],
+                "surname": ["Bloggs"]
+              },
+              "currentTier": "UD0",
+              "activeProbationManagedSentence": true,
+              "probationStatus": {
+                "status": "CURRENT",
+                "inBreach": false,
+                "preSentenceActivity": false,
+                "awaitingPsr": false
+              },
+              "age": 43
+            },
+            {
+              "offenderId": 2500063526,
+              "firstName": "Jane",
+              "middleNames": [],
+              "surname": "Bloggs",
+              "dateOfBirth": "1993-02-01",
+              "gender": "Female",
+              "otherIds": {
+                "crn": "X000002"
+              },
+              "contactDetails": {
+                "phoneNumbers": [],
+                "emailAddresses": []
+              },
+              "offenderProfile": {
+                "offenderLanguages": {
+                  "requiresInterpreter": false
+                },
+                "previousConviction": {
+                  "detail": {}
+                }
+              },
+              "offenderManagers": [
+                {
+                  "staff": {
+                    "code": "N07A001",
+                    "forenames": "John",
+                    "surname": "Smith"
+                  },
+                  "partitionArea": "National Data",
+                  "softDeleted": false,
+                  "team": {
+                    "code": "N07UAT",
+                    "description": "Unallocated Team(N07)",
+                    "district": {
+                      "code": "N07UAT",
+                      "description": "Unallocated Level 3(N07)"
+                    },
+                    "borough": {
+                      "code": "N07UAT",
+                      "description": "Unallocated Level 2(N07)"
+                    }
+                  },
+                  "probationArea": {
+                    "code": "N07",
+                    "description": "London",
+                    "nps": false
+                  },
+                  "fromDate": "1900-01-01",
+                  "active": true,
+                  "allocationReason": {
+                    "code": "IN1",
+                    "description": "Initial Allocation"
+                  }
+                }
+              ],
+              "softDeleted": false,
+              "currentDisposal": "0",
+              "partitionArea": "National Data",
+              "currentRestriction": false,
+              "restrictionMessage": "This is a restricted offender record. Please contact a system administrator",
+              "currentExclusion": false,
+              "exclusionMessage": "You are excluded from viewing this offender record. Please contact a system administrator",
+              "highlight": {
+                "firstName": ["Jo"],
+                "surname": ["Bloggs"]
+              },
+              "currentTier": "NA",
+              "activeProbationManagedSentence": false,
+              "probationStatus": {
+                "status": "NOT_SENTENCED",
+                "inBreach": false,
+                "preSentenceActivity": false,
+                "awaitingPsr": false
+              },
+              "age": 30
+            }
+          ],
+          "pageable": {
+            "sort": {
+              "empty": true,
+              "unsorted": true,
+              "sorted": false
+            },
+            "offset": 10,
+            "pageNumber": 1,
+            "pageSize": 10,
+            "paged": true,
+            "unpaged": false
+          },
+          "probationAreaAggregations": [
+            {
+              "code": "N07",
+              "count": 63
+            },
+            {
+              "code": "N34",
+              "count": 1
+            }
+          ],
+          "suggestions": {
+            "suggest": {
+              "firstName": [
+                {
+                  "text": "joe",
+                  "offset": 0,
+                  "length": 3,
+                  "options": []
+                },
+                {
+                  "text": "bloggs",
+                  "offset": 4,
+                  "length": 6,
+                  "options": []
+                }
+              ],
+              "surname": [
+                {
+                  "text": "joe",
+                  "offset": 0,
+                  "length": 3,
+                  "options": []
+                },
+                {
+                  "text": "bloggs",
+                  "offset": 4,
+                  "length": 6,
+                  "options": []
+                }
+              ]
+            }
+          },
+          "totalElements": 2,
+          "totalPages": 1,
+          "last": false,
+          "size": 2,
+          "number": 0,
+          "sort": {
+            "empty": true,
+            "unsorted": true,
+            "sorted": false
+          },
+          "first": false,
+          "numberOfElements": 2,
+          "empty": false
+        }
+      }
+    }
+  ]
+}

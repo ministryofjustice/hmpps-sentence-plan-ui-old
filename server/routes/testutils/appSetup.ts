@@ -7,7 +7,8 @@ import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
-import { Services } from '../../services'
+import { DeliusService, Services, UserService } from '../../services'
+import { ProbationSearchClient, SentencePlanClient } from '../../data'
 
 export const user = {
   firstName: 'first',
@@ -21,6 +22,15 @@ export const user = {
 }
 
 export const flashProvider = jest.fn()
+
+export function mockServices(): Services {
+  return {
+    userService: new UserService(null) as jest.Mocked<UserService>,
+    deliusService: new DeliusService(null) as jest.Mocked<DeliusService>,
+    probationSearchClient: new ProbationSearchClient(null) as jest.Mocked<ProbationSearchClient>,
+    sentencePlanClient: new SentencePlanClient(null) as jest.Mocked<SentencePlanClient>,
+  }
+}
 
 function appSetup(services: Services, production: boolean, userSupplier: () => Express.User): Express {
   const app = express()

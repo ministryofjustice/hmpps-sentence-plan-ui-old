@@ -1,18 +1,23 @@
 import { dataAccess } from '../data'
 import UserService from './userService'
 import ProbationSearchClient from '../data/probationSearchClient'
+import SentencePlanClient from '../data/sentencePlanClient'
+import DeliusService from './deliusService'
 
 export const services = () => {
-  const { hmppsAuthClient, probationSearchClient } = dataAccess()
+  const { hmppsAuthClient, probationSearchClient, sentencePlanClient, deliusClient } = dataAccess()
 
   const userService = new UserService(hmppsAuthClient)
+  const deliusService = new DeliusService(deliusClient)
 
   return {
     userService,
+    deliusService,
+    sentencePlanClient,
     probationSearchClient,
   }
 }
 
 export type Services = ReturnType<typeof services>
 
-export { UserService, ProbationSearchClient }
+export { UserService, SentencePlanClient, ProbationSearchClient, DeliusService }

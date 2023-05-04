@@ -9,34 +9,30 @@
 
 {% block content %}
 
-<form method="POST">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-    {{ govukInput({
-      label: {
-        text: "Who is this sentence plan for?",
-        classes: "govuk-label--l",
-        isPageHeading: true
-      },
-      hint: {
-        text: "Search using case reference number (CRN), name, aliases, date of birth..."
-      },
-      value: query,
-      id: "search",
-      name: "search",
-      classes: "govuk-!-width-two-thirds",
-      autocomplete: "off",
-      errorMessage: errorMessage
-    }) }}
+        {{ govukInput({
+            label: { text: "Who is this sentence plan for?", classes: "govuk-label--l", isPageHeading: true },
+            hint: { text: "Search using case reference number (CRN), name, aliases, date of birth..." },
+            value: query,
+            errorMessage: errorMessage,
+            id: "search",
+            name: "search",
+            classes: "govuk-!-width-two-thirds",
+            autocomplete: "off"
+        }) }}
 
-    {{ govukButton({ text: "Search" }) }}
-</form>
+        {{ govukButton({ text: "Search" }) }}
+    </form>
 
-{% if results | length %}
-    <p data-qa="result-summary">Showing {{ page.from }} to {{ page.to }} of {{ page.totalResults }} results.</p>
-    {{ govukTable({ firstCellIsHeader: true, head: headers, rows: results }) }}
-    {{ govukPagination({ previous: { href: page.prev }, next: { href: page.next }, items: page.items }) }}
-{% elif query != null %}
-    <p>There are no results for your search. Try refining your query above.</p>
-{% endif %}
+    {% if results | length %}
+        <p data-qa="result-summary">Showing {{ page.from }} to {{ page.to }} of {{ page.totalResults }} results.</p>
+        {{ govukTable({ firstCellIsHeader: true, head: headers, rows: results }) }}
+        {% if page.items | length > 1 %}
+            {{ govukPagination({ previous: { href: page.prev }, next: { href: page.next }, items: page.items }) }}
+        {% endif %}
+    {% elif query != null %}
+        <p>There are no results for your search. Try refining your query above.</p>
+    {% endif %}
 {% endblock %}

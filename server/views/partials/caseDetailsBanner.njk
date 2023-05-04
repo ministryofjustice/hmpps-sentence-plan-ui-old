@@ -1,0 +1,30 @@
+{% if caseDetails %}
+<section class='banner' aria-label='Case details'>
+    <div class='banner-header govuk-width-container'>
+        <span class='govuk-visually-hidden'>Name:</span>
+        <h1 class='banner-title govuk-heading-l govuk-!-margin-bottom-3'>
+            <span class='govuk-!-margin-right-6' data-qa='name'>{{ caseDetails.name | escape  }}</span>
+            <span class='banner-subtitle'>
+                <span class='govuk-body' data-qa='crn'><strong>CRN: </strong>{{ caseDetails.crn | escape }}</span>
+                {% if caseDetails.nomsNumber %}
+                    <span class='govuk-body divider'></span>
+                    <span class='govuk-body' data-qa='noms-number'><strong>NOMS: </strong>{{ caseDetails.nomsNumber | escape }}</span>
+                {% endif %}
+            </span>
+        </h1>
+    </div>
+    <div class='banner-content govuk-width-container govuk-body'>
+        {% if caseDetails.tier %}
+            <span data-qa='tier'><strong>Tier: </strong>{{ caseDetails.tier | escape }}</span>
+            <span class='divider'></span>
+        {% endif %}
+        <span data-qa='dob'><strong>Date of birth: </strong>{{ caseDetails.dateOfBirth | escape }}</span>
+        <span class='divider'></span>
+        <span data-qa='manager'><strong>Manager: </strong>{{ caseDetails.managerName | escape }}</span>
+        <span class='divider'></span>
+        {% if caseDetails.region %}
+            <span data-qa='region'><strong>Region: </strong>{{ caseDetails.region | escape }}</span>
+        {% endif %}
+    </div>
+</section>
+{% endif %}

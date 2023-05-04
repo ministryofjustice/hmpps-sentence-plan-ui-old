@@ -3,22 +3,34 @@
 [![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-sentence-plan-ui/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-sentence-plan-ui)
 
 User interface for the HMPPS Sentence Plan service.
-The back-end API code can be found in https://github.com/ministryofjustice/hmpps-sentence-plan
+The back-end API code can be found in https://github.com/ministryofjustice/hmpps-sentence-plan.
 
 * Dev: https://sentence-plan-dev.hmpps.service.justice.gov.uk
 
 ## Get started
+
 ### Pre-requisites
 
-You'll need [Node 18.x](https://nodejs.org/download/release/latest-v18.x). 
-If you're using [nvm](https://github.com/nvm-sh/nvm)/[fnm](https://github.com/Schniz/fnm) to manage your Node versions, run:
-```shell
-nvm install --latest-npm
-```
+You'll need to install:
 
-Once you have the right Node version, install the package dependencies: 
+* [Node 18.x](https://nodejs.org/download/release/latest-v18.x)*
+* [Docker](https://www.docker.com/)
+
+*If you're already using [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), run:
+`nvm install --latest-npm` at the project root to install the correct Node version automatically.
+
+### Dependencies
+
+Install NPM package dependencies:
+
 ```shell
 npm install
+```
+
+Pull the latest Docker image versions:
+
+```shell
+docker-compose pull
 ```
 
 ### Run the service
@@ -33,19 +45,28 @@ docker-compose up --scale=app=0
 npm run start:dev
 ```
 
-Open http://localhost:3000 in your browser, and login as `AUTH_USER`.
+Open http://localhost:3000 in your browser, and login with the following credentials:
+
+* Username: `AUTH_USER`
+* Password: `password123456`
 
 ### Integrate with dev services
 
 Alternatively, you can integrate your local UI with the dev/test services deployed on MOJ Cloud Platform using a personal HMPPS Auth client.
 If you don't already have a personal client, request one in the [#hmpps-auth-audit-registers](https://mojdt.slack.com/archives/C02S71KUBED) Slack channel.
 
+You'll need the following roles:
+* `ROLE_COMMUNITY` for searching probation cases
+* `ROLE_SENTENCE_PLAN_RW` for accessing sentence plans and Delius case information
+
 Create an `.env` file at the root of the project:
 ```properties
 NODE_ENV=development
 REDIS_HOST=localhost
 HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
+SENTENCE_PLAN_API_URL=https://sentence-plan-api-dev.hmpps.service.justice.gov.uk
 PROBATION_SEARCH_API_URL=https://probation-offender-search-dev.hmpps.service.justice.gov.uk
+DELIUS_INTEGRATION_API_URL=https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk
 
 # Add your personal client credentials below:
 API_CLIENT_ID=clientid

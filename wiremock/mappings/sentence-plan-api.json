@@ -1,0 +1,151 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "/sentence-plan-api/sentence-plan?crn=X000001"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "sentencePlans": [
+            {
+              "id": "00000000-0000-0000-0000-000000000001",
+              "crn": "X000002",
+              "status": "Active",
+              "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]"
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000002",
+              "crn": "X000002",
+              "status": "Closed",
+              "createdDate": "2023-04-23T17:39:37.910173+01:00[Europe/London]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/sentence-plan-api/sentence-plan?crn=X000002"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "sentencePlans": []
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "urlPattern": "/sentence-plan-api/sentence-plan",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": {
+              "expression": "$.crn",
+              "contains": "X000001"
+            }
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000003",
+          "crn": "{{ jsonPath request.body '$.crn' }}",
+          "createdDate": "{{ now }}"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "urlPattern": "/sentence-plan-api/sentence-plan",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": {
+              "expression": "$.crn",
+              "contains": "X000002"
+            }
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000004",
+          "crn": "{{ jsonPath request.body '$.crn' }}",
+          "createdDate": "{{ now }}"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "{{ request.path.[3] }}",
+          "crn": "X000002",
+          "status": "Active",
+          "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000003"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000003",
+          "crn": "X000001",
+          "status": "Draft",
+          "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000004"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000004",
+          "crn": "X000002",
+          "status": "Draft",
+          "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]"
+        }
+      }
+    }
+  ]
+}

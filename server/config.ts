@@ -66,6 +66,14 @@ export default {
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
+    sentencePlan: {
+      url: get('SENTENCE_PLAN_API_URL', 'http://localhost:8081/sentence-plan-api', requiredInProduction),
+      timeout: {
+        response: Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('SENTENCE_PLAN_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: new AgentConfig(Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 5000))),
+    },
     probationSearch: {
       url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8081/probation-search', requiredInProduction),
       timeout: {
@@ -73,6 +81,14 @@ export default {
         deadline: Number(get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 5000)),
       },
       agent: new AgentConfig(Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 5000))),
+    },
+    delius: {
+      url: get('DELIUS_INTEGRATION_API_URL', 'http://localhost:8081/delius', requiredInProduction),
+      timeout: {
+        response: Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('DELIUS_INTEGRATION_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: new AgentConfig(Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 5000))),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),

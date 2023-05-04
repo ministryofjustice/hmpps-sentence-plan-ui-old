@@ -1,3 +1,6 @@
+import { format, parseISO } from 'date-fns'
+import { Name } from '../data/deliusClient'
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -21,6 +24,12 @@ export const initialiseName = (fullName?: string): string | null => {
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
 }
+
+export const joinNonEmpty = (...parts: string[]): string => parts.filter(part => !isBlank(part)).join(' ')
+export const formatName = (name?: Name): string =>
+  name ? joinNonEmpty(name.forename, name.middleName, name.surname) : ''
+
+export const formatDate = (str?: string): string => (str ? format(parseISO(str), 'dd/MM/yyyy') : '')
 
 export const pagination = (
   currentPage: number,

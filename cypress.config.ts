@@ -3,6 +3,8 @@ import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import probationSearch from './integration_tests/mockApis/probationSearch'
+import deliusIntegration from './integration_tests/mockApis/deliusIntegration'
+import sentencePlanApi from './integration_tests/mockApis/sentencePlanApi'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -23,7 +25,9 @@ export default defineConfig({
         reset: resetStubs,
         ...auth,
         ...tokenVerification,
+        ...sentencePlanApi,
         ...probationSearch,
+        ...deliusIntegration,
       })
     },
     baseUrl: 'http://localhost:3007',
