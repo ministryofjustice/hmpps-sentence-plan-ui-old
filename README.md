@@ -3,22 +3,34 @@
 [![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-sentence-plan-ui/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-sentence-plan-ui)
 
 User interface for the HMPPS Sentence Plan service.
-The back-end API code can be found in https://github.com/ministryofjustice/hmpps-sentence-plan
+The back-end API code can be found in https://github.com/ministryofjustice/hmpps-sentence-plan.
 
 * Dev: https://sentence-plan-dev.hmpps.service.justice.gov.uk
 
 ## Get started
+
 ### Pre-requisites
 
-You'll need [Node 18.x](https://nodejs.org/download/release/latest-v18.x). 
-If you're using [nvm](https://github.com/nvm-sh/nvm)/[fnm](https://github.com/Schniz/fnm) to manage your Node versions, run:
-```shell
-nvm install --latest-npm
-```
+You'll need to install:
 
-Once you have the right Node version, install the package dependencies: 
+* [Node 18.x](https://nodejs.org/download/release/latest-v18.x)*
+* [Docker](https://www.docker.com/)
+
+*If you're already using [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), run:
+`nvm install --latest-npm` at the project root to install the correct Node version automatically.
+
+### Dependencies
+
+Install NPM package dependencies:
+
 ```shell
 npm install
+```
+
+Pull the latest Docker image versions:
+
+```shell
+docker-compose pull
 ```
 
 ### Run the service
@@ -33,7 +45,10 @@ docker-compose up --scale=app=0
 npm run start:dev
 ```
 
-Open http://localhost:3000 in your browser, and login as `AUTH_USER`.
+Open http://localhost:3000 in your browser, and login with the following credentials:
+
+* Username: `AUTH_USER`
+* Password: `password123456`
 
 ### Integrate with dev services
 
