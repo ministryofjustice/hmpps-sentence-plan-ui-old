@@ -2,7 +2,7 @@ import Page from './page'
 
 export default class SearchPage extends Page {
   constructor() {
-    super('Who is this sentence plan for?')
+    super('Search for a person')
   }
 
   search = (text = 'testing') => {

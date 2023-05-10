@@ -36,6 +36,8 @@ export interface SentencePlan extends NewSentencePlan {
   id: string
   status: 'Draft' | 'Active' | 'Closed'
   createdDate: string
+  riskFactors: string
+  positiveFactors: string
 }
 
 export interface SentencePlanListResponse {

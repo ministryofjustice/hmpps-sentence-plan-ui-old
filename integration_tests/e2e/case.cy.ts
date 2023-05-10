@@ -23,19 +23,22 @@ context('Case', () => {
       page = Page.verifyOnPage(CasePage)
     })
 
-    it('displays case details banner', () => {
-      cy.get('[data-qa=crn]').should('contain.text', 'X000001')
-      cy.get('[data-qa=noms-number]').should('not.exist')
-      cy.get('[data-qa=tier]').should('contain.text', 'Tier: D2')
-      cy.get('[data-qa=dob]').should('contain.text', 'Date of birth: 01/01/1980')
-      cy.get('[data-qa=manager]').should('contain.text', 'Manager: Unallocated')
-      cy.get('[data-qa=region]').should('contain.text', 'Region: London')
-    })
+    it('displays case details banner', () => page.checkCaseDetails())
 
     it('lists existing sentence plans', () => {
       page.sentencePlans().should('have.length', 2)
       page.addAnotherButton().should('contain.text', 'Add another')
       page.createButton().should('not.exist')
+    })
+
+    it('add button navigates to sentence plan summary', () => {
+      page.addAnotherButton().click()
+      cy.get('h2').should('contain.text', 'Create a sentence plan')
+    })
+
+    it('view button navigates to sentence plan summary', () => {
+      page.sentencePlans().last().find('a').click()
+      cy.get('h2').should('contain.text', 'Review a sentence plan')
     })
   })
 
@@ -59,6 +62,11 @@ context('Case', () => {
       page.sentencePlans().should('not.exist')
       page.addAnotherButton().should('not.exist')
       page.createButton().should('contain.text', 'Create a sentence plan')
+    })
+
+    it('create button navigates to sentence plan summary', () => {
+      page.createButton().click()
+      cy.get('h2').should('contain.text', 'Create a sentence plan')
     })
   })
 })

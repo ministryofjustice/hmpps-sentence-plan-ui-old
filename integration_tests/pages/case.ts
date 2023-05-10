@@ -2,11 +2,7 @@ import Page from './page'
 
 export default class CasePage extends Page {
   constructor() {
-    super('Sentence plans')
-  }
-
-  checkOnPage(): void {
-    cy.get('title').contains('Sentence plans')
+    super('Case summary')
   }
 
   addAnotherButton = () => cy.get('[data-qa=add-another]')

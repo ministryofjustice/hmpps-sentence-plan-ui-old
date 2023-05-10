@@ -13,15 +13,18 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
+beforeEach(() => {
+  services.deliusService.getCaseDetails = jest.fn().mockResolvedValue({
+    crn: '123',
+    name: 'Test Case',
+    dateOfBirth: '1990-01-01',
+    managerName: 'Test',
+    tier: 'T1',
+  })
+})
+
 describe('GET /case', () => {
   beforeEach(() => {
-    services.deliusService.getCaseDetails = jest.fn().mockResolvedValue({
-      crn: '123',
-      name: 'Test Case',
-      dateOfBirth: '1990-01-01',
-      managerName: 'Test',
-      tier: 'T1',
-    })
     services.sentencePlanClient.list = jest.fn().mockResolvedValue({ sentencePlans: [] })
   })
 
@@ -63,5 +66,60 @@ describe('GET /case', () => {
         expect(res.text).toContain('Draft')
         expect(res.text).toContain('2023-05-01')
       })
+  })
+})
+
+describe('GET /sentence-plan', () => {
+  it('should show no completed sections initially', () => {
+    services.sentencePlanClient.get = jest.fn().mockResolvedValue({ crn: '123' })
+    return request(app)
+      .get('/sentence-plan/123/summary')
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).not.toContain('completed'))
+  })
+
+  it('should tag completed sections', () => {
+    services.sentencePlanClient.get = jest.fn().mockResolvedValue({
+      crn: '123',
+      riskFactors: 'Dummy data',
+      positiveFactors: 'More dummy data',
+    })
+    return request(app)
+      .get('/sentence-plan/123/summary')
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('completed'))
+  })
+})
+
+describe('GET /sentence-plan/engagement-and-compliance', () => {
+  beforeEach(() => {
+    services.sentencePlanClient.get = jest.fn().mockResolvedValue({
+      id: '123',
+      riskFactors: 'Existing text',
+    })
+  })
+
+  it('should display existing data', () => {
+    return request(app)
+      .get('/sentence-plan/123/engagement-and-compliance')
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('Existing text'))
+  })
+
+  it('should save data', () => {
+    const updateApi = jest.fn().mockResolvedValue({})
+    services.sentencePlanClient.update = updateApi
+    return request(app)
+      .post('/sentence-plan/123/engagement-and-compliance')
+      .send({ riskFactors: 'Risk factors', positiveFactors: 'Positive factors' })
+      .expect(302)
+      .expect('Location', '/sentence-plan/123/summary')
+      .expect(_ =>
+        expect(updateApi).toBeCalledWith({
+          id: '123',
+          riskFactors: 'Risk factors',
+          positiveFactors: 'Positive factors',
+        }),
+      )
   })
 })
