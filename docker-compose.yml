@@ -24,6 +24,8 @@ services:
 
   wiremock:
     image: wiremock/wiremock
+    command:
+      - --local-response-templating
     networks:
       - hmpps
     ports:

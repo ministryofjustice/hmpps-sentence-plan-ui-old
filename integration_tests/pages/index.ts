@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class IndexPage extends Page {
   constructor() {
-    super('Manage a Sentence Plan')
+    super('Start')
   }
 
   headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')

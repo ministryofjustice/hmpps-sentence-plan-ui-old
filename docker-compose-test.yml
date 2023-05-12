@@ -10,6 +10,8 @@ services:
 
   wiremock-test:
     image: wiremock/wiremock
+    command:
+      - --local-response-templating
     networks:
       - hmpps_int
     ports:

@@ -1,0 +1,50 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Add an objective" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "./summary" }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-!-width-two-thirds">
+        <h2 class="govuk-heading-l">Add an objective</h2>
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukDetails({
+                summaryText: "How should I set an objective?",
+                text: "Details to be confirmed."
+            }) }}
+
+            {{ govukCharacterCount({
+                name: "description",
+                id: "description",
+                maxwords: 50,
+                label: { text: "Describe the objective", classes: "govuk-label--m" },
+                hint: { text: "Explain what the individual will achieve, including things like ..." }
+            }) }}
+            {{ govukCheckboxes({
+                name: "needs",
+                fieldset: {
+                    legend: { text: "Which crimonogenic needs does this objective relate to?", classes: "govuk-fieldset__legend--m" }
+                },
+                hint: { text: "Select at least one." },
+                items: [
+                    { value: "ete", text: "Education, training and employment" },
+                    { value: "accommodation", text: "Accommodation" }
+                ]
+            }) }}
+            {{ govukButton({ text: "Continue" }) }}
+        </form>
+    </div>
+{% endblock %}

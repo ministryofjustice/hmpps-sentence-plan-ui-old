@@ -16,13 +16,20 @@
               "id": "00000000-0000-0000-0000-000000000001",
               "crn": "X000002",
               "status": "Active",
-              "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]"
+              "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]",
+              "activeDate": "2023-04-30T09:57:02.774310+01:00[Europe/London]",
+              "riskFactors": "Dummy data",
+              "positiveFactors": "More dummy data"
             },
             {
               "id": "00000000-0000-0000-0000-000000000002",
               "crn": "X000002",
               "status": "Closed",
-              "createdDate": "2023-04-23T17:39:37.910173+01:00[Europe/London]"
+              "createdDate": "2023-04-23T17:39:37.910173+01:00[Europe/London]",
+              "activeDate": "2023-04-23T19:15:27.384629+01:00[Europe/London]",
+              "closedDate": "2023-04-30T12:34:32.983675+01:00[Europe/London]",
+              "riskFactors": "Dummy data",
+              "positiveFactors": "More dummy data"
             }
           ]
         }
@@ -57,15 +64,14 @@
         ]
       },
       "response": {
-        "status": 200,
+        "status": 201,
         "headers": {
           "Content-Type": "application/json"
         },
         "jsonBody": {
-          "id": "00000000-0000-0000-0000-000000000003",
-          "crn": "{{ jsonPath request.body '$.crn' }}",
-          "createdDate": "{{ now }}"
-        }
+          "id": "00000000-0000-0000-0000-000000000003"
+        },
+        "transformers": ["response-template"]
       }
     },
     {
@@ -82,33 +88,23 @@
         ]
       },
       "response": {
-        "status": 200,
+        "status": 201,
         "headers": {
           "Content-Type": "application/json"
         },
         "jsonBody": {
-          "id": "00000000-0000-0000-0000-000000000004",
-          "crn": "{{ jsonPath request.body '$.crn' }}",
-          "createdDate": "{{ now }}"
-        }
+          "id": "00000000-0000-0000-0000-000000000004"
+        },
+        "transformers": ["response-template"]
       }
     },
     {
       "request": {
-        "method": "GET",
+        "method": "PUT",
         "urlPattern": "/sentence-plan-api/sentence-plan/(.*)"
       },
       "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "jsonBody": {
-          "id": "{{ request.path.[3] }}",
-          "crn": "X000002",
-          "status": "Active",
-          "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]"
-        }
+        "status": 204
       }
     },
     {
@@ -145,6 +141,28 @@
           "status": "Draft",
           "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]"
         }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "{{ request.path.[2] }}",
+          "crn": "X000002",
+          "status": "Active",
+          "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]",
+          "activeDate": "2023-04-30T09:57:02.774310+01:00[Europe/London]",
+          "riskFactors": "Dummy data",
+          "positiveFactors": "More dummy data"
+        },
+        "transformers": ["response-template"]
       }
     }
   ]

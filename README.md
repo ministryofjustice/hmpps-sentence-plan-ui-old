@@ -39,7 +39,7 @@ To run the service locally, with dependencies in Docker:
 
 ```shell
 # Start the dependencies only
-docker-compose up --scale=app=0
+docker-compose up -d --scale=app=0
 
 # Start the UI service and watch for changes
 npm run start:dev
@@ -99,7 +99,7 @@ To run the Cypress integration tests locally:
 
 ```shell
 # Start dependencies
-docker-compose -f docker-compose-test.yml up
+docker-compose -f docker-compose-test.yml up -d
 
 # Start the UI in test mode
 npm run start-feature:dev

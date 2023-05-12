@@ -1,0 +1,49 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Engagement and compliance" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "./summary" }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-!-width-two-thirds">
+        <span class="govuk-caption-l">Write about the individual</span>
+        <h1 class="govuk-heading-l">Engagement and Compliance</h1>
+        <p class="govuk-body">
+            Record key information about the individual that could impact achievement of the sentence plan.
+            Make sure to also include what impact these factors have.
+        </p>
+
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukCharacterCount({
+                name: "risk-factors",
+                id: "risk-factors",
+                value: sentencePlan.riskFactors,
+                threshold: 50,
+                maxlength: 5000,
+                label: { text: "Identify risk factors which may affect engagement and compliance", classes: "govuk-label--m" },
+                hint: { text: "For example: any learning difficulties or disabilities, mental well-being, difficult relationships, or diversity issues." }
+            }) }}
+            {{ govukCharacterCount({
+                name: "positive-factors",
+                id: "positive-factors",
+                value: sentencePlan.positiveFactors,
+                threshold: 50,
+                maxlength: 5000,
+                label: { text: "Identify protective factors to be maintained or developed", classes: "govuk-label--m" },
+                hint: { text: "Describe any protective factors and strengths that could positively affect achievement of the sentence plan." }
+            }) }}
+            {{ govukButton({ text: "Continue" }) }}
+        </form>
+    </div>
+{% endblock %}
