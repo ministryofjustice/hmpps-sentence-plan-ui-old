@@ -131,7 +131,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - PI-1025_outofhoursalerts
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -140,7 +140,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - PI-1025_outofhoursalerts
           requires:
             - helm_lint
             - unit_test
