@@ -4,6 +4,7 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitle = applicationName + " - Add an objective" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -21,6 +22,15 @@
         <h2 class="govuk-heading-l">Add an objective</h2>
         <form method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                          errorList: [
+                            {
+                              text: "Please write an objective",
+                              href: "#description"
+                            }
+                          ]
+            }) }}
             {{ govukDetails({
                 summaryText: "How should I set an objective?",
                 text: "Details to be confirmed."
@@ -29,6 +39,8 @@
             {{ govukCharacterCount({
                 name: "description",
                 id: "description",
+
+                minwords: 1,
                 maxwords: 50,
                 label: { text: "Describe the objective", classes: "govuk-label--m" },
                 hint: { text: "Explain what the individual will achieve, including things like ..." }
@@ -44,7 +56,10 @@
                     { value: "accommodation", text: "Accommodation" }
                 ]
             }) }}
-            {{ govukButton({ text: "Continue" }) }}
+            <div class="govuk-button-group">
+            {{ govukButton({ type: Submit, text: "Continue" }) }}
+            {{ govukButton({ classes: "govuk-button--secondary", text: "Cancel", href: "./summary" }) }}
+            </div>
         </form>
     </div>
 {% endblock %}
