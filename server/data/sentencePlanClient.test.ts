@@ -26,11 +26,11 @@ describe('Sentence Plan client', () => {
     nock.cleanAll()
   })
 
-  describe('list', () => {
+  describe('listSentencePlans', () => {
     it('should return data from api', async () => {
       const results = { sentencePlans: [{ crn: '123' }] }
       mockSentencePlanApi.get('/sentence-plan?crn=123').reply(200, results)
-      const output = await sentencePlanClient.list('123')
+      const output = await sentencePlanClient.listSentencePlans('123')
       expect(output).toEqual(results)
     })
   })

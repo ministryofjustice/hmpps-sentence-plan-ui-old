@@ -7,11 +7,17 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
+  async function loadSentencePlan(id: string) {
+    const sentencePlan = await service.sentencePlanClient.getSentencePlan(id)
+    const caseDetails = await service.deliusService.getCaseDetails(sentencePlan.crn)
+    return { caseDetails, sentencePlan }
+  }
+
   get('/case/:crn', async function loadCaseSummary(req, res) {
     const { crn } = req.params
     const [caseDetails, { sentencePlans }] = await Promise.all([
       service.deliusService.getCaseDetails(crn),
-      service.sentencePlanClient.list(crn),
+      service.sentencePlanClient.listSentencePlans(crn),
     ])
 
     res.render('pages/case', {
@@ -27,35 +33,36 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
   get('/case/:crn/create-sentence-plan', async function createSentencePlan(req, res) {
     const { crn } = req.params
-    const { id } = await service.sentencePlanClient.create({ crn })
+    const { id } = await service.sentencePlanClient.createSentencePlan({ crn })
     res.redirect(`/sentence-plan/${id}/summary`)
   })
 
   get('/sentence-plan/:id/summary', async function loadSentencePlanSummary(req, res) {
-    res.render('pages/sentencePlan/summary', await loadContext(req.params.id))
+    const { id } = req.params
+    const [sentencePlan, objectivesList] = await Promise.all([
+      service.sentencePlanClient.getSentencePlan(id),
+      service.sentencePlanClient.listObjectives(id),
+    ])
+    const caseDetails = await service.deliusService.getCaseDetails(sentencePlan.crn)
+    const objectives = objectivesList.objectives.map((it, i) => ({
+      text: `${i + 1}. ${it.description}`,
+      href: `./objective/${it.id}`,
+      attributes: { 'data-actions': it.actionsCount || 0 },
+    }))
+    res.render('pages/sentencePlan/summary', { caseDetails, sentencePlan, objectives })
   })
 
   get('/sentence-plan/:id/engagement-and-compliance', async (req, res) => {
-    res.render('pages/sentencePlan/engagementAndCompliance', await loadContext(req.params.id))
+    res.render('pages/sentencePlan/engagementAndCompliance', await loadSentencePlan(req.params.id))
   })
 
   post('/sentence-plan/:id/engagement-and-compliance', async function updateEngagementAndCompliance(req, res) {
     const { id } = req.params
     const { riskFactors, positiveFactors } = req.body
-    const existingSentencePlan = await service.sentencePlanClient.get(id)
-    await service.sentencePlanClient.update({ ...existingSentencePlan, riskFactors, positiveFactors })
+    const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
+    await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, riskFactors, positiveFactors })
     res.redirect(`/sentence-plan/${id}/summary`)
   })
-
-  get('/sentence-plan/:id/add-objective', async (req, res) => {
-    res.render('pages/sentencePlan/addObjective', await loadContext(req.params.id))
-  })
-
-  const loadContext = async (id: string) => {
-    const sentencePlan = await service.sentencePlanClient.get(id)
-    const caseDetails = await service.deliusService.getCaseDetails(sentencePlan.crn)
-    return { caseDetails, sentencePlan }
-  }
 
   return router
 }

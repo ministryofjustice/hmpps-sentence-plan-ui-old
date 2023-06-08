@@ -10,11 +10,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if sentencePlan.status == "Draft" %}
-        <h2 class="govuk-heading-xl">Create a sentence plan</h2>
-    {% else %}
-        <h2 class="govuk-heading-xl">Review a sentence plan</h2>
-    {% endif %}
+    <h2 class="govuk-heading-xl">Create a sentence plan</h2>
 
     <div class="govuk-!-width-two-thirds">
         {{ govukDetails({
@@ -26,22 +22,18 @@
             sections: [
                 {
                     heading: { text: "Write about the individual" },
-                    items: [
-                        {
-                            text: "Engagement and compliance",
-                            href: "./engagement-and-compliance",
-                            complete: sentencePlan.riskFactors != null and sentencePlan.positiveFactors != null
-                        },
-                        { text: "Something else", href: "#", complete: false }
-                    ]
+                    items: [{
+                        text: "Engagement and compliance",
+                        href: "./engagement-and-compliance",
+                        complete: sentencePlan.riskFactors != null and sentencePlan.positiveFactors != null
+                    }]
                 },
                 {
                     heading: { text: "Set objectives" },
-                    items: [
-                        { text: "1. Complete unpaid work", attributes: {"data-actions": "1"}, href: "./objective/1" },
-                        { text: "2. Some other objective", attributes: {"data-actions": "3"}, href: "./objective/2" },
-                        { html: "<a href='./add-objective' role='button' class='govuk-button govuk-button--secondary'>Add another</a> <a href='./reorder-objectives' role='button' class='govuk-button govuk-button--secondary'>Re-order</a>" }
-                    ]
+                    items: objectives.concat({
+                        html: "<a href='./add-objective' role='button' class='govuk-button govuk-button--secondary' data-qa='add-objective'>" + ("Add an objective" if objectives.length == 0 else "Add another") + "</a>" +
+                            (" <a href='./reorder-objectives' role='button' class='govuk-button govuk-button--secondary' data-qa='reorder-objectives'>Re-order</a>" if objectives.length > 1 else "")
+                    })
                 },
                 {
                     heading: { text: "Final information" },

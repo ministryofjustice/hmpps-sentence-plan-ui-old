@@ -21,11 +21,14 @@ beforeEach(() => {
     managerName: 'Test',
     tier: 'T1',
   })
+  services.sentencePlanClient.listObjectives = jest.fn().mockResolvedValue({
+    objectives: [],
+  })
 })
 
 describe('GET /case', () => {
   beforeEach(() => {
-    services.sentencePlanClient.list = jest.fn().mockResolvedValue({ sentencePlans: [] })
+    services.sentencePlanClient.listSentencePlans = jest.fn().mockResolvedValue({ sentencePlans: [] })
   })
 
   it('should render case details banner', () => {
@@ -49,7 +52,7 @@ describe('GET /case', () => {
   })
 
   it('should display existing sentence plans', () => {
-    services.sentencePlanClient.list = jest.fn().mockResolvedValue({
+    services.sentencePlanClient.listSentencePlans = jest.fn().mockResolvedValue({
       sentencePlans: [
         {
           id: '123',
@@ -71,7 +74,7 @@ describe('GET /case', () => {
 
 describe('GET /sentence-plan', () => {
   it('should show no completed sections initially', () => {
-    services.sentencePlanClient.get = jest.fn().mockResolvedValue({ crn: '123' })
+    services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({ crn: '123' })
     return request(app)
       .get('/sentence-plan/123/summary')
       .expect('Content-Type', /html/)
@@ -79,7 +82,7 @@ describe('GET /sentence-plan', () => {
   })
 
   it('should tag completed sections', () => {
-    services.sentencePlanClient.get = jest.fn().mockResolvedValue({
+    services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({
       crn: '123',
       riskFactors: 'Dummy data',
       positiveFactors: 'More dummy data',
@@ -89,11 +92,22 @@ describe('GET /sentence-plan', () => {
       .expect('Content-Type', /html/)
       .expect(res => expect(res.text).toContain('completed'))
   })
+
+  it('should list objectives', () => {
+    services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({ crn: '123' })
+    services.sentencePlanClient.listObjectives = jest.fn().mockResolvedValue({
+      objectives: [{ description: 'Existing objective' }],
+    })
+    return request(app)
+      .get('/sentence-plan/123/summary')
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('Existing objective'))
+  })
 })
 
 describe('GET /sentence-plan/engagement-and-compliance', () => {
   beforeEach(() => {
-    services.sentencePlanClient.get = jest.fn().mockResolvedValue({
+    services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({
       id: '123',
       riskFactors: 'Existing text',
     })
@@ -108,7 +122,7 @@ describe('GET /sentence-plan/engagement-and-compliance', () => {
 
   it('should save data', () => {
     const updateApi = jest.fn().mockResolvedValue({})
-    services.sentencePlanClient.update = updateApi
+    services.sentencePlanClient.updateSentencePlan = updateApi
     return request(app)
       .post('/sentence-plan/123/engagement-and-compliance')
       .send({ riskFactors: 'Risk factors', positiveFactors: 'Positive factors' })

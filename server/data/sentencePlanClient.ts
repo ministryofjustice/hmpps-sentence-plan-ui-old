@@ -7,24 +7,47 @@ export default class SentencePlanClient {
 
   constructor(private hmppsAuthClient: HmppsAuthClient) {}
 
-  async list(crn: string): Promise<SentencePlanListResponse> {
+  async listSentencePlans(crn: string): Promise<SentencePlanListResponse> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).get({ path: `/sentence-plan?crn=${crn}` })
   }
 
-  async get(id: string): Promise<SentencePlan> {
+  async getSentencePlan(id: string): Promise<SentencePlan> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).get({ path: `/sentence-plan/${id}` })
   }
 
-  async create(sentencePlan: NewSentencePlan): Promise<SentencePlan> {
+  async createSentencePlan(sentencePlan: NewSentencePlan): Promise<SentencePlan> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).post({ path: `/sentence-plan`, data: sentencePlan })
   }
 
-  async update(sentencePlan: SentencePlan): Promise<SentencePlan> {
+  async updateSentencePlan(sentencePlan: SentencePlan): Promise<SentencePlan> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).put({ path: `/sentence-plan/${sentencePlan.id}`, data: sentencePlan })
+  }
+
+  async listObjectives(sentencePlanId: string): Promise<ObjectiveListResponse> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).get({ path: `/sentence-plan/${sentencePlanId}/objective` })
+  }
+
+  async getObjective(sentencePlanId: string, objectiveId: string): Promise<Objective> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).get({ path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}` })
+  }
+
+  async createObjective(sentencePlanId: string, objective: NewObjective): Promise<Objective> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).post({ path: `/sentence-plan/${sentencePlanId}/objective`, data: objective })
+  }
+
+  async updateObjective(sentencePlanId: string, objectiveId: string, objective: NewObjective): Promise<Objective> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).put({
+      path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}`,
+      data: objective,
+    })
   }
 }
 
@@ -42,4 +65,19 @@ export interface SentencePlan extends NewSentencePlan {
 
 export interface SentencePlanListResponse {
   sentencePlans: SentencePlan[]
+}
+
+export interface NewObjective extends Record<string, unknown> {
+  description: string
+  needs: Array<string>
+}
+
+export interface Objective extends NewObjective {
+  id: string
+  sentencePlanId: string
+  actionsCount: number
+}
+
+export interface ObjectiveListResponse {
+  objectives: Objective[]
 }
