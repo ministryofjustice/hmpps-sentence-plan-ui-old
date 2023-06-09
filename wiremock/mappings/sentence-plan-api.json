@@ -14,22 +14,18 @@
           "sentencePlans": [
             {
               "id": "00000000-0000-0000-0000-000000000001",
-              "crn": "X000002",
-              "status": "Active",
+              "crn": "X000001",
+              "status": "Draft",
               "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]",
-              "activeDate": "2023-04-30T09:57:02.774310+01:00[Europe/London]",
-              "riskFactors": "Dummy data",
-              "positiveFactors": "More dummy data"
+              "activeDate": "2023-04-30T09:57:02.774310+01:00[Europe/London]"
             },
             {
               "id": "00000000-0000-0000-0000-000000000002",
-              "crn": "X000002",
+              "crn": "X000001",
               "status": "Closed",
               "createdDate": "2023-04-23T17:39:37.910173+01:00[Europe/London]",
               "activeDate": "2023-04-23T19:15:27.384629+01:00[Europe/London]",
-              "closedDate": "2023-04-30T12:34:32.983675+01:00[Europe/London]",
-              "riskFactors": "Dummy data",
-              "positiveFactors": "More dummy data"
+              "closedDate": "2023-04-30T12:34:32.983675+01:00[Europe/London]"
             }
           ]
         }
@@ -110,6 +106,58 @@
     {
       "request": {
         "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000001"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "{{ request.path.[2] }}",
+          "crn": "X000001",
+          "status": "Draft",
+          "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]",
+          "activeDate": "2023-04-30T09:57:02.774310+01:00[Europe/London]",
+          "riskFactors": "Dummy data",
+          "positiveFactors": "More dummy data"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000001/objective"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "objectives": [
+            {
+              "id": "00000000-0000-0000-0000-00000000000a",
+              "description": "Complete unpaid work plan for the next three months",
+              "actionsCount": 1
+            },
+            {
+              "id": "00000000-0000-0000-0000-00000000000b",
+              "description": "Another objective",
+              "actionsCount": 3
+            },
+            {
+              "id": "00000000-0000-0000-0000-00000000000c",
+              "description": "And another objective with a description that is too long to fit in a single line. The objective description can be up to 50 words."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
         "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000003"
       },
       "response": {
@@ -146,7 +194,7 @@
     {
       "request": {
         "method": "GET",
-        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)"
+        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective"
       },
       "response": {
         "status": 200,
@@ -154,15 +202,37 @@
           "Content-Type": "application/json"
         },
         "jsonBody": {
-          "id": "{{ request.path.[2] }}",
-          "crn": "X000002",
-          "status": "Active",
-          "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]",
-          "activeDate": "2023-04-30T09:57:02.774310+01:00[Europe/London]",
-          "riskFactors": "Dummy data",
-          "positiveFactors": "More dummy data"
+          "objectives": []
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
         },
-        "transformers": ["response-template"]
+        "jsonBody": {}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective/(.*)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "description": "Test objective",
+          "needs": ["accommodation", "employability"]
+        }
       }
     }
   ]

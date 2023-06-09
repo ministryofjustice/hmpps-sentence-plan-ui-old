@@ -1,0 +1,85 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Set an objective" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-!-width-two-thirds">
+        <h2 class="govuk-heading-l">Set an objective</h2>
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukDetails({
+                summaryText: "What should I include in an objective?",
+                text: "Details to be confirmed."
+            }) }}
+
+            {{ govukCharacterCount({
+                name: "description",
+                id: "description",
+                label: { text: "Describe the objective", classes: "govuk-label--m" },
+                hint: { text: "Explain what the individual will achieve, including things like ..." },
+                maxwords: 50,
+                errorMessage: errorMessages.description,
+                value: objective.description
+            }) }}
+
+            {% set needsHtml %}
+                {{ govukCheckboxes({
+                    name: "needs",
+                    fieldset: {
+                        legend: { text: "Which crimonogenic needs does this objective relate to?", classes: "govuk-fieldset__legend--m" }
+                    },
+                    hint: { text: "Select at least one." },
+                    errorMessage: errorMessages.needs,
+                    items: [
+                        { value: "accommodation", text: "Accommodation", checked: objective.needs and "accommodation" in objective.needs },
+                        { value: "alcohol", text: "Alcohol misuse", checked: objective.needs and "alcohol" in objective.needs },
+                        { value: "attitudes", text: "Attitudes", checked: objective.needs and "attitudes" in objective.needs },
+                        { value: "drugs", text: "Drug misuse", checked: objective.needs and "drugs" in objective.needs },
+                        { value: "employability", text: "Education, training and employment", checked: objective.needs and "employability" in objective.needs },
+                        { value: "lifestyle", text: "Lifestyle", checked: objective.needs and "lifestyle" in objective.needs },
+                        { value: "relationships", text: "Relationships", checked: objective.needs and "relationships" in objective.needs },
+                        { value: "behaviour", text: "Thinking and behaviour", checked: objective.needs and "behaviour" in objective.needs }
+                    ]
+                }) }}
+            {% endset -%}
+
+            {{ govukRadios({
+                name: "relates-to-needs",
+                fieldset: {
+                    legend: { text: "Does this objective link to a criminogenic need?", classes: "govuk-fieldset__legend--m" }
+                },
+                errorMessage: errorMessages.relatesToNeeds,
+                items: [
+                    {
+                        value: "yes",
+                        text: "Yes",
+                        conditional: { html: needsHtml },
+                        checked: errorMessages.needs or (objective.needs and objective.needs.length > 0)
+                    },
+                    { value: "no", text: "No" }
+                ]
+            }) }}
+
+            <div class="govuk-button-group">
+                {{ govukButton({ type: "Submit", text: "Continue" }) }}
+                {{ govukButton({ classes: "govuk-button--secondary", text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

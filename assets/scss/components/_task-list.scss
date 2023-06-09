@@ -1,4 +1,10 @@
 .moj-task-list__item {
+  .moj-task-list__task-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &[data-actions]::before {
     content: "(" attr(data-actions) " actions)";
     text-align: right;

@@ -35,11 +35,6 @@ context('Case', () => {
       page.addAnotherButton().click()
       cy.get('h2').should('contain.text', 'Create a sentence plan')
     })
-
-    it('view button navigates to sentence plan summary', () => {
-      page.sentencePlans().last().find('a').click()
-      cy.get('h2').should('contain.text', 'Review a sentence plan')
-    })
   })
 
   context('new', () => {

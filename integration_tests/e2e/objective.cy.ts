@@ -3,9 +3,10 @@ import Page from '../pages/page'
 import SearchPage from '../pages/search'
 import CasePage from '../pages/case'
 import SummaryPage from '../pages/summary'
+import ObjectivePage from '../pages/objective'
 
-context('Sentence plan summary', () => {
-  let page: SummaryPage
+context('Objective', () => {
+  let page: ObjectivePage
 
   beforeEach(() => {
     cy.task('reset')
@@ -21,16 +22,18 @@ context('Sentence plan summary', () => {
     Page.verifyOnPage(IndexPage).startButton().click()
     Page.verifyOnPage(SearchPage).search().selectFirstResult()
     Page.verifyOnPage(CasePage).addAnotherButton().click()
-    page = Page.verifyOnPage(SummaryPage)
+    Page.verifyOnPage(SummaryPage).addObjectiveButton().click()
+    page = Page.verifyOnPage(ObjectivePage)
   })
 
   it('displays case details banner', () => page.checkCaseDetails())
 
-  it('displays engagement and compliance link', () => {
-    page.engagementAndCompliance().should('exist').should('have.attr', 'href', './engagement-and-compliance')
-  })
-
-  it('displays add objective button', () => {
-    page.addObjectiveButton().should('exist').should('have.attr', 'href', './add-objective')
+  it('data can be entered', () => {
+    cy.get('#description').type('Test objective description')
+    cy.get('#relates-to-needs').check('yes')
+    cy.get('[name=needs]').check('accommodation')
+    cy.get('[name=needs]').check('attitudes')
+    cy.get('form').submit()
+    cy.url().should('contain', '/summary')
   })
 })
