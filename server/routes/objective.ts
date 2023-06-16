@@ -32,7 +32,6 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     if (req.body['relates-to-needs'] === 'yes' && (objective.needs == null || objective.needs.length === 0)) {
       errorMessages.needs = { text: 'Select at least one criminogenic need' }
     }
-
     if (Object.keys(errorMessages).length > 0) {
       res.render('pages/sentencePlan/objective', { errorMessages, objective, ...(await loadObjective(sentencePlanId)) })
       return false
