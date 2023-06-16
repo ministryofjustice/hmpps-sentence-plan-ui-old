@@ -33,7 +33,7 @@ context('Objective', () => {
     cy.get('#relates-to-needs').check('yes')
     cy.get('[name=needs]').check('accommodation')
     cy.get('[name=needs]').check('attitudes')
-    cy.get('#motivation').check('Pre-contemplation')
+    cy.get('[name=motivation]').check('Pre-contemplation')
     cy.get('form').submit()
     cy.url().should('contain', '/summary')
   })
