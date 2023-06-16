@@ -33,7 +33,7 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
       errorMessages.needs = { text: 'Select at least one criminogenic need' }
     }
     if (req.body.motivation == null) {
-      errorMessages.Motivation = { text: 'Please select a motivation level' }
+      errorMessages.motivation = { text: 'Please select a motivation level' }
     }
     if (Object.keys(errorMessages).length > 0) {
       res.render('pages/sentencePlan/objective', { errorMessages, objective, ...(await loadObjective(sentencePlanId)) })
@@ -50,7 +50,7 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
   post('/sentence-plan/:sentencePlanId/add-objective', async function addObjective(req, res) {
     const { sentencePlanId } = req.params
     const { description, needs, motivation } = req.body
-    const objective = { description, motivation: motivation || [], needs: needs || [] }
+    const objective = { description, motivation, needs: needs || [] }
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       await service.sentencePlanClient.createObjective(sentencePlanId, objective)
       res.redirect(`/sentence-plan/${sentencePlanId}/summary`)
@@ -65,7 +65,7 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
   post('/sentence-plan/:sentencePlanId/objective/:objectiveId', async function updateObjective(req, res) {
     const { sentencePlanId, objectiveId } = req.params
     const { description, motivation, needs } = req.body
-    const objective = { description, motivation: motivation || [], needs: needs || [] }
+    const objective = { description, motivation, needs: needs || [] }
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       await service.sentencePlanClient.updateObjective(sentencePlanId, objectiveId, objective)
       res.redirect(`/sentence-plan/${sentencePlanId}/summary`)
