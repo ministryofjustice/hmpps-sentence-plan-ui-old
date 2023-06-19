@@ -37,7 +37,7 @@
 
             {% set needsHtml %}
                 {{ govukCheckboxes({
-                    name: "needs",
+                    name: "needs[]",
                     fieldset: {
                         legend: { text: "Which crimonogenic needs does this objective relate to?", classes: "govuk-fieldset__legend--m" }
                     },

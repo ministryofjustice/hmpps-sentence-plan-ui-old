@@ -5,6 +5,7 @@ import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import probationSearch from './integration_tests/mockApis/probationSearch'
 import deliusIntegration from './integration_tests/mockApis/deliusIntegration'
 import sentencePlanApi from './integration_tests/mockApis/sentencePlanApi'
+import interventionApi from './integration_tests/mockApis/interventionApi'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -28,6 +29,7 @@ export default defineConfig({
         ...sentencePlanApi,
         ...probationSearch,
         ...deliusIntegration,
+        ...interventionApi,
       })
     },
     baseUrl: 'http://localhost:3007',

@@ -25,6 +25,9 @@ beforeEach(() => {
   services.sentencePlanClient.getObjective = jest
     .fn()
     .mockResolvedValue({ crn: '123', description: 'Existing objective' })
+  services.interventionsClient.getNationalInterventionNames = jest
+    .fn()
+    .mockResolvedValue(['Intervention A', 'Intervention B'])
 })
 
 describe('GET /sentence-plan/objective/add-action', () => {
@@ -34,6 +37,14 @@ describe('GET /sentence-plan/objective/add-action', () => {
       .expect('Content-Type', /html/)
       .expect(res => expect(res.text).toContain('></textarea'))
       .expect(res => expect(res.text).toContain('id="intervention-type-container" class="govuk-visually-hidden"'))
+  })
+
+  it('should display national interventions list', () => {
+    return request(app)
+      .get('/sentence-plan/1/objective/2/add-action')
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('Intervention A'))
+      .expect(res => expect(res.text).toContain('Intervention B'))
   })
 
   it('should validate description', () => {

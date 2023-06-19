@@ -67,12 +67,17 @@
             {% endset -%}
 
             {% set nationalInterventionNameHtml %}
-                {{ govukInput({
-                    name: "national-intervention-name",
-                    value: action.interventionName if action.interventionType == "national" else "",
-                    errorMessage: errorMessages.nationalInterventionName,
-                    label: { text: "National intervention name", classes: "govuk-label--s" }
-                }) }}
+                <div class="govuk-form-group{{ " govuk-form-group--error" if errorMessages.nationalInterventionName else "" }}">
+                    <label for="national-intervention-name" class="govuk-label govuk-label--s">
+                        National intervention name
+                    </label>
+                    {% if errorMessages.nationalInterventionName %}
+                    <p class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> {{ errorMessages.nationalInterventionName.text }}
+                    </p>
+                    {% endif %}
+                    <div id="national-intervention-name-container"></div>
+                </div>
             {% endset -%}
 
             {% set otherInterventionNameHtml %}
@@ -106,9 +111,29 @@
             </div>
         </form>
     </div>
-    <script nonce="{{ cspNonce }}">
-      const options = document.querySelectorAll('input[name="relates-to-intervention"]');
-      const container = document.getElementById('intervention-type-container');
-      options.forEach(option => option.addEventListener('change', () => option.value === 'yes' ? container.classList.remove('govuk-visually-hidden') : container.classList.add('govuk-visually-hidden')));
-    </script>
+{% endblock %}
+
+{% block additionalStylesheets %}
+<link rel="stylesheet" href="/assets/accessible-autocomplete.min.css"/>
+{% endblock %}
+
+{% block additionalScripts %}
+<script type="text/javascript" src="/assets/accessible-autocomplete.min.js"></script>
+<script nonce="{{ cspNonce }}">
+  const options = document.querySelectorAll('input[name="relates-to-intervention"]');
+  const container = document.getElementById('intervention-type-container');
+  options.forEach(option => option.addEventListener('change', () => option.value === 'yes' ? container.classList.remove('govuk-visually-hidden') : container.classList.add('govuk-visually-hidden')));
+</script>
+<script nonce="{{ cspNonce }}">
+  accessibleAutocomplete({
+    element: document.querySelector('#national-intervention-name-container'),
+    id: 'national-intervention-name',
+    name: 'national-intervention-name',
+    showAllValues: true,
+    defaultValue: "{{ (action.interventionName if action.interventionType == "national" else "") | escape }}",
+    source: [
+      {% set comma = joiner() %}{% for name in nationalInterventions -%}{{ comma() }}"{{ name | safe | escape }}"{%- endfor %}
+    ]
+  })
+</script>
 {% endblock %}

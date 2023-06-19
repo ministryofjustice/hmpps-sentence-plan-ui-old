@@ -9,12 +9,13 @@ export default function actionRoutes(router: Router, service: Services): Router 
 
   async function loadAction(sentencePlanId: string, objectiveId: string, actionId?: string) {
     const sentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
-    const [caseDetails, objective, action] = await Promise.all([
+    const [caseDetails, objective, action, nationalInterventions] = await Promise.all([
       service.deliusService.getCaseDetails(sentencePlan.crn),
       service.sentencePlanClient.getObjective(sentencePlanId, objectiveId),
       actionId ? service.sentencePlanClient.getAction(sentencePlanId, objectiveId, actionId) : null,
+      service.interventionsClient.getNationalInterventionNames(),
     ])
-    return { caseDetails, sentencePlan, objective, action }
+    return { caseDetails, sentencePlan, objective, action, nationalInterventions }
   }
 
   async function validateAction(

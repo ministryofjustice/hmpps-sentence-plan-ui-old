@@ -60,7 +60,7 @@ describe('GET /sentence-plan/add-objective', () => {
   it('should validate motivation', () => {
     return request(app)
       .post('/sentence-plan/1/add-objective')
-      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: 'accommodation' })
+      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: ['accommodation'] })
       .expect('Content-Type', /html/)
       .expect(res => expect(res.text).toContain('Please select a motivation level'))
   })
@@ -122,7 +122,7 @@ describe('GET /sentence-plan/objective', () => {
   it('should validate motivation', () => {
     return request(app)
       .post('/sentence-plan/1/objective/2')
-      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: 'accommodation' })
+      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: ['accommodation'] })
       .expect('Content-Type', /html/)
       .expect(res => expect(res.text).toContain('Please select a motivation level'))
   })

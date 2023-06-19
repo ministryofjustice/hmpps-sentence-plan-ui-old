@@ -31,10 +31,10 @@ context('Objective', () => {
   it('data can be entered', () => {
     cy.get('#description').type('Test objective description')
     cy.get('#relates-to-needs').check('yes')
-    cy.get('[name=needs]').check('accommodation')
-    cy.get('[name=needs]').check('attitudes')
+    cy.get('[name=needs\\[\\]]').check('accommodation')
+    cy.get('[name=needs\\[\\]]').check('attitudes')
     cy.get('[name=motivation]').check('Pre-contemplation')
     cy.get('form').submit()
-    cy.url().should('contain', '/summary')
+    cy.url().should('contain', '/add-action')
   })
 })

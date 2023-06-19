@@ -1,7 +1,7 @@
 import { Request, type RequestHandler, type Response, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
-import { NewObjective } from '../data/sentencePlanClient'
+import { Need, NewObjective } from '../data/sentencePlanClient'
 
 export default function objectiveRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -52,8 +52,11 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
 
   post('/sentence-plan/:sentencePlanId/add-objective', async function addObjective(req, res) {
     const { sentencePlanId } = req.params
-    const { description, needs, motivation } = req.body
-    const objective = { description, motivation, needs: needs || [] }
+    const objective = {
+      description: req.body.description,
+      motivation: req.body.motivation,
+      needs: req.body.needs?.map((code: string): Need => ({ code })) || [],
+    }
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       const { id } = await service.sentencePlanClient.createObjective(sentencePlanId, objective)
       res.redirect(`/sentence-plan/${sentencePlanId}/objective/${id}/add-action`)
@@ -67,8 +70,11 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
 
   post('/sentence-plan/:sentencePlanId/objective/:objectiveId', async function updateObjective(req, res) {
     const { sentencePlanId, objectiveId } = req.params
-    const { description, motivation, needs } = req.body
-    const objective = { description, motivation, needs: needs || [] }
+    const objective = {
+      description: req.body.description,
+      motivation: req.body.motivation,
+      needs: req.body.needs?.map((code: string): Need => ({ code })) || [],
+    }
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       await service.sentencePlanClient.updateObjective(sentencePlanId, objectiveId, objective)
       res.redirect(`/sentence-plan/${sentencePlanId}/summary`)

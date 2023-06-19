@@ -109,7 +109,11 @@ export interface SentencePlanListResponse {
 
 export interface NewObjective extends Record<string, unknown> {
   description: string
-  needs: Array<string>
+  needs: Need[]
+}
+
+export interface Need {
+  code: string
 }
 
 export interface Objective extends NewObjective {
