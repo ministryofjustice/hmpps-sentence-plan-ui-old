@@ -57,15 +57,23 @@ describe('GET /sentence-plan/add-objective', () => {
       .expect(res => expect(res.text).toContain('Select at least one criminogenic need'))
   })
 
+  it('should validate motivation', () => {
+    return request(app)
+      .post('/sentence-plan/1/add-objective')
+      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: 'accommodation' })
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('Please select a motivation level'))
+  })
+
   it('should save data', () => {
     const updateApi = jest.fn().mockResolvedValue({})
     services.sentencePlanClient.createObjective = updateApi
     return request(app)
       .post('/sentence-plan/1/add-objective')
-      .send({ description: 'New text', 'relates-to-needs': 'no' })
+      .send({ description: 'New text', 'relates-to-needs': 'no', motivation: 'Action' })
       .expect(302)
       .expect('Location', '/sentence-plan/1/summary')
-      .expect(_ => expect(updateApi).toBeCalledWith('1', { description: 'New text', needs: [] }))
+      .expect(_ => expect(updateApi).toBeCalledWith('1', { description: 'New text', needs: [], motivation: 'Action' }))
   })
 })
 
@@ -111,14 +119,24 @@ describe('GET /sentence-plan/objective', () => {
       .expect(res => expect(res.text).toContain('Select at least one criminogenic need'))
   })
 
+  it('should validate motivation', () => {
+    return request(app)
+      .post('/sentence-plan/1/objective/2')
+      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: 'accommodation' })
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('Please select a motivation level'))
+  })
+
   it('should save data', () => {
     const updateApi = jest.fn().mockResolvedValue({})
     services.sentencePlanClient.updateObjective = updateApi
     return request(app)
       .post('/sentence-plan/1/objective/2')
-      .send({ description: 'New text', 'relates-to-needs': 'no', needs: [] })
+      .send({ description: 'New text', 'relates-to-needs': 'no', needs: [], motivation: 'Contemplation' })
       .expect(302)
       .expect('Location', '/sentence-plan/1/summary')
-      .expect(_ => expect(updateApi).toBeCalledWith('1', '2', { description: 'New text', needs: [] }))
+      .expect(_ =>
+        expect(updateApi).toBeCalledWith('1', '2', { description: 'New text', needs: [], motivation: 'Contemplation' }),
+      )
   })
 })

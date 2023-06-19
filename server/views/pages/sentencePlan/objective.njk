@@ -76,6 +76,25 @@
                 ]
             }) }}
 
+            <h2 class="govuk-heading-l">Motivation</h2>
+
+            {{ govukRadios({
+                name: "motivation",
+                fieldset: {
+                    legend: { text: "How motivated is the individual to complete this objective and to address the identified criminogenic needs?", classes: "govuk-fieldset__legend--m"}
+                },
+                hint: { text: "Please select the stage on cycle of change that best describes the individual's level of motivation"},
+                errorMessage: errorMessages.motivation,
+                items: [
+                    { value: "Action", text: "Action"},
+                    { value: "Contemplation", text: "Contemplation"},
+                    { value: "Maintenance", text: "Maintenance"},
+                    { value: "Pre-contemplation", text: "Pre-contemplation"},
+                    { value: "Preparation", text: "Preparation"},
+                    { value: "Relapse", text: "Relapse"}
+                ]
+            }) }}
+
             <div class="govuk-button-group">
                 {{ govukButton({ type: "Submit", text: "Continue" }) }}
                 {{ govukButton({ classes: "govuk-button--secondary", text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
