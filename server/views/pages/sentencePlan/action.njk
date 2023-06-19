@@ -1,0 +1,114 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Add an action" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+    {% include "../../partials/objectiveBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/objective/" + objective.id }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-!-width-two-thirds">
+        <span class="govuk-caption-l">Objectives</span>
+        <h1 class="govuk-heading-l">Add an action</h1>
+
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+            {{ govukCharacterCount({
+                name: "description",
+                id: "description",
+                label: { text: "Describe the action", classes: "govuk-label--m" },
+                hint: { text: "Describe what must happen to enable the objective to be completed." },
+                maxwords: 50,
+                errorMessage: errorMessages.description,
+                value: action.description
+            }) }}
+
+            {{ govukRadios({
+                name: "relates-to-intervention",
+                classes: "govuk-radios--inline",
+                fieldset: {
+                    legend: { text: "Will this action involve participation in an invervention programme?", classes: "govuk-fieldset__legend--m" }
+                },
+                errorMessage: errorMessages.relatesToIntervention,
+                items: [
+                    { value: "yes", text: "Yes", checked: action.interventionParticipation != null and action.interventionParticipation, attributes: { "aria-controls": "intervention-type-container" } },
+                    { value: "no", text: "No", checked: action.interventionParticipation != null and not action.interventionParticipation }
+                ]
+            }) }}
+
+            {% set apInterventionNameHtml %}
+                {{ govukInput({
+                    name: "ap-intervention-name",
+                    value: action.interventionName if action.interventionType == "accredited-programme" else "",
+                    errorMessage: errorMessages.apInterventionName,
+                    label: { text: "Accredited programme name", classes: "govuk-label--s" }
+                }) }}
+            {% endset -%}
+
+            {% set localInterventionNameHtml %}
+                {{ govukInput({
+                    name: "local-intervention-name",
+                    value: action.interventionName if action.interventionType == "local" else "",
+                    errorMessage: errorMessages.localInterventionName,
+                    label: { text: "Local intervention name", classes: "govuk-label--s" }
+                }) }}
+            {% endset -%}
+
+            {% set nationalInterventionNameHtml %}
+                {{ govukInput({
+                    name: "national-intervention-name",
+                    value: action.interventionName if action.interventionType == "national" else "",
+                    errorMessage: errorMessages.nationalInterventionName,
+                    label: { text: "National intervention name", classes: "govuk-label--s" }
+                }) }}
+            {% endset -%}
+
+            {% set otherInterventionNameHtml %}
+                {{ govukInput({
+                    name: "other-intervention-name",
+                    value: action.interventionName if action.interventionType == "other" else "",
+                    errorMessage: errorMessages.otherInterventionName,
+                    label: { text: "Intervention name", classes: "govuk-label--s" }
+                }) }}
+            {% endset -%}
+
+            <div id="intervention-type-container" class="{{ "govuk-visually-hidden" if action.interventionParticipation != true else "" }}">
+                {{ govukRadios({
+                    name: "intervention-type",
+                    fieldset: {
+                        legend: { text: "Which type of intervention will be involved?", classes: "govuk-fieldset__legend--m" }
+                    },
+                    errorMessage: errorMessages.interventionType,
+                    items: [
+                        { text: "Accredited Programme", value: "accredited-programme", checked: action.interventionType == "accredited-programme", conditional: { html: apInterventionNameHtml } },
+                        { text: "Local Intervention", value: "local", checked: action.interventionType == "local", conditional: { html: localInterventionNameHtml } },
+                        { text: "National Intervention", value: "national", checked: action.interventionType == "national", conditional: { html: nationalInterventionNameHtml } },
+                        { text: "Other", value: "other", checked: action.interventionType == "other", conditional: { html: otherInterventionNameHtml } }
+                    ]
+                }) }}
+            </div>
+
+            <div class="govuk-button-group">
+                {{ govukButton({ type: "Submit", text: "Add another action", name: "add-another", classes: "govuk-button--secondary" }) }}
+                {{ govukButton({ type: "Submit", text: "Continue", name: "continue" }) }}
+            </div>
+        </form>
+    </div>
+    <script nonce="{{ cspNonce }}">
+      const options = document.querySelectorAll('input[name="relates-to-intervention"]');
+      const container = document.getElementById('intervention-type-container');
+      options.forEach(option => option.addEventListener('change', () => option.value === 'yes' ? container.classList.remove('govuk-visually-hidden') : container.classList.add('govuk-visually-hidden')));
+    </script>
+{% endblock %}

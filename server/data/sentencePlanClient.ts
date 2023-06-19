@@ -49,6 +49,46 @@ export default class SentencePlanClient {
       data: objective,
     })
   }
+
+  async listActions(sentencePlanId: string, objectiveId: string): Promise<ActionListResponse> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).get({ path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}/action` })
+  }
+
+  async getAction(sentencePlanId: string, objectiveId: string, actionId: string): Promise<Action> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).get({
+      path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}/action/${actionId}`,
+    })
+  }
+
+  async createAction(sentencePlanId: string, objectiveId: string, action: NewAction): Promise<Action> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).post({
+      path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}/action`,
+      data: action,
+    })
+  }
+
+  async updateAction(
+    sentencePlanId: string,
+    objectiveId: string,
+    actionId: string,
+    action: NewAction,
+  ): Promise<Action> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).put({
+      path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}/action/${actionId}`,
+      data: action,
+    })
+  }
+
+  async deleteAction(sentencePlanId: string, objectiveId: string, actionId: string): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).delete({
+      path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}/action/${actionId}`,
+    })
+  }
 }
 
 export interface NewSentencePlan extends Record<string, unknown> {
@@ -80,4 +120,24 @@ export interface Objective extends NewObjective {
 
 export interface ObjectiveListResponse {
   objectives: Objective[]
+}
+
+export interface NewAction extends Record<string, unknown> {
+  description: string
+  interventionParticipation: boolean
+  interventionName?: string
+  interventionType?: 'accredited-programme' | 'local' | 'national' | 'other'
+  status: string
+  individualOwner: boolean
+  practitionerOwner: boolean
+  otherOwner?: string
+}
+
+export interface Action extends NewAction {
+  id: string
+  objectiveId: string
+}
+
+export interface ActionListResponse {
+  actions: Action[]
 }
