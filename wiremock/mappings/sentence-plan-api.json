@@ -173,7 +173,9 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "jsonBody": {}
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000000"
+        }
       }
     },
     {
@@ -187,8 +189,25 @@
           "Content-Type": "application/json"
         },
         "jsonBody": {
+          "id": "{{ request.path.[5] }}",
           "description": "Test objective",
           "needs": ["accommodation", "employability"]
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective/(.*)/action"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000000"
         }
       }
     }

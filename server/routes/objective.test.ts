@@ -60,19 +60,19 @@ describe('GET /sentence-plan/add-objective', () => {
   it('should validate motivation', () => {
     return request(app)
       .post('/sentence-plan/1/add-objective')
-      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: 'accommodation' })
+      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: ['accommodation'] })
       .expect('Content-Type', /html/)
       .expect(res => expect(res.text).toContain('Please select a motivation level'))
   })
 
   it('should save data', () => {
-    const updateApi = jest.fn().mockResolvedValue({})
+    const updateApi = jest.fn().mockResolvedValue({ id: '2' })
     services.sentencePlanClient.createObjective = updateApi
     return request(app)
       .post('/sentence-plan/1/add-objective')
       .send({ description: 'New text', 'relates-to-needs': 'no', motivation: 'Action' })
       .expect(302)
-      .expect('Location', '/sentence-plan/1/summary')
+      .expect('Location', '/sentence-plan/1/objective/2/add-action')
       .expect(_ => expect(updateApi).toBeCalledWith('1', { description: 'New text', needs: [], motivation: 'Action' }))
   })
 })
@@ -122,7 +122,7 @@ describe('GET /sentence-plan/objective', () => {
   it('should validate motivation', () => {
     return request(app)
       .post('/sentence-plan/1/objective/2')
-      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: 'accommodation' })
+      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: ['accommodation'] })
       .expect('Content-Type', /html/)
       .expect(res => expect(res.text).toContain('Please select a motivation level'))
   })

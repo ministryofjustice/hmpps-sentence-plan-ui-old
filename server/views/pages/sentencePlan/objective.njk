@@ -20,13 +20,10 @@
 
 {% block content %}
     <div class="govuk-!-width-two-thirds">
+        <span class="govuk-caption-l">Objectives</span>
         <h2 class="govuk-heading-l">Set an objective</h2>
         <form method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            {{ govukDetails({
-                summaryText: "What should I include in an objective?",
-                text: "Details to be confirmed."
-            }) }}
 
             {{ govukCharacterCount({
                 name: "description",
@@ -40,7 +37,7 @@
 
             {% set needsHtml %}
                 {{ govukCheckboxes({
-                    name: "needs",
+                    name: "needs[]",
                     fieldset: {
                         legend: { text: "Which crimonogenic needs does this objective relate to?", classes: "govuk-fieldset__legend--m" }
                     },
