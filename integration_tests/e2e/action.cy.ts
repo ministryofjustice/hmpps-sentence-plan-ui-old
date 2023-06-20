@@ -23,7 +23,7 @@ context('Action', () => {
   beforeEach(() => {
     Page.verifyOnPage(IndexPage).startButton().click()
     Page.verifyOnPage(SearchPage).search().selectFirstResult()
-    Page.verifyOnPage(CasePage).addAnotherButton().click()
+    Page.verifyOnPage(CasePage).createButton().click()
     Page.verifyOnPage(SummaryPage).addObjectiveButton().click()
     Page.verifyOnPage(ObjectivePage).enterObjective()
     page = Page.verifyOnPage(ActionPage)
