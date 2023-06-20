@@ -19,27 +19,6 @@ context('Case', () => {
   context('existing', () => {
     beforeEach(() => {
       Page.verifyOnPage(IndexPage).startButton().click()
-      Page.verifyOnPage(SearchPage).search().selectFirstResult()
-      page = Page.verifyOnPage(CasePage)
-    })
-
-    it('displays case details banner', () => page.checkCaseDetails())
-
-    it('lists existing sentence plans', () => {
-      page.sentencePlans().should('have.length', 2)
-      page.addAnotherButton().should('contain.text', 'Add another')
-      page.createButton().should('not.exist')
-    })
-
-    it('add button navigates to sentence plan summary', () => {
-      page.addAnotherButton().click()
-      cy.get('h2').should('contain.text', 'Create a sentence plan')
-    })
-  })
-
-  context('new', () => {
-    beforeEach(() => {
-      Page.verifyOnPage(IndexPage).startButton().click()
       Page.verifyOnPage(SearchPage).search().selectSecondResult()
       page = Page.verifyOnPage(CasePage)
     })
@@ -52,6 +31,27 @@ context('Case', () => {
       cy.get('[data-qa=manager]').should('contain.text', 'Manager: John Smith')
       cy.get('[data-qa=region]').should('contain.text', 'Region: Wales')
     })
+
+    it('lists existing sentence plans', () => {
+      page.sentencePlans().should('have.length', 2)
+      page.addAnotherButton().should('not.exist')
+      page.createButton().should('not.exist')
+    })
+
+    it('view link navigates to draft sentence plan summary', () => {
+      page.sentencePlans().first().find('a').click()
+      cy.get('h2').should('contain.text', 'Create a sentence plan')
+    })
+  })
+
+  context('new', () => {
+    beforeEach(() => {
+      Page.verifyOnPage(IndexPage).startButton().click()
+      Page.verifyOnPage(SearchPage).search().selectFirstResult()
+      page = Page.verifyOnPage(CasePage)
+    })
+
+    it('displays case details banner', () => page.checkCaseDetails())
 
     it('display create button when there are no existing sentence plans', () => {
       page.sentencePlans().should('not.exist')

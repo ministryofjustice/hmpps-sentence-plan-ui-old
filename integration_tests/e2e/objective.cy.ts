@@ -21,7 +21,7 @@ context('Objective', () => {
   beforeEach(() => {
     Page.verifyOnPage(IndexPage).startButton().click()
     Page.verifyOnPage(SearchPage).search().selectFirstResult()
-    Page.verifyOnPage(CasePage).addAnotherButton().click()
+    Page.verifyOnPage(CasePage).createButton().click()
     Page.verifyOnPage(SummaryPage).addObjectiveButton().click()
     page = Page.verifyOnPage(ObjectivePage)
   })
