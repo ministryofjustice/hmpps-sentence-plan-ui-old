@@ -28,6 +28,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         { html: `<strong class="moj-badge">${it.status}</strong>` },
         { html: `<a href='/sentence-plan/${it.id}/summary'>View</a>` },
       ]),
+      hasDraft: sentencePlans.some(it => it.status === 'Draft'),
     })
   })
 

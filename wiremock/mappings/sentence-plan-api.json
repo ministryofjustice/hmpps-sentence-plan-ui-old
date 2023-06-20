@@ -11,6 +11,21 @@
           "Content-Type": "application/json"
         },
         "jsonBody": {
+          "sentencePlans": []
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/sentence-plan-api/sentence-plan?crn=X000002"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
           "sentencePlans": [
             {
               "id": "00000000-0000-0000-0000-000000000001",
@@ -28,21 +43,6 @@
               "closedDate": "2023-04-30T12:34:32.983675+01:00[Europe/London]"
             }
           ]
-        }
-      }
-    },
-    {
-      "request": {
-        "method": "GET",
-        "url": "/sentence-plan-api/sentence-plan?crn=X000002"
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "jsonBody": {
-          "sentencePlans": []
         }
       }
     },
@@ -66,32 +66,7 @@
         },
         "jsonBody": {
           "id": "00000000-0000-0000-0000-000000000003"
-        },
-        "transformers": ["response-template"]
-      }
-    },
-    {
-      "request": {
-        "method": "POST",
-        "urlPattern": "/sentence-plan-api/sentence-plan",
-        "bodyPatterns": [
-          {
-            "matchesJsonPath": {
-              "expression": "$.crn",
-              "contains": "X000002"
-            }
-          }
-        ]
-      },
-      "response": {
-        "status": 201,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "jsonBody": {
-          "id": "00000000-0000-0000-0000-000000000004"
-        },
-        "transformers": ["response-template"]
+        }
       }
     },
     {
@@ -176,24 +151,6 @@
     {
       "request": {
         "method": "GET",
-        "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000004"
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "jsonBody": {
-          "id": "00000000-0000-0000-0000-000000000004",
-          "crn": "X000002",
-          "status": "Draft",
-          "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]"
-        }
-      }
-    },
-    {
-      "request": {
-        "method": "GET",
         "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective"
       },
       "response": {
@@ -216,7 +173,9 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "jsonBody": {}
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000000"
+        }
       }
     },
     {
@@ -230,8 +189,25 @@
           "Content-Type": "application/json"
         },
         "jsonBody": {
+          "id": "{{ request.path.[5] }}",
           "description": "Test objective",
           "needs": ["accommodation", "employability"]
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective/(.*)/action"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000000"
         }
       }
     }

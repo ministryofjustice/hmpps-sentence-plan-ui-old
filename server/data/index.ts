@@ -10,6 +10,7 @@ import TokenStore from './tokenStore'
 import ProbationSearchClient from './probationSearchClient'
 import SentencePlanClient from './sentencePlanClient'
 import DeliusClient from './deliusClient'
+import InterventionsClient from './interventionsClient'
 
 initialiseAppInsights()
 buildAppInsightsClient()
@@ -21,6 +22,7 @@ export const dataAccess = () => {
     sentencePlanClient: new SentencePlanClient(hmppsAuthClient),
     probationSearchClient: new ProbationSearchClient(hmppsAuthClient),
     deliusClient: new DeliusClient(hmppsAuthClient),
+    interventionsClient: new InterventionsClient(hmppsAuthClient),
   }
 }
 

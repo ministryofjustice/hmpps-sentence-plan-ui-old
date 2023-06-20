@@ -9,6 +9,7 @@ import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import { DeliusService, Services, UserService } from '../../services'
 import { ProbationSearchClient, SentencePlanClient } from '../../data'
+import InterventionsClient from '../../data/interventionsClient'
 
 export const user = {
   firstName: 'first',
@@ -29,6 +30,7 @@ export function mockServices(): Services {
     deliusService: new DeliusService(null) as jest.Mocked<DeliusService>,
     probationSearchClient: new ProbationSearchClient(null) as jest.Mocked<ProbationSearchClient>,
     sentencePlanClient: new SentencePlanClient(null) as jest.Mocked<SentencePlanClient>,
+    interventionsClient: new InterventionsClient(null) as jest.Mocked<InterventionsClient>,
   }
 }
 

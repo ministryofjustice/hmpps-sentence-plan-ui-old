@@ -21,7 +21,7 @@ context('Engagement and compliance', () => {
   beforeEach(() => {
     Page.verifyOnPage(IndexPage).startButton().click()
     Page.verifyOnPage(SearchPage).search().selectFirstResult()
-    Page.verifyOnPage(CasePage).addAnotherButton().click()
+    Page.verifyOnPage(CasePage).createButton().click()
     Page.verifyOnPage(SummaryPage).engagementAndCompliance().click()
     page = Page.verifyOnPage(EngagementAndCompliancePage)
   })

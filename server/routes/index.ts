@@ -4,6 +4,7 @@ import type { Services } from '../services'
 import searchRoutes from './search'
 import sentencePlanRoutes from './sentencePlan'
 import objectiveRoutes from './objective'
+import actionRoutes from './action'
 
 export default function routes(service: Services): Router {
   const router = Router()
@@ -13,6 +14,7 @@ export default function routes(service: Services): Router {
   searchRoutes(router, service)
   sentencePlanRoutes(router, service)
   objectiveRoutes(router, service)
+  actionRoutes(router, service)
 
   return router
 }

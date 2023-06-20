@@ -20,7 +20,7 @@ context('Sentence plan summary', () => {
   beforeEach(() => {
     Page.verifyOnPage(IndexPage).startButton().click()
     Page.verifyOnPage(SearchPage).search().selectFirstResult()
-    Page.verifyOnPage(CasePage).addAnotherButton().click()
+    Page.verifyOnPage(CasePage).createButton().click()
     page = Page.verifyOnPage(SummaryPage)
   })
 

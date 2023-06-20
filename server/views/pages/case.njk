@@ -14,12 +14,14 @@
         <h2>{{ caseDetails.name }} has {{ rows | length }} sentence plan{% if rows | length > 1 %}s{% endif %}</h2>
         <p>Select to view or update one below</p>
         {{ govukTable({ head: head, rows: rows }) }}
-        {{ govukButton({
-            text: 'Add another',
-            href: '/case/' + caseDetails.crn + '/create-sentence-plan',
-            classes: 'govuk-button--secondary',
-            attributes: { 'data-qa': 'add-another' }
-        }) }}
+        {% if not hasDraft %}
+            {{ govukButton({
+                text: 'Add another',
+                href: '/case/' + caseDetails.crn + '/create-sentence-plan',
+                classes: 'govuk-button--secondary',
+                attributes: { 'data-qa': 'add-another' }
+            }) }}
+        {% endif %}
     {% else %}
         <p>{{ caseDetails.name }} does not have a sentence plan yet.</p>
         {{ govukButton({
