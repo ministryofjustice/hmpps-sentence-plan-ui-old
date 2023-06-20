@@ -1,0 +1,52 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/oasys/needs/X000001"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "needs": [
+            {
+              "code": "accommodation",
+              "description": "Accommodation"
+            },
+            {
+              "code": "alcohol",
+              "description": "Alcohol misuse"
+            },
+            {
+              "code": "attitudes",
+              "description": "Attitudes"
+            },
+            {
+              "code": "drugs",
+              "description": "Drug misuse"
+            },
+            {
+              "code": "employability",
+              "description": "Education, training and employment"
+            },
+            {
+              "code": "lifestyle",
+              "description": "Lifestyle"
+            },
+            {
+              "code": "relationships",
+              "description": "Relationships"
+            },
+            {
+              "code": "behaviour",
+              "description": "Thinking and behaviour"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
