@@ -16,6 +16,11 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     return { objective, caseDetails, sentencePlan }
   }
 
+  async function loadNeeds(crn: string) {
+    const needs = await service.oasysClient.getNeeds(crn)
+    console.log(needs)
+  }
+
   async function validateObjective(
     objective: NewObjective,
     sentencePlanId: string,

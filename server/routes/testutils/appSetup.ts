@@ -10,6 +10,7 @@ import * as auth from '../../authentication/auth'
 import { DeliusService, Services, UserService } from '../../services'
 import { ProbationSearchClient, SentencePlanClient } from '../../data'
 import InterventionsClient from '../../data/interventionsClient'
+import OasysClient from '../../data/oasysClient'
 
 export const user = {
   firstName: 'first',
@@ -31,6 +32,7 @@ export function mockServices(): Services {
     probationSearchClient: new ProbationSearchClient(null) as jest.Mocked<ProbationSearchClient>,
     sentencePlanClient: new SentencePlanClient(null) as jest.Mocked<SentencePlanClient>,
     interventionsClient: new InterventionsClient(null) as jest.Mocked<InterventionsClient>,
+    oasysClient: new OasysClient(null) as jest.Mocked<OasysClient>,
   }
 }
 
