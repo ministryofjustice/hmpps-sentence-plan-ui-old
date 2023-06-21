@@ -13,7 +13,8 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
       service.deliusService.getCaseDetails(sentencePlan.crn),
       objectiveId ? service.sentencePlanClient.getObjective(sentencePlanId, objectiveId) : null,
     ])
-    return { objective, caseDetails, sentencePlan }
+    const needs = objective?.needs?.map(it => it.code) || []
+    return { objective, needs, caseDetails, sentencePlan }
   }
 
   async function validateObjective(
@@ -45,6 +46,13 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     return true
   }
 
+  function getNeeds(req: Request): Need[] {
+    if (req.body['relates-to-needs'] === 'yes' && req.body.needs) {
+      return req.body.needs.map((code: string): Need => ({ code }))
+    }
+    return []
+  }
+
   get('/sentence-plan/:sentencePlanId/add-objective', async (req, res) => {
     const { sentencePlanId } = req.params
     res.render('pages/sentencePlan/objective', await loadObjective(sentencePlanId))
@@ -55,7 +63,7 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     const objective = {
       description: req.body.description,
       motivation: req.body.motivation,
-      needs: req.body.needs?.map((code: string): Need => ({ code })) || [],
+      needs: getNeeds(req),
     }
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       const { id } = await service.sentencePlanClient.createObjective(sentencePlanId, objective)
@@ -73,10 +81,11 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     const objective = {
       description: req.body.description,
       motivation: req.body.motivation,
-      needs: req.body.needs?.map((code: string): Need => ({ code })) || [],
+      needs: getNeeds(req),
     }
     if (await validateObjective(objective, sentencePlanId, req, res)) {
-      await service.sentencePlanClient.updateObjective(sentencePlanId, objectiveId, objective)
+      const existingObjective = await service.sentencePlanClient.getObjective(sentencePlanId, objectiveId)
+      await service.sentencePlanClient.updateObjective({ ...existingObjective, ...objective })
       res.redirect(`/sentence-plan/${sentencePlanId}/summary`)
     }
   })
