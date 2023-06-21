@@ -19,5 +19,5 @@ interface Need {
 }
 
 export interface NeedsResponse {
-  needs: Need[]
+  criminogenicNeeds: Need[]
 }

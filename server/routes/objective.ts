@@ -9,16 +9,19 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
 
   async function loadObjective(sentencePlanId: string, objectiveId?: string) {
     const sentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
-    const [caseDetails, objective] = await Promise.all([
+    const [caseDetails, objective, needs] = await Promise.all([
       service.deliusService.getCaseDetails(sentencePlan.crn),
       objectiveId ? service.sentencePlanClient.getObjective(sentencePlanId, objectiveId) : null,
+      loadNeeds(sentencePlan.crn),
     ])
-    return { objective, caseDetails, sentencePlan }
+
+    console.log(needs)
+    return { objective, caseDetails, needs, sentencePlan }
   }
 
-  async function loadNeeds(crn: string) {
+  async function loadNeeds(crn: string): Promise<Need[]> {
     const needs = await service.oasysClient.getNeeds(crn)
-    console.log(needs)
+    return needs.criminogenicNeeds
   }
 
   async function validateObjective(
