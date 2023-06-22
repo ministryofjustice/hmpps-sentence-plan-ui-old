@@ -67,6 +67,8 @@ HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
 SENTENCE_PLAN_API_URL=https://sentence-plan-api-dev.hmpps.service.justice.gov.uk
 PROBATION_SEARCH_API_URL=https://probation-offender-search-dev.hmpps.service.justice.gov.uk
 DELIUS_INTEGRATION_API_URL=https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk
+INTERVENTIONS_API_URL=https://hmpps-interventions-service-dev.apps.live-1.cloud-platform.service.justice.gov.uk
+OASYS_INTEGRATION_API_URL=https://sentence-plan-and-oasys-dev.hmpps.service.justice.gov.uk
 
 # Add your personal client credentials below:
 API_CLIENT_ID=clientid

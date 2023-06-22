@@ -2,6 +2,7 @@ import { Request, type RequestHandler, type Response, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { Need, NewObjective } from '../data/sentencePlanClient'
+import { Need as OasysNeed } from '../data/oasysClient'
 
 export default function objectiveRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -9,17 +10,23 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
 
   async function loadObjective(sentencePlanId: string, objectiveId?: string) {
     const sentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
-    const [caseDetails, objective, needs] = await Promise.all([
+    const [caseDetails, objective, oasysNeeds] = await Promise.all([
       service.deliusService.getCaseDetails(sentencePlan.crn),
       objectiveId ? service.sentencePlanClient.getObjective(sentencePlanId, objectiveId) : null,
       loadNeeds(sentencePlan.crn),
     ])
-
-    console.log(needs)
-    return { objective, caseDetails, needs, sentencePlan }
+    const selectedNeeds = objective?.needs?.map(it => it.code) || []
+    const needsOptions = oasysNeeds.map(it => ({
+      value: it.key,
+      text: it.description,
+      checked: selectedNeeds.includes(it.key),
+    }))
+    console.log(selectedNeeds)
+    console.log(needsOptions)
+    return { objective, selectedNeeds, caseDetails, sentencePlan, needsOptions }
   }
 
-  async function loadNeeds(crn: string): Promise<Need[]> {
+  async function loadNeeds(crn: string): Promise<OasysNeed[]> {
     const needs = await service.oasysClient.getNeeds(crn)
     return needs.criminogenicNeeds
   }
@@ -53,6 +60,13 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     return true
   }
 
+  function getNeeds(req: Request): Need[] {
+    if (req.body['relates-to-needs'] === 'yes' && req.body.needs) {
+      return req.body.needs.map((code: string): Need => ({ code }))
+    }
+    return []
+  }
+
   get('/sentence-plan/:sentencePlanId/add-objective', async (req, res) => {
     const { sentencePlanId } = req.params
     res.render('pages/sentencePlan/objective', await loadObjective(sentencePlanId))
@@ -63,8 +77,10 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     const objective = {
       description: req.body.description,
       motivation: req.body.motivation,
-      needs: req.body.needs?.map((code: string): Need => ({ code })) || [],
+      needs: getNeeds(req),
     }
+
+    console.log(objective)
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       const { id } = await service.sentencePlanClient.createObjective(sentencePlanId, objective)
       res.redirect(`/sentence-plan/${sentencePlanId}/objective/${id}/add-action`)
@@ -81,10 +97,12 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     const objective = {
       description: req.body.description,
       motivation: req.body.motivation,
-      needs: req.body.needs?.map((code: string): Need => ({ code })) || [],
+      needs: getNeeds(req),
     }
+    console.log(objective)
     if (await validateObjective(objective, sentencePlanId, req, res)) {
-      await service.sentencePlanClient.updateObjective(sentencePlanId, objectiveId, objective)
+      const existingObjective = await service.sentencePlanClient.getObjective(sentencePlanId, objectiveId)
+      await service.sentencePlanClient.updateObjective({ ...existingObjective, ...objective })
       res.redirect(`/sentence-plan/${sentencePlanId}/summary`)
     }
   })

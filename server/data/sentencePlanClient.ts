@@ -42,10 +42,10 @@ export default class SentencePlanClient {
     return this.restClient(token).post({ path: `/sentence-plan/${sentencePlanId}/objective`, data: objective })
   }
 
-  async updateObjective(sentencePlanId: string, objectiveId: string, objective: NewObjective): Promise<Objective> {
+  async updateObjective(objective: Objective): Promise<Objective> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).put({
-      path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}`,
+      path: `/sentence-plan/${objective.sentencePlanId}/objective/${objective.id}`,
       data: objective,
     })
   }

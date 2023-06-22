@@ -13,8 +13,8 @@ export default class OasysClient {
   }
 }
 
-interface Need {
-  code: string
+export interface Need {
+  key: string
   description: string
 }
 

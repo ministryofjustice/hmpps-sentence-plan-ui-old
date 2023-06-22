@@ -60,7 +60,7 @@ describe('GET /sentence-plan/add-objective', () => {
   it('should validate motivation', () => {
     return request(app)
       .post('/sentence-plan/1/add-objective')
-      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: ['accommodation'] })
+      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: [{ code: 'accommodation' }] })
       .expect('Content-Type', /html/)
       .expect(res => expect(res.text).toContain('Please select a motivation level'))
   })
@@ -82,7 +82,7 @@ describe('GET /sentence-plan/objective', () => {
     services.sentencePlanClient.getObjective = jest.fn().mockResolvedValue({
       id: '2',
       description: 'Existing text',
-      needs: ['drugs'],
+      needs: [{ code: 'drugs' }],
     })
   })
 
@@ -122,7 +122,7 @@ describe('GET /sentence-plan/objective', () => {
   it('should validate motivation', () => {
     return request(app)
       .post('/sentence-plan/1/objective/2')
-      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: ['accommodation'] })
+      .send({ description: 'New text', 'relates-to-needs': 'yes', needs: [{ code: 'accommodation' }] })
       .expect('Content-Type', /html/)
       .expect(res => expect(res.text).toContain('Please select a motivation level'))
   })
@@ -136,7 +136,12 @@ describe('GET /sentence-plan/objective', () => {
       .expect(302)
       .expect('Location', '/sentence-plan/1/summary')
       .expect(_ =>
-        expect(updateApi).toBeCalledWith('1', '2', { description: 'New text', needs: [], motivation: 'Contemplation' }),
+        expect(updateApi).toBeCalledWith({
+          id: '2',
+          description: 'New text',
+          needs: [],
+          motivation: 'Contemplation',
+        }),
       )
   })
 })
