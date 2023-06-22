@@ -22,6 +22,18 @@ beforeEach(() => {
     tier: 'T1',
   })
   services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({ crn: '123' })
+  services.oasysClient.getNeeds = jest.fn().mockResolvedValue({
+    criminogenicNeeds: [
+      {
+        key: 'accomodation',
+        description: 'Accomodation',
+      },
+      {
+        key: 'drugs',
+        description: 'Drug misuse',
+      },
+    ],
+  })
 })
 
 describe('GET /sentence-plan/add-objective', () => {
