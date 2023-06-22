@@ -15,6 +15,7 @@ context('Objective', () => {
     cy.task('stubProbationSearch')
     cy.task('stubDeliusIntegration')
     cy.task('stubSentencePlanApi')
+    cy.task('stubOasysIntegration')
     cy.signIn()
   })
 
