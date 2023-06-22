@@ -5,7 +5,8 @@ import SentencePlanClient from '../data/sentencePlanClient'
 import DeliusService from './deliusService'
 
 export const services = () => {
-  const { hmppsAuthClient, probationSearchClient, sentencePlanClient, deliusClient, interventionsClient } = dataAccess()
+  const { hmppsAuthClient, probationSearchClient, sentencePlanClient, deliusClient, interventionsClient, oasysClient } =
+    dataAccess()
 
   const userService = new UserService(hmppsAuthClient)
   const deliusService = new DeliusService(deliusClient)
@@ -16,6 +17,7 @@ export const services = () => {
     sentencePlanClient,
     probationSearchClient,
     interventionsClient,
+    oasysClient,
   }
 }
 

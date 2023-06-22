@@ -11,6 +11,7 @@ import ProbationSearchClient from './probationSearchClient'
 import SentencePlanClient from './sentencePlanClient'
 import DeliusClient from './deliusClient'
 import InterventionsClient from './interventionsClient'
+import OasysClient from './oasysClient'
 
 initialiseAppInsights()
 buildAppInsightsClient()
@@ -23,6 +24,7 @@ export const dataAccess = () => {
     probationSearchClient: new ProbationSearchClient(hmppsAuthClient),
     deliusClient: new DeliusClient(hmppsAuthClient),
     interventionsClient: new InterventionsClient(hmppsAuthClient),
+    oasysClient: new OasysClient(hmppsAuthClient),
   }
 }
 

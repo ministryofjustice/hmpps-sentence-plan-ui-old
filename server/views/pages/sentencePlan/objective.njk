@@ -43,16 +43,7 @@
                     },
                     hint: { text: "Select at least one." },
                     errorMessage: errorMessages.needs,
-                    items: [
-                        { value: "accommodation", text: "Accommodation", checked: needs and "accommodation" in needs },
-                        { value: "alcohol", text: "Alcohol misuse", checked: needs and "alcohol" in needs },
-                        { value: "attitudes", text: "Attitudes", checked: needs and "attitudes" in needs },
-                        { value: "drugs", text: "Drug misuse", checked: needs and "drugs" in needs },
-                        { value: "employability", text: "Education, training and employment", checked: needs and "employability" in needs },
-                        { value: "lifestyle", text: "Lifestyle", checked: needs and "lifestyle" in needs },
-                        { value: "relationships", text: "Relationships", checked: needs and "relationships" in needs },
-                        { value: "behaviour", text: "Thinking and behaviour", checked: needs and "behaviour" in needs }
-                    ]
+                    items: needsOptions
                 }) }}
             {% endset -%}
 
@@ -67,12 +58,12 @@
                         value: "yes",
                         text: "Yes",
                         conditional: { html: needsHtml },
-                        checked: errorMessages.needs or (needs and needs.length > 0)
+                        checked: errorMessages.needs or (selectedNeeds and selectedNeeds.length > 0)
                     },
                     {
                         value: "no",
                         text: "No",
-                        checked: not errorMessages.needs and objective and needs and needs.length == 0
+                        checked: not errorMessages.needs and objective and selectedNeeds and selectedNeeds.length == 0
                     }
                 ]
             }) }}
