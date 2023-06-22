@@ -11,37 +11,37 @@
           "Content-Type": "application/json"
         },
         "jsonBody": {
-          "needs": [
+          "criminogenicNeeds": [
             {
-              "code": "accommodation",
+              "key": "accommodation",
               "description": "Accommodation"
             },
             {
-              "code": "alcohol",
+              "key": "alcohol",
               "description": "Alcohol misuse"
             },
             {
-              "code": "attitudes",
+              "key": "attitudes",
               "description": "Attitudes"
             },
             {
-              "code": "drugs",
+              "key": "drugs",
               "description": "Drug misuse"
             },
             {
-              "code": "employability",
+              "key": "employability",
               "description": "Education, training and employment"
             },
             {
-              "code": "lifestyle",
+              "key": "lifestyle",
               "description": "Lifestyle"
             },
             {
-              "code": "relationships",
+              "key": "relationships",
               "description": "Relationships"
             },
             {
-              "code": "behaviour",
+              "key": "behaviour",
               "description": "Thinking and behaviour"
             }
           ]

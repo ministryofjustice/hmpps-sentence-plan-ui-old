@@ -17,6 +17,7 @@ context('Action', () => {
     cy.task('stubDeliusIntegration')
     cy.task('stubSentencePlanApi')
     cy.task('stubInterventionApi')
+    cy.task('stubOasysIntegration')
     cy.signIn()
   })
 
