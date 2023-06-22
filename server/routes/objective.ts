@@ -16,12 +16,13 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
       loadNeeds(sentencePlan.crn),
     ])
     const selectedNeeds = objective?.needs?.map(it => it.code) || []
+    const selectedNeedsDescriptions = selectedNeeds.map(code => oasysNeeds.find(it => it.key === code).description)
     const needsOptions = oasysNeeds.map(it => ({
       value: it.key,
       text: it.description,
       checked: selectedNeeds.includes(it.key),
     }))
-    return { objective, selectedNeeds, caseDetails, sentencePlan, needsOptions }
+    return { objective, needsOptions, selectedNeeds, selectedNeedsDescriptions, caseDetails, sentencePlan }
   }
 
   async function loadNeeds(crn: string): Promise<OasysNeed[]> {
@@ -99,8 +100,17 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       const existingObjective = await service.sentencePlanClient.getObjective(sentencePlanId, objectiveId)
       await service.sentencePlanClient.updateObjective({ ...existingObjective, ...objective })
-      res.redirect(`/sentence-plan/${sentencePlanId}/summary`)
+      res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/summary`)
     }
+  })
+
+  get('/sentence-plan/:sentencePlanId/objective/:objectiveId/summary', async (req, res) => {
+    const { sentencePlanId, objectiveId } = req.params
+    const { actions } = await service.sentencePlanClient.listActions(sentencePlanId, objectiveId)
+    res.render('pages/sentencePlan/objectiveSummary', {
+      actions,
+      ...(await loadObjective(sentencePlanId, objectiveId)),
+    })
   })
 
   interface ErrorMessages {

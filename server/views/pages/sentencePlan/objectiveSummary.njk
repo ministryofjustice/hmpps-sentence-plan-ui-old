@@ -1,0 +1,83 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Objective summary" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+    {% include "../../partials/objectiveBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back to draft plan", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-!-width-two-thirds">
+        <span class="govuk-caption-l">Objectives</span>
+        <h1 class="govuk-heading-l">Review objective</h1>
+
+        {{ govukSummaryList({
+            card: {
+                title: { text: "Objective summary" },
+                actions: {
+                    items: [{
+                        href: "/sentence-plan/" + sentencePlan.id + "/objective/" + objective.id,
+                        text: "Change",
+                        visuallyHiddenText: "objective"
+                    }]
+                }
+            },
+            rows: [
+                { key: { text: "Description" }, value: { text: objective.description } },
+                { key: { text: "Needs" }, value: { html: (selectedNeedsDescriptions | sort | join("<br/>")) } },
+                { key: { text: "Motivation" }, value: { text: objective.motivation } }
+            ]
+        }) }}
+
+        {% for action in actions %}
+        <form method="POST" action="/sentence-plan/{{ sentencePlan.id }}/objective/{{ objective.id }}/action/{{ action.id }}/delete">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukSummaryList({
+                card: {
+                    title: { text: "Action " + loop.index },
+                    actions: {
+                        items: [
+                            {
+                                href: "/sentence-plan/" + sentencePlan.id + "/objective/" + objective.id + "/action/" + action.id,
+                                text: "Change",
+                                visuallyHiddenText: "action"
+                            },
+                            {
+                                href: "#",
+                                text: "Delete",
+                                visuallyHiddenText: "action",
+                                classes: "delete-action-link"
+                            }
+                        ]
+                    }
+                },
+                rows: [
+                    { key: { text: "Description" }, value: { text: action.description } },
+                    { key: { text: "Relates to an intervention" }, value: { text: 'Yes' if action.interventionParticipation else 'No' } },
+                    { key: { text: "Intervention" }, value: { text: action.interventionName if action.interventionParticipation else 'N/A' } }
+                ]
+            }) }}
+        </form>
+        {% endfor %}
+
+        <div class="govuk-button-group">
+            {{ govukButton({ type: "Submit", text: "Add another action" if (actions | length > 0) else "Add an action", href: "/sentence-plan/" + sentencePlan.id + "/objective/" + objective.id + "/add-action", classes: "govuk-button--secondary" }) }}
+            {{ govukButton({ type: "Submit", text: "Continue", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block additionalScripts %}
+<script nonce="{{ cspNonce }}">
+  document.querySelectorAll('.delete-action-link').forEach(link => link.addEventListener('click', () => link.closest('form').submit()));
+</script>
+{% endblock %}
