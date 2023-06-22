@@ -21,8 +21,6 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
       text: it.description,
       checked: selectedNeeds.includes(it.key),
     }))
-    console.log(selectedNeeds)
-    console.log(needsOptions)
     return { objective, selectedNeeds, caseDetails, sentencePlan, needsOptions }
   }
 
@@ -80,7 +78,6 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
       needs: getNeeds(req),
     }
 
-    console.log(objective)
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       const { id } = await service.sentencePlanClient.createObjective(sentencePlanId, objective)
       res.redirect(`/sentence-plan/${sentencePlanId}/objective/${id}/add-action`)
@@ -99,7 +96,6 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
       motivation: req.body.motivation,
       needs: getNeeds(req),
     }
-    console.log(objective)
     if (await validateObjective(objective, sentencePlanId, req, res)) {
       const existingObjective = await service.sentencePlanClient.getObjective(sentencePlanId, objectiveId)
       await service.sentencePlanClient.updateObjective({ ...existingObjective, ...objective })
