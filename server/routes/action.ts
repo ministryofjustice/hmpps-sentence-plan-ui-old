@@ -103,7 +103,7 @@ export default function actionRoutes(router: Router, service: Services): Router 
       if ('add-another' in req.body) {
         res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/add-action`)
       } else {
-        res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/action-summary`)
+        res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/summary`)
       }
     }
   })
@@ -115,16 +115,25 @@ export default function actionRoutes(router: Router, service: Services): Router 
 
   post('/sentence-plan/:sentencePlanId/objective/:objectiveId/action/:actionId', async function updateAction(req, res) {
     const { sentencePlanId, objectiveId, actionId } = req.params
-    const action = toAction(req)
+    const action = { id: actionId, objectiveId, sentencePlanId, ...toAction(req) }
     if (await validateAction(action, sentencePlanId, objectiveId, req, res)) {
       await service.sentencePlanClient.updateAction(sentencePlanId, objectiveId, actionId, action)
       if ('add-another' in req.body) {
         res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/add-action`)
       } else {
-        res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/action-summary`)
+        res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/summary`)
       }
     }
   })
+
+  post(
+    '/sentence-plan/:sentencePlanId/objective/:objectiveId/action/:actionId/delete',
+    async function deleteAction(req, res) {
+      const { sentencePlanId, objectiveId, actionId } = req.params
+      await service.sentencePlanClient.deleteAction(sentencePlanId, objectiveId, actionId)
+      res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/summary`)
+    },
+  )
 
   interface ErrorMessages {
     [key: string]: { text: string }

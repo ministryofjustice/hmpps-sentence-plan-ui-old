@@ -92,7 +92,7 @@ describe('GET /sentence-plan/objective/add-action', () => {
         continue: true,
       })
       .expect(302)
-      .expect('Location', '/sentence-plan/1/objective/2/action-summary')
+      .expect('Location', '/sentence-plan/1/objective/2/summary')
       .expect(_ =>
         expect(api).toBeCalledWith('1', '2', {
           description: 'New text',
@@ -171,9 +171,12 @@ describe('GET /sentence-plan/objective/action', () => {
         continue: true,
       })
       .expect(302)
-      .expect('Location', '/sentence-plan/1/objective/2/action-summary')
+      .expect('Location', '/sentence-plan/1/objective/2/summary')
       .expect(_ =>
         expect(api).toBeCalledWith('1', '2', '3', {
+          id: '3',
+          objectiveId: '2',
+          sentencePlanId: '1',
           description: 'New text',
           interventionParticipation: true,
           interventionType: 'accredited-programme',

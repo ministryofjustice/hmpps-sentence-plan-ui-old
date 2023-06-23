@@ -47,7 +47,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     const caseDetails = await service.deliusService.getCaseDetails(sentencePlan.crn)
     const objectives = objectivesList.objectives.map((it, i) => ({
       text: `${i + 1}. ${it.description}`,
-      href: `./objective/${it.id}`,
+      href: `./objective/${it.id}/summary`,
       attributes: { 'data-actions': it.actionsCount || 0 },
     }))
     res.render('pages/sentencePlan/summary', { caseDetails, sentencePlan, objectives })

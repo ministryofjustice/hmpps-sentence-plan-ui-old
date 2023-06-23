@@ -146,7 +146,7 @@ describe('GET /sentence-plan/objective', () => {
       .post('/sentence-plan/1/objective/2')
       .send({ description: 'New text', 'relates-to-needs': 'no', needs: [], motivation: 'Contemplation' })
       .expect(302)
-      .expect('Location', '/sentence-plan/1/summary')
+      .expect('Location', '/sentence-plan/1/objective/2/summary')
       .expect(_ =>
         expect(updateApi).toBeCalledWith({
           id: '2',
@@ -155,5 +155,51 @@ describe('GET /sentence-plan/objective', () => {
           motivation: 'Contemplation',
         }),
       )
+  })
+})
+
+describe('GET /sentence-plan/objective/summary', () => {
+  beforeEach(() => {
+    services.sentencePlanClient.getObjective = jest.fn().mockResolvedValue({
+      id: '2',
+      description: 'Existing text',
+      needs: [{ code: 'drugs' }],
+    })
+    services.sentencePlanClient.listActions = jest.fn().mockResolvedValue({
+      actions: [
+        {
+          id: '3',
+          description: 'First action',
+          interventionParticipation: false,
+        },
+        {
+          id: '4',
+          description: 'Second action',
+          interventionParticipation: true,
+          interventionName: 'My intervention',
+        },
+      ],
+    })
+  })
+
+  it('should display objective summary and actions', () => {
+    return request(app)
+      .get('/sentence-plan/1/objective/2/summary')
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('Existing text'))
+      .expect(res => expect(res.text).toContain('Drug misuse'))
+      .expect(res => expect(res.text).toContain('First action'))
+      .expect(res => expect(res.text).toContain('Second action'))
+      .expect(res => expect(res.text).toContain('My intervention'))
+  })
+
+  it('can delete an action', () => {
+    const api = jest.fn().mockResolvedValue({})
+    services.sentencePlanClient.deleteAction = api
+    return request(app)
+      .post('/sentence-plan/1/objective/2/action/3/delete')
+      .expect(302)
+      .expect('Location', '/sentence-plan/1/objective/2/summary')
+      .expect(_ => expect(api).toBeCalledWith('1', '2', '3'))
   })
 })
