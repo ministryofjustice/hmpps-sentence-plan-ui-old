@@ -1,7 +1,4 @@
-import IndexPage from '../pages/index'
 import Page from '../pages/page'
-import SearchPage from '../pages/search'
-import CasePage from '../pages/case'
 import SummaryPage from '../pages/summary'
 import ObjectivePage from '../pages/objective'
 import ActionPage from '../pages/action'
@@ -15,18 +12,16 @@ context('Action', () => {
     cy.task('stubAuthUser')
     cy.task('stubProbationSearch')
     cy.task('stubDeliusIntegration')
+    cy.task('stubOasysIntegration')
     cy.task('stubSentencePlanApi')
     cy.task('stubInterventionApi')
-    cy.task('stubOasysIntegration')
     cy.signIn()
   })
 
   beforeEach(() => {
-    Page.verifyOnPage(IndexPage).startButton().click()
-    Page.verifyOnPage(SearchPage).search().selectFirstResult()
-    Page.verifyOnPage(CasePage).createButton().click()
+    cy.visit('/sentence-plan/00000000-0000-0000-0000-000000000003/summary')
     Page.verifyOnPage(SummaryPage).addObjectiveButton().click()
-    Page.verifyOnPage(ObjectivePage).enterObjective()
+    Page.verifyOnPage(ObjectivePage).enterDetails()
     page = Page.verifyOnPage(ActionPage)
   })
 
@@ -35,8 +30,10 @@ context('Action', () => {
     cy.get('[data-qa="objective"]').should('contain', 'Test objective')
   })
 
+  it('navigates to action summary page on save', () => page.enterDetails())
+
   it('auto-completes national interventions', () => {
-    cy.get('#description').type('Test objective description')
+    cy.get('#description').type('Test action description')
     cy.get('[name=relates-to-intervention]').check('yes')
     cy.get('[name=intervention-type]').check('national')
     cy.get('[name=national-intervention-name]').type('personal wellbeing{downArrow}{enter}')
@@ -45,16 +42,7 @@ context('Action', () => {
       'Personal Wellbeing Services for Young Adults in Dyfed-Powys DA',
     )
     cy.get('button[name=continue]').click()
-    cy.url().should('contain', '/action-summary')
-  })
-
-  it('navigates to action summary page on save', () => {
-    cy.get('#description').type('Test objective description')
-    cy.get('[name=relates-to-intervention]').check('yes')
-    cy.get('[name=intervention-type]').check('other')
-    cy.get('[name=other-intervention-name]').type('Some other intervention')
-    cy.get('button[name=continue]').click()
-    cy.url().should('contain', '/action-summary')
+    cy.url().should('contain', '/summary')
   })
 
   it('can add another action', () => {

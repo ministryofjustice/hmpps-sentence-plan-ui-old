@@ -5,7 +5,7 @@ export default class ObjectivePage extends Page {
     super('Set an objective')
   }
 
-  enterObjective() {
+  enterDetails() {
     cy.get('#description').type('Test objective')
     cy.get('#relates-to-needs').check('yes')
     cy.get('[name=needs\\[\\]]').check('relationships')

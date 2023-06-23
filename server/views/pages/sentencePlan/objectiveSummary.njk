@@ -27,7 +27,8 @@
                     items: [{
                         href: "/sentence-plan/" + sentencePlan.id + "/objective/" + objective.id,
                         text: "Change",
-                        visuallyHiddenText: "objective"
+                        visuallyHiddenText: "objective",
+                        attributes: { "data-qa": "change-objective" }
                     }]
                 }
             },
@@ -49,13 +50,15 @@
                             {
                                 href: "/sentence-plan/" + sentencePlan.id + "/objective/" + objective.id + "/action/" + action.id,
                                 text: "Change",
-                                visuallyHiddenText: "action"
+                                visuallyHiddenText: "action",
+                                attributes: { "data-qa": "change-action-" + loop.index }
                             },
                             {
                                 href: "#",
                                 text: "Delete",
                                 visuallyHiddenText: "action",
-                                classes: "delete-action-link"
+                                classes: "delete-action-link",
+                                attributes: { "data-qa": "delete-action-" + loop.index }
                             }
                         ]
                     }

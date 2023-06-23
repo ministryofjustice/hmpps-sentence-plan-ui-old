@@ -1,7 +1,4 @@
-import IndexPage from '../pages/index'
 import Page from '../pages/page'
-import SearchPage from '../pages/search'
-import CasePage from '../pages/case'
 import SummaryPage from '../pages/summary'
 import EngagementAndCompliancePage from '../pages/engagementAndCompliance'
 
@@ -19,9 +16,7 @@ context('Engagement and compliance', () => {
   })
 
   beforeEach(() => {
-    Page.verifyOnPage(IndexPage).startButton().click()
-    Page.verifyOnPage(SearchPage).search().selectFirstResult()
-    Page.verifyOnPage(CasePage).createButton().click()
+    cy.visit('/sentence-plan/00000000-0000-0000-0000-000000000003/summary')
     Page.verifyOnPage(SummaryPage).engagementAndCompliance().click()
     page = Page.verifyOnPage(EngagementAndCompliancePage)
   })

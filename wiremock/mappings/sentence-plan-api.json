@@ -72,7 +72,7 @@
     {
       "request": {
         "method": "PUT",
-        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)"
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)"
       },
       "response": {
         "status": 204
@@ -151,7 +151,7 @@
     {
       "request": {
         "method": "GET",
-        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective"
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)/objective"
       },
       "response": {
         "status": 200,
@@ -166,7 +166,7 @@
     {
       "request": {
         "method": "POST",
-        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective"
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)/objective"
       },
       "response": {
         "status": 200,
@@ -181,7 +181,7 @@
     {
       "request": {
         "method": "GET",
-        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective/(.*)"
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)/objective/([^/]*)"
       },
       "response": {
         "status": 200,
@@ -189,9 +189,17 @@
           "Content-Type": "application/json"
         },
         "jsonBody": {
-          "id": "{{ request.path.[5] }}",
+          "id": "00000000-0000-0000-0000-000000000000",
           "description": "Test objective",
-          "needs": ["accommodation", "employability"]
+          "needs": [
+            {
+              "code": "accommodation"
+            },
+            {
+              "code": "employability"
+            }
+          ],
+          "motivation": "Action"
         },
         "transformers": ["response-template"]
       }
@@ -199,7 +207,7 @@
     {
       "request": {
         "method": "POST",
-        "urlPattern": "/sentence-plan-api/sentence-plan/(.*)/objective/(.*)/action"
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)/objective/([^/]+)/action"
       },
       "response": {
         "status": 200,
@@ -208,6 +216,53 @@
         },
         "jsonBody": {
           "id": "00000000-0000-0000-0000-000000000000"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "DELETE",
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)/objective/([^/]+)/action/([^/]+)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)/objective/([^/]+)/action"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "actions": [
+            {
+              "id": "00000000-0000-0000-0000-000000000000",
+              "objectiveId": "00000000-0000-0000-0000-000000000000",
+              "description": "Do a thing",
+              "interventionParticipation": false,
+              "status": "In progress",
+              "individualOwner": true,
+              "practitionerOwner": false
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000000",
+              "objectiveId": "00000000-0000-0000-0000-000000000000",
+              "description": "Do another thing",
+              "interventionParticipation": true,
+              "interventionName": "Some intervention",
+              "status": "In progress",
+              "individualOwner": false,
+              "practitionerOwner": true
+            }
+          ]
         }
       }
     }
