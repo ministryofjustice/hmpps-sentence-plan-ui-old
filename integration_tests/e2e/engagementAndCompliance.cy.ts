@@ -25,7 +25,7 @@ context('Engagement and compliance', () => {
 
   it('data can be entered', () => {
     cy.get('#risk-factors').type('Test data for risk factors')
-    cy.get('#positive-factors').type('Test data for positive factors')
+    cy.get('#protective-factors').type('Test data for protective factors')
     cy.get('form').submit()
     cy.url().should('contain', '/summary')
   })
