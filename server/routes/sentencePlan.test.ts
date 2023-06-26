@@ -125,7 +125,7 @@ describe('GET /sentence-plan/engagement-and-compliance', () => {
     services.sentencePlanClient.updateSentencePlan = updateApi
     return request(app)
       .post('/sentence-plan/123/engagement-and-compliance')
-      .send({ riskFactors: 'Risk factors', protectiveFactors: 'protective factors' })
+      .send({ 'risk-factors': 'Risk factors', 'protective-factors': 'protective factors' })
       .expect(302)
       .expect('Location', '/sentence-plan/123/summary')
       .expect(_ =>

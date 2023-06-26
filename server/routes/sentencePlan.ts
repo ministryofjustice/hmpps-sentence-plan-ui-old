@@ -59,9 +59,12 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
   post('/sentence-plan/:id/engagement-and-compliance', async function updateEngagementAndCompliance(req, res) {
     const { id } = req.params
-    const { riskFactors, protectiveFactors } = req.body
     const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
-    await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, riskFactors, protectiveFactors })
+    await service.sentencePlanClient.updateSentencePlan({
+      ...existingSentencePlan,
+      riskFactors: req.body['risk-factors'],
+      protectiveFactors: req.body['protective-factors'],
+    })
     res.redirect(`/sentence-plan/${id}/summary`)
   })
 
