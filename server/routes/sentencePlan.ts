@@ -15,9 +15,10 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
   get('/case/:crn', async function loadCaseSummary(req, res) {
     const { crn } = req.params
-    const [caseDetails, { sentencePlans }] = await Promise.all([
+    const [caseDetails, { sentencePlans }, initialAppointment] = await Promise.all([
       service.deliusService.getCaseDetails(crn),
       service.sentencePlanClient.listSentencePlans(crn),
+      service.deliusService.getInitialAppointmentDate(crn),
     ])
 
     res.render('pages/case', {
@@ -29,6 +30,10 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         { html: `<a href='/sentence-plan/${it.id}/summary'>View</a>` },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
+      initialAppointmentDate:
+        initialAppointment.appointmentDate !== undefined
+          ? formatDate(initialAppointment.appointmentDate)
+          : 'No initial appointment found',
     })
   })
 

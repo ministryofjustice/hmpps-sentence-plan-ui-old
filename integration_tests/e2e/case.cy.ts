@@ -42,6 +42,10 @@ context('Case', () => {
       page.sentencePlans().first().find('a').click()
       cy.get('h2').should('contain.text', 'Create a sentence plan')
     })
+
+    it('show initial appointment date', () => {
+      cy.get('[data-qa=initial-appointment-date]').should('contain.text', '06/06/2023')
+    })
   })
 
   context('new', () => {

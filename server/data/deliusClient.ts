@@ -11,6 +11,11 @@ export default class DeliusClient {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).get({ path: `/case-details/${crn}` })
   }
+
+  async getInitialAppointmentDate(crn: string): Promise<InitialAppointment> {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).get({ path: `/case-details/${crn}/first-appointment-date` })
+  }
 }
 
 export interface Name {
@@ -30,4 +35,9 @@ export interface CaseDetailsResponse {
   }
   region?: string
   tier?: string
+  inCustody: boolean
+}
+
+export interface InitialAppointment {
+  appointmentDate?: string
 }

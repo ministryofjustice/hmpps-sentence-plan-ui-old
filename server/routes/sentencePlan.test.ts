@@ -20,6 +20,10 @@ beforeEach(() => {
     dateOfBirth: '1990-01-01',
     managerName: 'Test',
     tier: 'T1',
+    isCustody: false,
+  })
+  services.deliusService.getInitialAppointmentDate = jest.fn().mockResolvedValue({
+    appointmentDate: '1990-01-01',
   })
   services.sentencePlanClient.listObjectives = jest.fn().mockResolvedValue({
     objectives: [],
