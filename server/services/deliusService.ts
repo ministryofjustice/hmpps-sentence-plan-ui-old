@@ -9,6 +9,11 @@ interface CaseDetails {
   dateOfBirth: string
   region?: string
   managerName: string
+  inCustody: boolean
+}
+
+interface InitialAppointment {
+  appointmentDate?: string
 }
 
 export default class DeliusService {
@@ -27,6 +32,14 @@ export default class DeliusService {
         details.keyWorker != null && !details.keyWorker.unallocated
           ? formatName(details.keyWorker.name)
           : 'Unallocated',
+      inCustody: details.inCustody,
+    }
+  }
+
+  async getInitialAppointmentDate(crn: string): Promise<InitialAppointment> {
+    const details = await this.deliusClient.getInitialAppointmentDate(crn)
+    return {
+      appointmentDate: details.appointmentDate,
     }
   }
 }

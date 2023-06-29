@@ -6,7 +6,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block banner %}
-  {% include "../partials/caseDetailsBanner.njk" %}
+    {% include "../partials/caseDetailsBanner.njk" %}
 {% endblock %}
 
 {% block content %}
@@ -30,4 +30,13 @@
             attributes: { 'data-qa': 'create' }
         }) }}
     {% endif %}
+
+    <h2>Additional Information</h2>
+    {% if not caseDetails.inCustody %}
+        <p>Initial appointment date</p>
+        <hr>
+        <p><b>{{ initialAppointmentDate }}</b></p>
+    {% endif %}
 {% endblock %}
+
+
