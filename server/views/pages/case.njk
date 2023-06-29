@@ -35,7 +35,7 @@
     {% if not caseDetails.inCustody %}
         <p>Initial appointment date</p>
         <hr>
-        <p><b>{{ initialAppointmentDate }}</b></p>
+        <span data-qa='initial-appointment-date'><p><b>{{ initialAppointmentDate }}</b></p></span>
     {% endif %}
 {% endblock %}
 
