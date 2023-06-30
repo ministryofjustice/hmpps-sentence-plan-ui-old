@@ -20,6 +20,10 @@ beforeEach(() => {
     dateOfBirth: '1990-01-01',
     managerName: 'Test',
     tier: 'T1',
+    isCustody: false,
+  })
+  services.deliusService.getInitialAppointmentDate = jest.fn().mockResolvedValue({
+    appointmentDate: '1990-01-01',
   })
   services.sentencePlanClient.listObjectives = jest.fn().mockResolvedValue({
     objectives: [],
@@ -85,7 +89,7 @@ describe('GET /sentence-plan', () => {
     services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({
       crn: '123',
       riskFactors: 'Dummy data',
-      positiveFactors: 'More dummy data',
+      protectiveFactors: 'More dummy data',
     })
     return request(app)
       .get('/sentence-plan/123/summary')
@@ -125,14 +129,14 @@ describe('GET /sentence-plan/engagement-and-compliance', () => {
     services.sentencePlanClient.updateSentencePlan = updateApi
     return request(app)
       .post('/sentence-plan/123/engagement-and-compliance')
-      .send({ riskFactors: 'Risk factors', positiveFactors: 'Positive factors' })
+      .send({ 'risk-factors': 'Risk factors', 'protective-factors': 'protective factors' })
       .expect(302)
       .expect('Location', '/sentence-plan/123/summary')
       .expect(_ =>
         expect(updateApi).toBeCalledWith({
           id: '123',
           riskFactors: 'Risk factors',
-          positiveFactors: 'Positive factors',
+          protectiveFactors: 'protective factors',
         }),
       )
   })

@@ -15,9 +15,10 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
   get('/case/:crn', async function loadCaseSummary(req, res) {
     const { crn } = req.params
-    const [caseDetails, { sentencePlans }] = await Promise.all([
+    const [caseDetails, { sentencePlans }, initialAppointment] = await Promise.all([
       service.deliusService.getCaseDetails(crn),
       service.sentencePlanClient.listSentencePlans(crn),
+      service.deliusService.getInitialAppointmentDate(crn),
     ])
 
     res.render('pages/case', {
@@ -29,6 +30,10 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         { html: `<a href='/sentence-plan/${it.id}/summary'>View</a>` },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
+      initialAppointmentDate:
+        initialAppointment.appointmentDate !== undefined
+          ? formatDate(initialAppointment.appointmentDate)
+          : 'No initial appointment found',
     })
   })
 
@@ -47,7 +52,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     const caseDetails = await service.deliusService.getCaseDetails(sentencePlan.crn)
     const objectives = objectivesList.objectives.map((it, i) => ({
       text: `${i + 1}. ${it.description}`,
-      href: `./objective/${it.id}`,
+      href: `./objective/${it.id}/summary`,
       attributes: { 'data-actions': it.actionsCount || 0 },
     }))
     res.render('pages/sentencePlan/summary', { caseDetails, sentencePlan, objectives })
@@ -59,9 +64,12 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
   post('/sentence-plan/:id/engagement-and-compliance', async function updateEngagementAndCompliance(req, res) {
     const { id } = req.params
-    const { riskFactors, positiveFactors } = req.body
     const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
-    await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, riskFactors, positiveFactors })
+    await service.sentencePlanClient.updateSentencePlan({
+      ...existingSentencePlan,
+      riskFactors: req.body['risk-factors'],
+      protectiveFactors: req.body['protective-factors'],
+    })
     res.redirect(`/sentence-plan/${id}/summary`)
   })
 

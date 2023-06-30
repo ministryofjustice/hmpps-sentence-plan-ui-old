@@ -24,7 +24,8 @@
               "forename": "Unallocated (N07)",
               "surname": "Unallocated"
             },
-            "unallocated": true
+            "unallocated": true,
+            "inCustody": true
           }
         }
       }
@@ -54,8 +55,37 @@
               "forename": "John",
               "surname": "Smith"
             },
-            "unallocated": false
+            "unallocated": false,
+            "inCustody": false
           }
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/delius/case-details/X000001/first-appointment-date"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/delius/case-details/X000002/first-appointment-date"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "appointmentDate": "2023-06-06"
         }
       }
     }
