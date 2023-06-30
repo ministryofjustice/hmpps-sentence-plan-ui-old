@@ -145,11 +145,8 @@
 
 {% block additionalScripts %}
 <script type="text/javascript" src="/assets/accessible-autocomplete.min.js"></script>
-<script nonce="{{ cspNonce }}">function actionCancelClick() {
-
-    }
-
-    const options = document.querySelectorAll('input[name="relates-to-intervention"]');
+<script nonce="{{ cspNonce }}">
+  const options = document.querySelectorAll('input[name="relates-to-intervention"]');
   const container = document.getElementById('intervention-type-container');
   options.forEach(option => option.addEventListener('change', () => option.value === 'yes' ? container.classList.remove('govuk-visually-hidden') : container.classList.add('govuk-visually-hidden')));
 </script>
@@ -164,5 +161,8 @@
       {% set comma = joiner() %}{% for name in nationalInterventions -%}{{ comma() }}"{{ name | safe | escape }}"{%- endfor %}
     ]
   })
+</script>
+<script nonce="{{  cspNonce }}">
+
 </script>
 {% endblock %}
