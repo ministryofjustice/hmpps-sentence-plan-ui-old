@@ -105,9 +105,35 @@
                 }) }}
             </div>
 
+            {{ govukRadios({
+                name: "ensuring-the-action",
+                classes: "govuk-radios--inline",
+                fieldset: {
+                    legend: { text: "Who will be involved in ensuring this action is completed. (please select all that apply)", classes: "govuk-fieldset__legend--m" }
+                },
+                errorMessage: errorMessages.ensuringTheAction,
+                items: [
+                    { value: "individual", text: "Individual" },
+                    { value: "Probation Practicioner", text: "Probation Practicioner" },
+                    { value: "Other", text: "Other (please provide details)", checked: action.ensureActionType == "other", conditional: { html: ensureActionOtherHtml } }
+                ]
+            }) }}
+
+            {% set ensureActionOtherHtml %}
+                {{ govukInput({
+                    name: "ensure-action-other",
+                    value: action.ensureActionOther if action.ensureActionType == "Other" else "",
+                    errorMessage: errorMessages.ensureActionOther,
+                    label: { text: "Please provide more details", classes: "govuk-label--s" }
+                }) }}
+            {% endset -%}
+
             <div class="govuk-button-group">
                 {{ govukButton({ type: "Submit", text: "Add another action", name: "add-another", classes: "govuk-button--secondary" }) }}
                 {{ govukButton({ type: "Submit", text: "Continue", name: "continue" }) }}
+                {{ govukBackLink({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/add-objective/" }) }}
+
+                <a onclick="actionCancelClick()">Cancel</a>
             </div>
         </form>
     </div>
@@ -119,8 +145,11 @@
 
 {% block additionalScripts %}
 <script type="text/javascript" src="/assets/accessible-autocomplete.min.js"></script>
-<script nonce="{{ cspNonce }}">
-  const options = document.querySelectorAll('input[name="relates-to-intervention"]');
+<script nonce="{{ cspNonce }}">function actionCancelClick() {
+
+    }
+
+    const options = document.querySelectorAll('input[name="relates-to-intervention"]');
   const container = document.getElementById('intervention-type-container');
   options.forEach(option => option.addEventListener('change', () => option.value === 'yes' ? container.classList.remove('govuk-visually-hidden') : container.classList.add('govuk-visually-hidden')));
 </script>
