@@ -24,18 +24,22 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
     let arrivalIntoCustodyDate = 'unknown'
     if (caseDetails.nomsNumber !== undefined) {
-      const sentence = <Sentence>(
-        await Promise.all([service.prisonApiClient.getArrivalIntoCustodyDate(caseDetails.nomsNumber)])
-      )
-      arrivalIntoCustodyDate = sentence.sentenceDetail.sentenceStartDate
+      try {
+        const sentence = <Sentence>(
+          await Promise.all([service.prisonApiClient.getArrivalIntoCustodyDate(caseDetails.nomsNumber)])
+        )
+        arrivalIntoCustodyDate = sentence.sentenceDetail.sentenceStartDate
+      } catch (error) {
+        arrivalIntoCustodyDate = 'Error receiving information from prison api'
+      }
     }
 
     res.render('pages/case', {
       caseDetails,
       head: [{ text: 'Date' }, { text: 'Status' }, {}],
       rows: sentencePlans.map(it => [
-        { html: `<span title="${it.createdDate}">${formatDate(it.createdDate)}</span>` },
-        { html: `<strong class="moj-badge">${it.status}</strong>` },
+        { html: `<span title='${it.createdDate}'>${formatDate(it.createdDate)}</span>` },
+        { html: `<strong class='moj-badge'>${it.status}</strong>` },
         { html: `<a href='/sentence-plan/${it.id}/summary'>View</a>` },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
