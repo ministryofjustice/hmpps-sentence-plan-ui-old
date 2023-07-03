@@ -28,6 +28,11 @@ beforeEach(() => {
   services.sentencePlanClient.listObjectives = jest.fn().mockResolvedValue({
     objectives: [],
   })
+  services.prisonApiClient.getArrivalIntoCustodyDate = jest.fn().mockResolvedValue({
+    sentenceDetail: {
+      sentenceStartDate: '2010-02-03',
+    },
+  })
 })
 
 describe('GET /case', () => {

@@ -1,0 +1,21 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/api/offenders/AB1234A/sentences"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "sentenceDetail": {
+            "sentenceStartDate": "2010-02-03"
+          }
+        }
+      }
+    }
+  ]
+}

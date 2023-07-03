@@ -12,6 +12,7 @@ import SentencePlanClient from './sentencePlanClient'
 import DeliusClient from './deliusClient'
 import InterventionsClient from './interventionsClient'
 import OasysClient from './oasysClient'
+import PrisonApiClient from './prisonApiClient'
 
 initialiseAppInsights()
 buildAppInsightsClient()
@@ -25,6 +26,7 @@ export const dataAccess = () => {
     deliusClient: new DeliusClient(hmppsAuthClient),
     interventionsClient: new InterventionsClient(hmppsAuthClient),
     oasysClient: new OasysClient(hmppsAuthClient),
+    prisonApiClient: new PrisonApiClient(hmppsAuthClient),
   }
 }
 

@@ -14,11 +14,12 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   }
 
   get('/case/:crn', async function loadCaseSummary(req, res) {
-    const { crn } = req.params
-    const [caseDetails, { sentencePlans }, initialAppointment] = await Promise.all([
+    const { crn, nomsNumber } = req.params
+    const [caseDetails, { sentencePlans }, initialAppointment, arrivalIntoCustodyDate] = await Promise.all([
       service.deliusService.getCaseDetails(crn),
       service.sentencePlanClient.listSentencePlans(crn),
       service.deliusService.getInitialAppointmentDate(crn),
+      service.prisonApiClient.getArrivalIntoCustodyDate(nomsNumber),
     ])
 
     res.render('pages/case', {
@@ -34,7 +35,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         initialAppointment.appointmentDate !== undefined
           ? formatDate(initialAppointment.appointmentDate)
           : 'No initial appointment found',
-      arrivalIntoCustodyDate: '12/12/1999',
+      arrivalIntoCustodyDate,
     })
   })
 

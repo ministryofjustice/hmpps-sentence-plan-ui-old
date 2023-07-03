@@ -12,6 +12,7 @@
         },
         "jsonBody": {
           "crn": "X000001",
+          "nomsNumber": "AB1234A",
           "name": {
             "forename": "Joe",
             "surname": "Bloggs"
