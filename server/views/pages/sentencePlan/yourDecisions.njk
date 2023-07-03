@@ -1,0 +1,35 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Your decisions" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-!-width-two-thirds">
+        <span class="govuk-caption-l">Final information</span>
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukCharacterCount({
+                name: "practitioner-comments",
+                id: "practitioner-comments",
+                value: sentencePlan.practitionerComments,
+                threshold: 50,
+                maxlength: 5000,
+                label: { text: "Your decisions", classes: "govuk-label--l", isPageHeading: true },
+                hint: { text: "Record the reasoning behind any decisions you have made. Include any key points from conversations with the individual that are relevant to the completion of this sentence plan. For example, why you might not deal with a particular need at this time, or why you chose to include a particular objective or action." }
+            }) }}
+            {{ govukButton({ text: "Continue", type: "Submit" }) }}
+            {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
+        </form>
+    </div>
+{% endblock %}

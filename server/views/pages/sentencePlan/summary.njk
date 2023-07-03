@@ -31,15 +31,22 @@
                 {
                     heading: { text: "Set objectives" },
                     items: objectives.concat({
-                        html: "<a href='./add-objective' role='button' class='govuk-button govuk-button--secondary' data-qa='add-objective'>" + ("Add an objective" if objectives.length == 0 else "Add another") + "</a>" +
-                            (" <a href='./reorder-objectives' role='button' class='govuk-button govuk-button--secondary' data-qa='reorder-objectives'>Re-order</a>" if objectives.length > 1 else "")
+                        html: "<a href='./add-objective' role='button' class='govuk-button govuk-button--secondary' data-qa='add-objective'>" + ("Add an objective" if objectives.length == 0 else "Add another") + "</a>"
                     })
                 },
                 {
                     heading: { text: "Final information" },
                     items: [
-                        { text: "Your decisions", href: "./your-decisions" },
-                        { text: "Individual's comments", href: "./individuals-comments" }
+                        {
+                            text: "Your decisions",
+                            href: "./your-decisions",
+                            complete: sentencePlan.practitionerComments != null
+                        },
+                        {
+                            text: "Individual's comments",
+                            href: "./individuals-comments",
+                            complete: sentencePlan.individualComments != null
+                        }
                     ]
                 },
                 {

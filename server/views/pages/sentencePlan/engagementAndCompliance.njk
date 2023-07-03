@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-    {{ govukBackLink({ text: "Back", href: "./summary" }) }}
+    {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
 {% endblock %}
 
 {% block content %}
@@ -44,6 +44,7 @@
                 hint: { text: "Describe any protective factors and strengths that could positively affect achievement of the sentence plan." }
             }) }}
             {{ govukButton({ text: "Continue" }) }}
+            {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
         </form>
     </div>
 {% endblock %}
