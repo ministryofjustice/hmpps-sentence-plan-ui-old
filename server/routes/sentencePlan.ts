@@ -34,6 +34,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         initialAppointment.appointmentDate !== undefined
           ? formatDate(initialAppointment.appointmentDate)
           : 'No initial appointment found',
+      arrivalIntoCustodyDate: '12/12/1999',
     })
   })
 
