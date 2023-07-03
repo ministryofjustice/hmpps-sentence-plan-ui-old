@@ -3,7 +3,6 @@ import UserService from './userService'
 import ProbationSearchClient from '../data/probationSearchClient'
 import SentencePlanClient from '../data/sentencePlanClient'
 import DeliusService from './deliusService'
-import PrisonApiClient from '../data/prisonApiClient'
 
 export const services = () => {
   const {

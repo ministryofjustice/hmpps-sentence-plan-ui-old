@@ -1,4 +1,3 @@
-import Sender from 'applicationinsights/out/Library/Sender'
 import RestClient from './restClient'
 import config from '../config'
 import HmppsAuthClient from './hmppsAuthClient'
