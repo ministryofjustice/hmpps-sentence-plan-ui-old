@@ -1,7 +1,6 @@
 import nock from 'nock'
 import config from '../config'
 import HmppsAuthClient from './hmppsAuthClient'
-import DeliusClient from './deliusClient'
 import PrisonApiClient from './prisonApiClient'
 
 jest.mock('../data/hmppsAuthClient')
