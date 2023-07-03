@@ -12,7 +12,7 @@
         },
         "jsonBody": {
           "crn": "X000001",
-          "nomsNumber": "AB1234A",
+          "nomisId": "AB1234A",
           "name": {
             "forename": "Joe",
             "surname": "Bloggs"
@@ -43,7 +43,7 @@
         },
         "jsonBody": {
           "crn": "X000002",
-          "nomsNumber": "AB1234C",
+          "nomisId": "AB1234C",
           "name": {
             "forename": "Jane",
             "surname": "Bloggs"
