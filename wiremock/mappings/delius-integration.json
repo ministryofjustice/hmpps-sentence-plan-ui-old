@@ -12,7 +12,6 @@
         },
         "jsonBody": {
           "crn": "X000001",
-          "nomisId": "AB1234A",
           "name": {
             "forename": "Joe",
             "surname": "Bloggs"
