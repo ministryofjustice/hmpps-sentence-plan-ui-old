@@ -36,7 +36,7 @@ export default class DeliusService {
     }
   }
 
-  async getInitialAppointmentDate(crn: string): Promise<InitialAppointment> {
+  async getInitialAppointment(crn: string): Promise<InitialAppointment> {
     const details = await this.deliusClient.getInitialAppointmentDate(crn)
     return {
       appointmentDate: details.appointmentDate,

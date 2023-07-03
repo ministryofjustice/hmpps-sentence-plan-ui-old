@@ -12,6 +12,7 @@
         },
         "jsonBody": {
           "crn": "X000001",
+          "nomisId": "AB1234Z",
           "name": {
             "forename": "Joe",
             "surname": "Bloggs"
@@ -24,9 +25,9 @@
               "forename": "Unallocated (N07)",
               "surname": "Unallocated"
             },
-            "unallocated": true,
-            "inCustody": true
-          }
+            "unallocated": true
+          },
+          "inCustody": true
         }
       }
     },
@@ -55,23 +56,10 @@
               "forename": "John",
               "surname": "Smith"
             },
-            "unallocated": false,
-            "inCustody": false
-          }
+            "unallocated": false
+          },
+          "inCustody": false
         }
-      }
-    },
-    {
-      "request": {
-        "method": "GET",
-        "urlPattern": "/delius/case-details/X000001/first-appointment-date"
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "jsonBody": {}
       }
     },
     {

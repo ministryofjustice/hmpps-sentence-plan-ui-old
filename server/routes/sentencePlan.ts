@@ -3,6 +3,7 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { formatDate } from '../utils/utils'
 import { Sentence } from '../data/prisonApiClient'
+import { InitialAppointment } from '../data/deliusClient'
 
 export default function sentencePlanRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -16,19 +17,30 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
   get('/case/:crn', async function loadCaseSummary(req, res) {
     const { crn } = req.params
-    const [caseDetails, { sentencePlans }, initialAppointment] = await Promise.all([
+    const [caseDetails, { sentencePlans }] = await Promise.all([
       service.deliusService.getCaseDetails(crn),
       service.sentencePlanClient.listSentencePlans(crn),
-      service.deliusService.getInitialAppointmentDate(crn),
     ])
 
+    let initialAppointmentDate = 'unknown'
+    if (!caseDetails.inCustody) {
+      try {
+        const initialAppointment = <InitialAppointment>(
+          await Promise.all([service.deliusService.getInitialAppointment(crn)])
+        )
+        initialAppointmentDate = formatDate(initialAppointment[0].appointmentDate)
+      } catch (error) {
+        initialAppointmentDate = 'Error receiving information from delius integration'
+      }
+    }
+
     let arrivalIntoCustodyDate = 'unknown'
-    if (caseDetails.nomsNumber !== undefined) {
+    if (caseDetails.nomsNumber !== undefined && caseDetails.inCustody) {
       try {
         const sentence = <Sentence>(
           await Promise.all([service.prisonApiClient.getArrivalIntoCustodyDate(caseDetails.nomsNumber)])
         )
-        arrivalIntoCustodyDate = sentence.sentenceDetail.sentenceStartDate
+        arrivalIntoCustodyDate = formatDate(sentence[0].sentenceDetail.sentenceStartDate)
       } catch (error) {
         arrivalIntoCustodyDate = 'Error receiving information from prison api'
       }
@@ -43,10 +55,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         { html: `<a href='/sentence-plan/${it.id}/summary'>View</a>` },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
-      initialAppointmentDate:
-        initialAppointment.appointmentDate !== undefined
-          ? formatDate(initialAppointment.appointmentDate)
-          : 'No initial appointment found',
+      initialAppointmentDate,
       arrivalIntoCustodyDate,
     })
   })

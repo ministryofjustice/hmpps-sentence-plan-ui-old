@@ -3,7 +3,7 @@
     {
       "request": {
         "method": "GET",
-        "urlPattern": "/api/offenders/AB1234A/sentences"
+        "urlPattern": "/prison-api/api/offenders/AB1234Z/sentences"
       },
       "response": {
         "status": 200,

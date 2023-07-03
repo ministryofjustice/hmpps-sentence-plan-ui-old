@@ -7,6 +7,7 @@ import deliusIntegration from './integration_tests/mockApis/deliusIntegration'
 import sentencePlanApi from './integration_tests/mockApis/sentencePlanApi'
 import interventionApi from './integration_tests/mockApis/interventionApi'
 import oasysIntegration from './integration_tests/mockApis/oasysIntegration'
+import prisonApiIntegration from './integration_tests/mockApis/prisonApiIntegration'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -32,6 +33,7 @@ export default defineConfig({
         ...deliusIntegration,
         ...interventionApi,
         ...oasysIntegration,
+        ...prisonApiIntegration,
       })
     },
     baseUrl: 'http://localhost:3007',
