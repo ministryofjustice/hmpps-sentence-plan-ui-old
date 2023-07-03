@@ -24,7 +24,7 @@ export default class DeliusService {
     return {
       name: formatName(details.name),
       crn: details.crn,
-      nomsNumber: details.nomsNumber,
+      nomsNumber: details.nomisId,
       tier: details.tier,
       dateOfBirth: formatDate(details.dateOfBirth),
       region: details.region,

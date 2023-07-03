@@ -2,6 +2,7 @@ import { type RequestHandler, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { formatDate } from '../utils/utils'
+import { Sentence } from '../data/prisonApiClient'
 
 export default function sentencePlanRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -14,13 +15,20 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   }
 
   get('/case/:crn', async function loadCaseSummary(req, res) {
-    const { crn, nomsNumber } = req.params
-    const [caseDetails, { sentencePlans }, initialAppointment, arrivalIntoCustodyDate] = await Promise.all([
+    const { crn } = req.params
+    const [caseDetails, { sentencePlans }, initialAppointment] = await Promise.all([
       service.deliusService.getCaseDetails(crn),
       service.sentencePlanClient.listSentencePlans(crn),
       service.deliusService.getInitialAppointmentDate(crn),
-      service.prisonApiClient.getArrivalIntoCustodyDate(nomsNumber),
     ])
+
+    let arrivalIntoCustodyDate = 'unknown'
+    if (caseDetails.nomsNumber !== undefined) {
+      const sentence = <Sentence>(
+        await Promise.all([service.prisonApiClient.getArrivalIntoCustodyDate(caseDetails.nomsNumber)])
+      )
+      arrivalIntoCustodyDate = sentence.sentenceDetail.sentenceStartDate
+    }
 
     res.render('pages/case', {
       caseDetails,

@@ -26,7 +26,7 @@ export interface Name {
 
 export interface CaseDetailsResponse {
   crn: string
-  nomsNumber?: string
+  nomisId?: string
   name: Name
   dateOfBirth: string
   keyWorker?: {
