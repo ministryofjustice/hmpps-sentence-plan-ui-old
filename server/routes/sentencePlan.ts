@@ -15,7 +15,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     return { caseDetails, sentencePlan }
   }
 
-  async function errorMessage(page: string, text: string, req: Request, res: Response) {
+  async function errorMessage(text: string, page: string, req: Request, res: Response) {
     res.render(`pages/sentencePlan/${page}`, { ...(await loadSentencePlan(req.params.id)), errorMessage: { text } })
   }
 
@@ -103,10 +103,9 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   post('/sentence-plan/:id/your-decisions', async function updatePractitionerComments(req, res) {
     const { id } = req.params
     const practitionerComments = req.body['practitioner-comments']
-    if (practitionerComments.length === 0)
-      await errorMessage('Please enter your decisions', 'practitionerComments', req, res)
+    if (practitionerComments.length === 0) await errorMessage('Please enter your decisions', 'yourDecisions', req, res)
     if (practitionerComments.length > 5000)
-      await errorMessage('Your decisions must be 5000 characters or less', 'practitionerComments', req, res)
+      await errorMessage('Your decisions must be 5000 characters or less', 'yourDecisions', req, res)
 
     const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
     await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, practitionerComments })
