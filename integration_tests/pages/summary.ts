@@ -7,5 +7,9 @@ export default class SummaryPage extends Page {
 
   engagementAndCompliance = () => cy.get('.moj-task-list__item').contains('Engagement and compliance')
 
+  yourDecisions = () => cy.get('.moj-task-list__item').contains('Your decisions')
+
+  individualsComments = () => cy.get('.moj-task-list__item').contains("Individual's comments")
+
   addObjectiveButton = () => cy.get('[data-qa=add-objective]')
 }
