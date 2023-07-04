@@ -4,6 +4,7 @@ import type { Services } from '../services'
 import { formatDate } from '../utils/utils'
 import { Sentence } from '../data/prisonApiClient'
 import { InitialAppointment } from '../data/deliusClient'
+import logger from '../../logger'
 
 export default function sentencePlanRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -42,6 +43,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         const sentence = <Sentence>await service.prisonApiClient.getArrivalIntoCustodyDate(caseDetails.nomsNumber)
         arrivalIntoCustodyDate = formatDate(sentence.sentenceDetail.sentenceStartDate)
       } catch (error) {
+        logger.error(error, `Failed to get data from prison api: ${JSON.stringify(error)}`)
         arrivalIntoCustodyDate = 'Error receiving information from prison api'
       }
     }
