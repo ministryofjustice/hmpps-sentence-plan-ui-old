@@ -25,10 +25,8 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     let initialAppointmentDate = 'unknown'
     if (!caseDetails.inCustody) {
       try {
-        const initialAppointment = <InitialAppointment>(
-          await Promise.all([service.deliusService.getInitialAppointment(crn)])
-        )
-        initialAppointmentDate = formatDate(initialAppointment[0].appointmentDate)
+        const initialAppointment = <InitialAppointment>await service.deliusService.getInitialAppointment(crn)
+        initialAppointmentDate = formatDate(initialAppointment.appointmentDate)
       } catch (error) {
         initialAppointmentDate = 'Error receiving information from delius integration'
       }
@@ -37,10 +35,8 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     let arrivalIntoCustodyDate = 'unknown'
     if (caseDetails.nomsNumber !== undefined && caseDetails.inCustody) {
       try {
-        const sentence = <Sentence>(
-          await Promise.all([service.prisonApiClient.getArrivalIntoCustodyDate(caseDetails.nomsNumber)])
-        )
-        arrivalIntoCustodyDate = formatDate(sentence[0].sentenceDetail.sentenceStartDate)
+        const sentence = <Sentence>await service.prisonApiClient.getArrivalIntoCustodyDate(caseDetails.nomsNumber)
+        arrivalIntoCustodyDate = formatDate(sentence.sentenceDetail.sentenceStartDate)
       } catch (error) {
         arrivalIntoCustodyDate = 'Error receiving information from prison api'
       }
