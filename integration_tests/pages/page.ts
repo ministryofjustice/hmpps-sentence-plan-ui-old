@@ -19,7 +19,7 @@ export default abstract class Page {
 
   checkCaseDetails = () => {
     cy.get('[data-qa=crn]').should('contain.text', 'X000001')
-    cy.get('[data-qa=noms-number]').should('not.exist')
+    cy.get('[data-qa=noms-number]').should('contain.text', 'AB1234Z')
     cy.get('[data-qa=tier]').should('contain.text', 'Tier: D2')
     cy.get('[data-qa=dob]').should('contain.text', 'Date of birth: 01/01/1980')
     cy.get('[data-qa=manager]').should('contain.text', 'Manager: Unallocated')

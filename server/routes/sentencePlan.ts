@@ -2,6 +2,8 @@ import { type RequestHandler, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { formatDate } from '../utils/utils'
+import { Sentence } from '../data/prisonApiClient'
+import { InitialAppointment } from '../data/deliusClient'
 
 export default function sentencePlanRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -15,25 +17,42 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
   get('/case/:crn', async function loadCaseSummary(req, res) {
     const { crn } = req.params
-    const [caseDetails, { sentencePlans }, initialAppointment] = await Promise.all([
+    const [caseDetails, { sentencePlans }] = await Promise.all([
       service.deliusService.getCaseDetails(crn),
       service.sentencePlanClient.listSentencePlans(crn),
-      service.deliusService.getInitialAppointmentDate(crn),
     ])
+
+    let initialAppointmentDate = 'unknown'
+    if (!caseDetails.inCustody) {
+      try {
+        const initialAppointment = <InitialAppointment>await service.deliusService.getInitialAppointment(crn)
+        initialAppointmentDate = formatDate(initialAppointment.appointmentDate)
+      } catch (error) {
+        initialAppointmentDate = 'Error receiving information from delius integration'
+      }
+    }
+
+    let arrivalIntoCustodyDate = 'unknown'
+    if (caseDetails.nomsNumber !== undefined && caseDetails.inCustody) {
+      try {
+        const sentence = <Sentence>await service.prisonApiClient.getArrivalIntoCustodyDate(caseDetails.nomsNumber)
+        arrivalIntoCustodyDate = formatDate(sentence.sentenceDetail.sentenceStartDate)
+      } catch (error) {
+        arrivalIntoCustodyDate = 'Error receiving information from prison api'
+      }
+    }
 
     res.render('pages/case', {
       caseDetails,
       head: [{ text: 'Date' }, { text: 'Status' }, {}],
       rows: sentencePlans.map(it => [
-        { html: `<span title="${it.createdDate}">${formatDate(it.createdDate)}</span>` },
-        { html: `<strong class="moj-badge">${it.status}</strong>` },
+        { html: `<span title='${it.createdDate}'>${formatDate(it.createdDate)}</span>` },
+        { html: `<strong class='moj-badge'>${it.status}</strong>` },
         { html: `<a href='/sentence-plan/${it.id}/summary'>View</a>` },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
-      initialAppointmentDate:
-        initialAppointment.appointmentDate !== undefined
-          ? formatDate(initialAppointment.appointmentDate)
-          : 'No initial appointment found',
+      initialAppointmentDate,
+      arrivalIntoCustodyDate,
     })
   })
 

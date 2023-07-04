@@ -11,6 +11,7 @@ import { DeliusService, Services, UserService } from '../../services'
 import { ProbationSearchClient, SentencePlanClient } from '../../data'
 import InterventionsClient from '../../data/interventionsClient'
 import OasysClient from '../../data/oasysClient'
+import PrisonApiClient from '../../data/prisonApiClient'
 
 export const user = {
   firstName: 'first',
@@ -33,6 +34,7 @@ export function mockServices(): Services {
     sentencePlanClient: new SentencePlanClient(null) as jest.Mocked<SentencePlanClient>,
     interventionsClient: new InterventionsClient(null) as jest.Mocked<InterventionsClient>,
     oasysClient: new OasysClient(null) as jest.Mocked<OasysClient>,
+    prisonApiClient: new PrisonApiClient(null) as jest.Mocked<PrisonApiClient>,
   }
 }
 

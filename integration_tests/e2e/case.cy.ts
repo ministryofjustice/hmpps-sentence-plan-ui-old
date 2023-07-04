@@ -13,6 +13,7 @@ context('Case', () => {
     cy.task('stubProbationSearch')
     cy.task('stubDeliusIntegration')
     cy.task('stubSentencePlanApi')
+    cy.task('stubPrisonApiIntegration')
     cy.signIn()
   })
 

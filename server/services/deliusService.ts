@@ -24,7 +24,7 @@ export default class DeliusService {
     return {
       name: formatName(details.name),
       crn: details.crn,
-      nomsNumber: details.nomsNumber,
+      nomsNumber: details.nomisId,
       tier: details.tier,
       dateOfBirth: formatDate(details.dateOfBirth),
       region: details.region,
@@ -36,7 +36,7 @@ export default class DeliusService {
     }
   }
 
-  async getInitialAppointmentDate(crn: string): Promise<InitialAppointment> {
+  async getInitialAppointment(crn: string): Promise<InitialAppointment> {
     const details = await this.deliusClient.getInitialAppointmentDate(crn)
     return {
       appointmentDate: details.appointmentDate,
