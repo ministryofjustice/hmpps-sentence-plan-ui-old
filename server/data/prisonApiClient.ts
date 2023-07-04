@@ -9,7 +9,7 @@ export default class PrisonApiClient {
   constructor(private hmppsAuthClient: HmppsAuthClient) {}
 
   async getArrivalIntoCustodyDate(nomsNumber: string): Promise<Sentence> {
-    logger.debug(`Prison api url: ${config.apis.prisonApi}`)
+    logger.debug(`Prison api url:`, config.apis.prisonApi.url)
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).get({ path: `/api/offenders/${nomsNumber}/sentences` })
   }
