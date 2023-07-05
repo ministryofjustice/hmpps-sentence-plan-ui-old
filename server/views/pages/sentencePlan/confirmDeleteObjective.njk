@@ -1,0 +1,40 @@
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Set an objective" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+  {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/objective/" + objective.id + "/summary" }) }}
+{% endblock %}
+
+{% block content %}
+{% set html %}
+  <p class="govuk-notification-banner__heading">
+    You have selected to delete this objective
+    <br>
+    If you choose to continue, this will permanently delete this objective and all related actions.
+    <br>
+    If you do not want to delete this draft objective select to go back.
+    <br>
+    <a class="govuk-notification-banner__link" href="#">Sure go for it</a>.
+    <a class="govuk-notification-banner__link" href="#">Nee way man</a>.
+  </p>
+{% endset %}
+
+{{ govukNotificationBanner({
+  html: html
+}) }}
+
+{% endblock %}

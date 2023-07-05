@@ -119,6 +119,13 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     res.redirect(`/sentence-plan/${sentencePlanId}/summary`)
   })
 
+  get('/sentence-plan/:sentencePlanId/objective/:objectiveId/confirmDelete', async function deleteAction(req, res) {
+    const { sentencePlanId, objectiveId } = req.params
+    res.render('pages/sentencePlan/confirmDeleteObjective', {
+      ...(await loadObjective(sentencePlanId, objectiveId)),
+    })
+  })
+
   interface ErrorMessages {
     [key: string]: { text: string }
   }
