@@ -1,6 +1,8 @@
 {% extends "../../partials/layout.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "moj/components/task-list/macro.njk" import mojTaskList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = applicationName + " - Create a sentence plan" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -56,6 +58,19 @@
                     ]
                 }
             ]
+        }) }}
+
+        {% set html %}
+            <p class="govuk-inset-text">
+                Everything created on this draft plan has been saved. Selecting to return to start allows you to start a new plan for a different individual. You can re-open this plan by searching using the CRN or Individual’s name.
+                <br>
+                <a class="govuk-notification-banner__link" href="/">Return to start</a>.
+            </p>
+        {% endset %}
+
+        {{ govukDetails({
+            summaryText: "return to start",
+            html: html
         }) }}
 
     </div>
