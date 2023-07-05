@@ -37,6 +37,11 @@ export default class SentencePlanClient {
     return this.restClient(token).get({ path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}` })
   }
 
+  async deleteObjective(sentencePlanId: string, objectiveId: string) {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).delete({ path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}` })
+  }
+
   async createObjective(sentencePlanId: string, objective: NewObjective): Promise<Objective> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).post({ path: `/sentence-plan/${sentencePlanId}/objective`, data: objective })
