@@ -145,4 +145,15 @@ describe('GET /sentence-plan/engagement-and-compliance', () => {
         }),
       )
   })
+
+  it('can delete a sentence plan', () => {
+    services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({ crn: '123' })
+    const api = jest.fn().mockResolvedValue({})
+    services.sentencePlanClient.deleteSentencePlan = api
+    return request(app)
+      .post('/sentence-plan/1/delete')
+      .expect(302)
+      .expect('Location', '/case/123')
+      .expect(_ => expect(api).toBeCalledWith('1'))
+  })
 })

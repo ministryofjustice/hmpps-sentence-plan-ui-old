@@ -73,5 +73,14 @@
             html: html
         }) }}
 
+
+        <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Delete",
+                attributes: { "data-qa": "confirm-delete-sentence-plan-button" },
+                href: "/sentence-plan/" + sentencePlan.id + "/confirmDelete"
+            }) }}
+        </div>
+
     </div>
 {% endblock %}

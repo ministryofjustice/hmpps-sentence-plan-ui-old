@@ -129,5 +129,20 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     res.redirect(`/sentence-plan/${id}/summary`)
   })
 
+  post('/sentence-plan/:sentencePlanId/delete', async function deleteAction(req, res) {
+    const { sentencePlanId } = req.params
+    const sentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
+    const { crn } = sentencePlan
+    await service.sentencePlanClient.deleteSentencePlan(sentencePlanId)
+    res.redirect(`/case/${crn}`)
+  })
+
+  get('/sentence-plan/:sentencePlanId/confirmDelete', async function deleteAction(req, res) {
+    const { sentencePlanId } = req.params
+    res.render('pages/sentencePlan/confirmDeleteSentencePlan', {
+      ...(await loadSentencePlan(sentencePlanId)),
+    })
+  })
+
   return router
 }
