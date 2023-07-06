@@ -102,6 +102,18 @@
     },
     {
       "request": {
+        "method": "DELETE",
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
         "method": "GET",
         "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000001/objective"
       },

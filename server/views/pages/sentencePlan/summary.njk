@@ -3,12 +3,17 @@
 {% from "moj/components/task-list/macro.njk" import mojTaskList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% set pageTitle = applicationName + " - Create a sentence plan" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block banner %}
     {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "/case/" + sentencePlan.crn }) }}
 {% endblock %}
 
 {% block content %}

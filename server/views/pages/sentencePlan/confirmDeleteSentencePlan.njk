@@ -1,0 +1,36 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Delete a sentence plan" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+  {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+{% endblock %}
+
+{% block content %}
+{% set html %}
+  <p class="govuk-notification-banner__heading">You have selected to delete this sentence plan</p>
+  <p>If you choose to continue, this will permanently delete this sentence plan and all related objectives.</p>
+  <p>If you do not want to delete this draft sentence plan, select the cancel button.</p>
+{% endset %}
+
+{{ govukNotificationBanner({
+  html: html
+}) }}
+
+<form method="POST" action="/sentence-plan/{{ sentencePlan.id }}/delete">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+      <div class="govuk-button-group">
+          {{ govukButton({ text: "Continue", attributes: { "data-qa": "delete-sentence-plan" } }) }}
+          {{ govukButton({ text: "Cancel", classes: "govuk-button--secondary", "href": "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+      </div>
+</form>
+
+{% endblock %}

@@ -54,7 +54,9 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
       rows: sentencePlans.map(it => [
         { html: `<span title='${it.createdDate}'>${formatDate(it.createdDate)}</span>` },
         { html: `<strong class='moj-badge'>${it.status}</strong>` },
-        { html: `<a href='/sentence-plan/${it.id}/summary'>View</a>` },
+        {
+          html: `<a href='/sentence-plan/${it.id}/summary'>View</a> | <a href='/sentence-plan/${it.id}/confirmDelete'>Delete</a>`,
+        },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
       initialAppointmentDate,
@@ -127,6 +129,21 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
     await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, individualComments })
     res.redirect(`/sentence-plan/${id}/summary`)
+  })
+
+  post('/sentence-plan/:sentencePlanId/delete', async function deleteAction(req, res) {
+    const { sentencePlanId } = req.params
+    const sentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
+    const { crn } = sentencePlan
+    await service.sentencePlanClient.deleteSentencePlan(sentencePlanId)
+    res.redirect(`/case/${crn}`)
+  })
+
+  get('/sentence-plan/:sentencePlanId/confirmDelete', async function deleteAction(req, res) {
+    const { sentencePlanId } = req.params
+    res.render('pages/sentencePlan/confirmDeleteSentencePlan', {
+      ...(await loadSentencePlan(sentencePlanId)),
+    })
   })
 
   return router
