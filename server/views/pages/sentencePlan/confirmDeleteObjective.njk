@@ -33,10 +33,10 @@
 
 <form method="POST" action="/sentence-plan/{{ sentencePlan.id }}/objective/{{ objective.id }}/delete">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-   {{ govukButton({
-    text: "continue",
-    attributes: { "data-qa": "delete-objective-button" }
-  }) }}
+  <div class="govuk-button-group">
+      {{ govukButton({ text: "Continue", attributes: { "data-qa": "delete-objective-button" } }) }}
+      {{ govukButton({ text: "Cancel", classes: "govuk-button--secondary", "href": "/sentence-plan/" + sentencePlan.id + "/objective/" + objective.id + "/summary" }) }}
+  </div>
 </form>
 
 {% endblock %}
