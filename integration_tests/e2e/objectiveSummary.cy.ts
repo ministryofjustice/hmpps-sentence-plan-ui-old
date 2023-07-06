@@ -57,4 +57,11 @@ context('Objective summary', () => {
     cy.get('[data-qa=delete-action-2]').click()
     cy.url().should('contain', 'objective/00000000-0000-0000-0000-000000000000/summary')
   })
+
+  it('can delete objective', () => {
+    cy.get('[data-qa=delete-objective]').click()
+    cy.url().should('contain', 'objective/00000000-0000-0000-0000-000000000000/confirmDelete')
+    cy.get('[data-qa=delete-objective-button]').click()
+    cy.url().should('contain', '/sentence-plan/00000000-0000-0000-0000-000000000003/summary')
+  })
 })

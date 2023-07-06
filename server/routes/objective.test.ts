@@ -202,4 +202,14 @@ describe('GET /sentence-plan/objective/summary', () => {
       .expect('Location', '/sentence-plan/1/objective/2/summary')
       .expect(_ => expect(api).toBeCalledWith('1', '2', '3'))
   })
+
+  it('can delete an objective', () => {
+    const api = jest.fn().mockResolvedValue({})
+    services.sentencePlanClient.deleteObjective = api
+    return request(app)
+      .post('/sentence-plan/1/objective/2/delete')
+      .expect(302)
+      .expect('Location', '/sentence-plan/1/summary')
+      .expect(_ => expect(api).toBeCalledWith('1', '2'))
+  })
 })
