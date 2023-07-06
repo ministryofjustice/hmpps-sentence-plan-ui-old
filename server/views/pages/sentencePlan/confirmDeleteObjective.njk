@@ -7,6 +7,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+ {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Set an objective" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -25,16 +26,22 @@
     You have selected to delete this objective
     <br>
     If you choose to continue, this will permanently delete this objective and all related actions.
+    <br><br>
+    If you do not want to delete this draft objective select back.
     <br>
-    If you do not want to delete this draft objective select to go back.
-    <br>
-    <a class="govuk-notification-banner__link" href="#">Sure go for it</a>.
-    <a class="govuk-notification-banner__link" href="#">Nee way man</a>.
   </p>
 {% endset %}
 
 {{ govukNotificationBanner({
   html: html
 }) }}
+
+<form method="POST" action="/sentence-plan/{{ sentencePlan.id }}/objective/{{ objective.id }}/delete">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+   {{ govukButton({
+    text: "continue",
+    attributes: { "data-qa": "delete-objective-button" }
+  }) }}
+</form>
 
 {% endblock %}
