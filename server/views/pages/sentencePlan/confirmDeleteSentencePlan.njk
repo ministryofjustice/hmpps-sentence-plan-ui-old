@@ -28,7 +28,7 @@
 <form method="POST" action="/sentence-plan/{{ sentencePlan.id }}/delete">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div class="govuk-button-group">
-          {{ govukButton({ text: "Continue", attributes: { "data-qa": "delete-sentence-plan-button" } }) }}
+          {{ govukButton({ text: "Continue", attributes: { "data-qa": "delete-sentence-plan" } }) }}
           {{ govukButton({ text: "Cancel", classes: "govuk-button--secondary", "href": "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
       </div>
 </form>

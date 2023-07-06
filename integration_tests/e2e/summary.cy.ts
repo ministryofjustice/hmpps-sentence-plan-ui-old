@@ -33,4 +33,12 @@ context('Sentence plan summary', () => {
   it('displays add objective button', () => {
     page.addObjectiveButton().should('exist').should('have.attr', 'href', './add-objective')
   })
+
+  it('can delete sentence plan', () => {
+    cy.get('[data-qa=confirm-delete-sentence-plan]').click()
+    cy.url().should('contain', 'sentence-plan/00000000-0000-0000-0000-000000000003/confirmDelete')
+    cy.get('[data-qa=delete-sentence-plan]').click()
+    cy.url().should('contain', '/case/X000001')
+    cy.get('[data-qa=create').should('exist')
+  })
 })
