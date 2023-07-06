@@ -50,11 +50,12 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
 
     res.render('pages/case', {
       caseDetails,
-      head: [{ text: 'Date' }, { text: 'Status' }, {}],
+      head: [{ text: 'Date' }, { text: 'Status' }, {}, {}],
       rows: sentencePlans.map(it => [
         { html: `<span title='${it.createdDate}'>${formatDate(it.createdDate)}</span>` },
         { html: `<strong class='moj-badge'>${it.status}</strong>` },
         { html: `<a href='/sentence-plan/${it.id}/summary'>View</a>` },
+        { html: `<a href='/sentence-plan/${it.id}/confirmDelete'>Delete</a>` },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
       initialAppointmentDate,
