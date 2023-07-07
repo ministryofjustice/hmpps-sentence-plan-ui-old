@@ -1,0 +1,36 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Individual's comments" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-!-width-two-thirds">
+        <span class="govuk-caption-l">Final information</span>
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukCharacterCount({
+                name: "individual-comments",
+                id: "individual-comments",
+                value: sentencePlan.individualComments,
+                errorMessage: errorMessage,
+                threshold: 50,
+                maxlength: 5000,
+                label: { text: "Individual's comments", classes: "govuk-label--l", isPageHeading: true },
+                hint: { text: "Record anything the individual wants to say about their plan. Include any points they want to make or clarify." }
+            }) }}
+            {{ govukButton({ text: "Continue", type: "Submit" }) }}
+            {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
+        </form>
+    </div>
+{% endblock %}

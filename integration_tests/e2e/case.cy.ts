@@ -13,6 +13,7 @@ context('Case', () => {
     cy.task('stubProbationSearch')
     cy.task('stubDeliusIntegration')
     cy.task('stubSentencePlanApi')
+    cy.task('stubPrisonApiIntegration')
     cy.signIn()
   })
 
@@ -39,8 +40,15 @@ context('Case', () => {
     })
 
     it('view link navigates to draft sentence plan summary', () => {
-      page.sentencePlans().first().find('a').click()
+      page.sentencePlans().first().find('a:contains("View")').click()
       cy.get('h2').should('contain.text', 'Create a sentence plan')
+    })
+
+    it('delete link navigates to confirm delete page ', () => {
+      page.sentencePlans().first().find('a:contains("Delete")').click()
+      cy.url().should('contain', 'sentence-plan/00000000-0000-0000-0000-000000000001/confirmDelete')
+      cy.get('[data-qa=delete-sentence-plan]').click()
+      cy.url().should('contain', '/case/X000001')
     })
 
     it('show initial appointment date', () => {

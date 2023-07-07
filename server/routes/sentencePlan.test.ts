@@ -22,11 +22,16 @@ beforeEach(() => {
     tier: 'T1',
     isCustody: false,
   })
-  services.deliusService.getInitialAppointmentDate = jest.fn().mockResolvedValue({
+  services.deliusService.getInitialAppointment = jest.fn().mockResolvedValue({
     appointmentDate: '1990-01-01',
   })
   services.sentencePlanClient.listObjectives = jest.fn().mockResolvedValue({
     objectives: [],
+  })
+  services.prisonApiClient.getArrivalIntoCustodyDate = jest.fn().mockResolvedValue({
+    sentenceDetail: {
+      sentenceStartDate: '2010-02-03',
+    },
   })
 })
 
@@ -139,5 +144,16 @@ describe('GET /sentence-plan/engagement-and-compliance', () => {
           protectiveFactors: 'protective factors',
         }),
       )
+  })
+
+  it('can delete a sentence plan', () => {
+    services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({ crn: '123' })
+    const api = jest.fn().mockResolvedValue({})
+    services.sentencePlanClient.deleteSentencePlan = api
+    return request(app)
+      .post('/sentence-plan/1/delete')
+      .expect(302)
+      .expect('Location', '/case/123')
+      .expect(_ => expect(api).toBeCalledWith('1'))
   })
 })

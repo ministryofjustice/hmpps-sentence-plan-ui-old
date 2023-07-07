@@ -27,6 +27,11 @@ export default class SentencePlanClient {
     return this.restClient(token).put({ path: `/sentence-plan/${sentencePlan.id}`, data: sentencePlan })
   }
 
+  async deleteSentencePlan(sentencePlanId: string) {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).delete({ path: `/sentence-plan/${sentencePlanId}` })
+  }
+
   async listObjectives(sentencePlanId: string): Promise<ObjectiveListResponse> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).get({ path: `/sentence-plan/${sentencePlanId}/objective` })
@@ -35,6 +40,11 @@ export default class SentencePlanClient {
   async getObjective(sentencePlanId: string, objectiveId: string): Promise<Objective> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return this.restClient(token).get({ path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}` })
+  }
+
+  async deleteObjective(sentencePlanId: string, objectiveId: string) {
+    const token = await this.hmppsAuthClient.getSystemClientToken()
+    return this.restClient(token).delete({ path: `/sentence-plan/${sentencePlanId}/objective/${objectiveId}` })
   }
 
   async createObjective(sentencePlanId: string, objective: NewObjective): Promise<Objective> {
