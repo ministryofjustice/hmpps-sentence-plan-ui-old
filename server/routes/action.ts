@@ -56,7 +56,10 @@ export default function actionRoutes(router: Router, service: Services): Router 
       errorMessages.owner = {
         text: 'Please select who will be involved in ensuring the action is completed',
       }
-    } else if (req.body.owner.includes('other') && req.body['other-owner'].length === 0) {
+    } else if (
+      req.body.owner.includes('other') &&
+      (req.body['other-owner'] == null || req.body['other-owner'].length === 0)
+    ) {
       errorMessages.otherOwner = {
         text: 'You selected Other. Please complete this field by providing details in the box, of who will be involved in ensuring the action is completed',
       }
