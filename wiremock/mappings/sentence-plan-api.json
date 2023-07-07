@@ -190,6 +190,34 @@
         },
         "jsonBody": {
           "id": "00000000-0000-0000-0000-000000000000",
+          "sentencePlanId": "00000000-0000-0000-0000-000000000001",
+          "description": "Test objective",
+          "needs": [
+            {
+              "code": "accommodation"
+            },
+            {
+              "code": "employability"
+            }
+          ],
+          "motivation": "Action"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)/objective/([^/]*)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000000",
+          "sentencePlanId": "00000000-0000-0000-0000-000000000001",
           "description": "Test objective",
           "needs": [
             {
@@ -249,6 +277,7 @@
               "description": "Do a thing",
               "interventionParticipation": false,
               "status": "In progress",
+              "targetDate": "02 2024",
               "individualOwner": true,
               "practitionerOwner": false
             },
@@ -258,11 +287,35 @@
               "description": "Do another thing",
               "interventionParticipation": true,
               "interventionName": "Some intervention",
-              "status": "In progress",
-              "individualOwner": false,
-              "practitionerOwner": true
+              "status": "To Do",
+              "targetDate": "12 2025",
+              "individualOwner": true,
+              "practitionerOwner": false,
+              "otherOwner": "Some other owner"
             }
           ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/([^/]+)/objective/([^/]+)/action/([^/]+)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000000",
+          "objectiveId": "00000000-0000-0000-0000-000000000000",
+          "description": "Do a thing",
+          "interventionParticipation": false,
+          "status": "In progress",
+          "targetDate": "02 2024",
+          "individualOwner": true,
+          "practitionerOwner": false
         }
       }
     }

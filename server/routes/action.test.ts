@@ -79,6 +79,18 @@ describe('GET /sentence-plan/objective/add-action', () => {
       .expect(res => expect(res.text).toContain('Enter the name of the accredited programme'))
   })
 
+  it('should validate date is not in past', () => {
+    return request(app)
+      .post('/sentence-plan/1/objective/2/add-action')
+      .send({ description: 'New text', 'relates-to-intervention': 'no', 'target-date': null })
+      .expect('Content-Type', /html/)
+      .expect(res =>
+        expect(res.text).toContain('The date entered is in the past, please enter a target date that is in the future'),
+      )
+  })
+
+  it('')
+
   it('should save data', () => {
     const api = jest.fn().mockResolvedValue({})
     services.sentencePlanClient.createAction = api
@@ -89,6 +101,11 @@ describe('GET /sentence-plan/objective/add-action', () => {
         'relates-to-intervention': 'yes',
         'intervention-type': 'accredited-programme',
         'ap-intervention-name': 'Building Better Relationships',
+        'target-date': '12 2024',
+        individualOwner: false,
+        practitionerOwner: false,
+        'other-owner': 'Guardian',
+        status: 'to-do',
         continue: true,
       })
       .expect(302)
@@ -99,10 +116,11 @@ describe('GET /sentence-plan/objective/add-action', () => {
           interventionParticipation: true,
           interventionType: 'accredited-programme',
           interventionName: 'Building Better Relationships',
+          targetDate: '12 2024',
           individualOwner: false,
           practitionerOwner: false,
-          otherOwner: null,
-          status: 'Draft',
+          otherOwner: 'Guardian',
+          status: 'to-do',
         }),
       )
   })
@@ -127,7 +145,7 @@ describe('GET /sentence-plan/objective/add-action', () => {
           interventionParticipation: true,
           interventionType: 'accredited-programme',
           interventionName: 'Building Better Relationships',
-          individualOwner: false,
+          individualOwner: true,
           practitionerOwner: false,
           otherOwner: null,
           status: 'Draft',
