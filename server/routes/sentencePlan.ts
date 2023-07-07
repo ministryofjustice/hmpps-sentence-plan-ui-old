@@ -146,5 +146,9 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     })
   })
 
+  get('/sentence-plan/:id/start-review', async (req, res) => {
+    res.render('pages/sentencePlan/review', await loadSentencePlan(req.params.id))
+  })
+
   return router
 }

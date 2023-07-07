@@ -1,0 +1,48 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Review" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-!-width-two-thirds">
+        <h1 class="govuk-heading-l">Sentence Plan Review</h1>
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <ol class="govuk-heading-m">
+                <li>
+                    <h2 class="govuk-heading-m">Write about the individual.</h2>
+                    <p class="govuk-label">Risk Factors that may affect engagement and compliance</p>
+                    <p class="govuk-input govuk-!-width-full">{{ sentencePlan.riskFactors }}</p>
+                    <p class="govuk-label">Protective Factors that may affect engagement and compliance</p>
+                    <p class="govuk-input govuk-!-width-full">{{ sentencePlan.protectiveFactors }}</p>
+                </li>
+                <li>
+                    <h2 class="govuk-heading-m">Objectives.</h2>
+                </li>
+                <li>
+                    <h2 class="govuk-heading-m">Final information.</h2>
+                    <p class="govuk-label">Your decisions</p>
+                    <p class="govuk-input govuk-!-width-full">{{ sentencePlan.practitionerComments }}</p>
+                    <p class="govuk-label">Individual's comments</p>
+                    <p class="govuk-input govuk-!-width-full">{{ sentencePlan.individualComments }}</p>
+                </li>
+
+            </ol>
+
+
+            {{ govukButton({ text: "Start Plan", type: "Submit" }) }}
+            {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
+        </form>
+    </div>
+{% endblock %}
