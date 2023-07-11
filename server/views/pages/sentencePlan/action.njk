@@ -4,6 +4,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set pageTitle = applicationName + " - Add an action" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -105,9 +107,65 @@
                 }) }}
             </div>
 
+            {{ govukDateInput({
+                id: "target-date",
+                name: "target-date",
+                fieldset: {
+                    legend: { text: "What is the target date for the action to be finished?", classes: "govuk-label--m" }
+                },
+                hint: {
+                    text: "For example, 10 2023"
+                },
+                errorMessage: errorMessages.targetDate,
+                items: [
+                    { name: "month", classes: "govuk-input--width-2", value: action.targetDateMonth },
+                    { name: "year", classes: "govuk-input--width-4", value: action.targetDateYear }
+                ]
+            }) }}
+
+            {% set ensureActionOtherHtml %}
+                {{ govukCharacterCount({
+                    name: "other-owner",
+                    id: "other-owner",
+                    fieldset: { legend: {text: "Please provide more details", classes: "govuk-label--s" } },
+                    maxwords: 50,
+                    errorMessage: errorMessages.otherOwner,
+                    value: action.otherOwner
+                }) }}
+            {% endset -%}
+
+            {{ govukCheckboxes({
+                name: "owner",
+                fieldset: {
+                    legend: { text: "Who will be involved in ensuring this action is completed?", classes: "govuk-fieldset__legend--m" }
+                },
+                hint: {
+                    text: "Select all that apply."
+                },
+                errorMessage: errorMessages.owner,
+                items: [
+                    { text: "Individual", value: "individual", checked: action.individualOwner },
+                    { text: "Probation Practitioner", value: "practitioner", checked: action.practitionerOwner  },
+                    { text: "Other (please provide details)", value: "other", checked: action.otherOwner or errorMessages.otherOwner, conditional: { html: ensureActionOtherHtml } }
+                ]
+            }) }}
+
+            {{ govukRadios({
+                name: "status",
+                fieldset: {
+                    legend: { text: "What is the current status of this action?", classes: "govuk-fieldset__legend--m" }
+                },
+                errorMessage: errorMessages.status,
+                items: [
+                    { text: "To Do", value: "to-do", checked: action.status == "to-do" },
+                    { text: "In Progress", value: "in-progress", checked: action.status == "in-progress" }
+                ]
+            }) }}
+
             <div class="govuk-button-group">
-                {{ govukButton({ type: "Submit", text: "Add another action", name: "add-another", classes: "govuk-button--secondary" }) }}
                 {{ govukButton({ type: "Submit", text: "Continue", name: "continue" }) }}
+                {{ govukButton({ type: "Submit", text: "Add another action", name: "add-another", classes: "govuk-button--secondary" }) }}
+                {{ govukButton({ type: "Submit", text: "Cancel", name: "cancel", classes: "govuk-button--secondary" }) }}
             </div>
         </form>
     </div>

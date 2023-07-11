@@ -1,5 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { addYears } from 'date-fns'
 import { appWithAllRoutes, mockServices } from './testutils/appSetup'
 
 let app: Express
@@ -79,6 +80,46 @@ describe('GET /sentence-plan/objective/add-action', () => {
       .expect(res => expect(res.text).toContain('Enter the name of the accredited programme'))
   })
 
+  it('should validate date is not in past', () => {
+    return request(app)
+      .post('/sentence-plan/1/objective/2/add-action')
+      .send({ description: 'New text', 'relates-to-intervention': 'no', month: '01', year: '2004' })
+      .expect('Content-Type', /html/)
+      .expect(res =>
+        expect(res.text).toContain('The date entered is in the past, please enter a target date that is in the future'),
+      )
+  })
+
+  it('should validate action has owner', () => {
+    return request(app)
+      .post('/sentence-plan/1/objective/2/add-action')
+      .send({})
+      .expect('Content-Type', /html/)
+      .expect(res =>
+        expect(res.text).toContain('Please select who will be involved in ensuring the action is completed'),
+      )
+  })
+
+  it('should validate action has owner if other is selected', () => {
+    return request(app)
+      .post('/sentence-plan/1/objective/2/add-action')
+      .send({ owner: ['other'] })
+      .expect('Content-Type', /html/)
+      .expect(res =>
+        expect(res.text).toContain(
+          'You selected Other. Please complete this field by providing details in the box, of who will be involved in ensuring the action is completed',
+        ),
+      )
+  })
+
+  it('should validate status', () => {
+    return request(app)
+      .post('/sentence-plan/1/objective/2/add-action')
+      .send({})
+      .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('Please select the status of the action'))
+  })
+
   it('should save data', () => {
     const api = jest.fn().mockResolvedValue({})
     services.sentencePlanClient.createAction = api
@@ -89,6 +130,11 @@ describe('GET /sentence-plan/objective/add-action', () => {
         'relates-to-intervention': 'yes',
         'intervention-type': 'accredited-programme',
         'ap-intervention-name': 'Building Better Relationships',
+        month: '12',
+        year: addYears(new Date(), 1).getFullYear(),
+        owner: ['other'],
+        'other-owner': 'Guardian',
+        status: 'to-do',
         continue: true,
       })
       .expect(302)
@@ -99,10 +145,12 @@ describe('GET /sentence-plan/objective/add-action', () => {
           interventionParticipation: true,
           interventionType: 'accredited-programme',
           interventionName: 'Building Better Relationships',
+          targetDateMonth: '12',
+          targetDateYear: addYears(new Date(), 1).getFullYear(),
           individualOwner: false,
           practitionerOwner: false,
-          otherOwner: null,
-          status: 'Draft',
+          otherOwner: 'Guardian',
+          status: 'to-do',
         }),
       )
   })
@@ -117,6 +165,10 @@ describe('GET /sentence-plan/objective/add-action', () => {
         'relates-to-intervention': 'yes',
         'intervention-type': 'accredited-programme',
         'ap-intervention-name': 'Building Better Relationships',
+        month: '12',
+        year: addYears(new Date(), 1).getFullYear(),
+        owner: ['individual'],
+        status: 'to-do',
         'add-another': true,
       })
       .expect(302)
@@ -127,10 +179,12 @@ describe('GET /sentence-plan/objective/add-action', () => {
           interventionParticipation: true,
           interventionType: 'accredited-programme',
           interventionName: 'Building Better Relationships',
-          individualOwner: false,
+          individualOwner: true,
           practitionerOwner: false,
           otherOwner: null,
-          status: 'Draft',
+          targetDateMonth: '12',
+          targetDateYear: addYears(new Date(), 1).getFullYear(),
+          status: 'to-do',
         }),
       )
   })
@@ -144,6 +198,9 @@ describe('GET /sentence-plan/objective/action', () => {
       interventionParticipation: true,
       interventionType: 'local',
       interventionName: 'Existing intervention name',
+      otherOwner: 'Social Security',
+      targetDateMonth: '01',
+      targetDateYear: addYears(new Date(), 1).getFullYear(),
     })
   })
 
@@ -156,6 +213,9 @@ describe('GET /sentence-plan/objective/action', () => {
       .expect(res => expect(res.text).toContain('value="yes" checked'))
       .expect(res => expect(res.text).toContain('value="local" checked'))
       .expect(res => expect(res.text).toContain('Existing intervention name'))
+      .expect(res => expect(res.text).toContain('Social Security'))
+      .expect(res => expect(res.text).toContain('01'))
+      .expect(res => expect(res.text).toContain(addYears(new Date(), 1).getFullYear().toString()))
   })
 
   it('should save data', () => {
@@ -168,6 +228,11 @@ describe('GET /sentence-plan/objective/action', () => {
         'relates-to-intervention': 'yes',
         'intervention-type': 'accredited-programme',
         'ap-intervention-name': 'Building Better Relationships',
+        owner: ['other'],
+        'other-owner': 'Legal Guardian',
+        month: '05',
+        year: `${addYears(new Date(), 1).getFullYear()}`,
+        status: 'to-do',
         continue: true,
       })
       .expect(302)
@@ -183,8 +248,10 @@ describe('GET /sentence-plan/objective/action', () => {
           interventionName: 'Building Better Relationships',
           individualOwner: false,
           practitionerOwner: false,
-          otherOwner: null,
-          status: 'Draft',
+          otherOwner: 'Legal Guardian',
+          targetDateMonth: '05',
+          targetDateYear: addYears(new Date(), 1).getFullYear().toString(),
+          status: 'to-do',
         }),
       )
   })

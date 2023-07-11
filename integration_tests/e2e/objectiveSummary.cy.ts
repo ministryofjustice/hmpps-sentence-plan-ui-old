@@ -21,7 +21,7 @@ context('Objective summary', () => {
     cy.visit(
       '/sentence-plan/00000000-0000-0000-0000-000000000003/objective/00000000-0000-0000-0000-000000000000/add-action',
     )
-    Page.verifyOnPage(ActionPage).enterDetails()
+    Page.verifyOnPage(ActionPage).enterDetails().continue()
     page = Page.verifyOnPage(ObjectiveSummaryPage)
   })
 

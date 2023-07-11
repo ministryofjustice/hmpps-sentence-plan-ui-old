@@ -1,4 +1,5 @@
 import { Request, type RequestHandler, type Response, Router } from 'express'
+import { endOfMonth, isPast, isValid, parseISO } from 'date-fns'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { NewAction } from '../data/sentencePlanClient'
@@ -26,10 +27,10 @@ export default function actionRoutes(router: Router, service: Services): Router 
     res: Response,
   ): Promise<boolean> {
     const errorMessages: ErrorMessages = {}
-    if (req.body.description.length === 0) {
+    if (req.body.description == null || req.body.description.length === 0) {
       errorMessages.description = { text: 'Please write an action' }
     }
-    if (req.body.description.trim().split(/\s+/).length > 50) {
+    if (req.body.description != null && req.body.description.trim().split(/\s+/).length > 50) {
       errorMessages.description = { text: 'Action must be 50 words or less' }
     }
     if (req.body['relates-to-intervention'] == null) {
@@ -51,6 +52,41 @@ export default function actionRoutes(router: Router, service: Services): Router 
       }
     }
 
+    if (req.body.owner == null) {
+      errorMessages.owner = {
+        text: 'Please select who will be involved in ensuring the action is completed',
+      }
+    } else if (
+      req.body.owner.includes('other') &&
+      (req.body['other-owner'] == null || req.body['other-owner'].length === 0)
+    ) {
+      errorMessages.otherOwner = {
+        text: 'You selected Other. Please complete this field by providing details in the box, of who will be involved in ensuring the action is completed',
+      }
+    }
+    if (req.body['other-owner'] != null && req.body['other-owner'].trim().split(/\s+/).length > 50) {
+      errorMessages.otherOwner = { text: 'Please shorten your details to 50 words or less' }
+    }
+
+    if (req.body.status == null) {
+      errorMessages.status = { text: 'Please select the status of the action' }
+    }
+
+    if (req.body.month === '' || req.body.year === '') {
+      errorMessages.targetDate = { text: 'Please enter a target date' }
+    } else {
+      const date = parseISO(`${req.body.year}-${req.body.month}-01`)
+      if (!isValid(date)) {
+        errorMessages.targetDate = {
+          text: 'Please enter a valid date',
+        }
+      } else if (isPast(endOfMonth(date))) {
+        errorMessages.targetDate = {
+          text: 'The date entered is in the past, please enter a target date that is in the future',
+        }
+      }
+    }
+
     if (Object.keys(errorMessages).length > 0) {
       res.render('pages/sentencePlan/action', {
         errorMessages,
@@ -68,10 +104,12 @@ export default function actionRoutes(router: Router, service: Services): Router 
       interventionParticipation: req.body['relates-to-intervention'] === 'yes',
       interventionType: req.body['intervention-type'],
       interventionName: getInterventionName(req),
-      status: 'Draft',
-      individualOwner: req.body.owner === 'individual',
-      practitionerOwner: req.body.owner === 'practitioner',
-      otherOwner: req.body.owner === 'other' ? req.body.otherOwnerName : null,
+      status: req.body.status,
+      individualOwner: req.body.owner?.includes('individual'),
+      practitionerOwner: req.body.owner?.includes('practitioner'),
+      otherOwner: req.body.owner?.includes('other') ? req.body['other-owner'] : null,
+      targetDateMonth: req.body.month,
+      targetDateYear: req.body.year,
     }
   }
 
@@ -97,6 +135,10 @@ export default function actionRoutes(router: Router, service: Services): Router 
 
   post('/sentence-plan/:sentencePlanId/objective/:objectiveId/add-action', async function addAction(req, res) {
     const { sentencePlanId, objectiveId } = req.params
+    if ('cancel' in req.body) {
+      res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}`)
+      return
+    }
     const action = toAction(req)
     if (await validateAction(action, sentencePlanId, objectiveId, req, res)) {
       await service.sentencePlanClient.createAction(sentencePlanId, objectiveId, action)
@@ -115,6 +157,10 @@ export default function actionRoutes(router: Router, service: Services): Router 
 
   post('/sentence-plan/:sentencePlanId/objective/:objectiveId/action/:actionId', async function updateAction(req, res) {
     const { sentencePlanId, objectiveId, actionId } = req.params
+    if ('cancel' in req.body) {
+      res.redirect(`/sentence-plan/${sentencePlanId}/objective/${objectiveId}/summary`)
+      return
+    }
     const action = { id: actionId, objectiveId, sentencePlanId, ...toAction(req) }
     if (await validateAction(action, sentencePlanId, objectiveId, req, res)) {
       await service.sentencePlanClient.updateAction(sentencePlanId, objectiveId, actionId, action)
