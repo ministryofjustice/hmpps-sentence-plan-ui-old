@@ -4,7 +4,9 @@ import type { Services } from '../services'
 import { formatDate } from '../utils/utils'
 import { Sentence } from '../data/prisonApiClient'
 import { InitialAppointment } from '../data/deliusClient'
+import { Need as OasysNeed } from '../data/oasysClient'
 import logger from '../../logger'
+import { Action } from '../data/sentencePlanClient'
 
 export default function sentencePlanRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -146,8 +148,54 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     })
   })
 
+  async function loadNeeds(crn: string): Promise<OasysNeed[]> {
+    const needs = await service.oasysClient.getNeeds(crn)
+    return needs.criminogenicNeeds
+  }
+
   get('/sentence-plan/:id/start-review', async (req, res) => {
-    res.render('pages/sentencePlan/review', await loadSentencePlan(req.params.id))
+    const { id } = req.params
+    const [sentencePlan, objectivesList] = await Promise.all([
+      service.sentencePlanClient.getSentencePlan(id),
+      service.sentencePlanClient.listObjectives(id),
+    ])
+
+    const objectiveIds = objectivesList.objectives?.map(o => o.id)
+
+    let allActions: Action[] = []
+    // eslint-disable-next-line no-restricted-syntax
+    for (const oId of objectiveIds) {
+      // eslint-disable-next-line no-await-in-loop
+      allActions = allActions.concat((await service.sentencePlanClient.listActions(id, oId)).actions)
+    }
+
+    const head = [
+      { text: 'Objective', classes: 'govuk-!-width-one-half' },
+      { text: 'Needs/Actions', classes: 'govuk-!-width-one-half' },
+    ]
+
+    const needTypes = await loadNeeds(sentencePlan.crn)
+
+    function displayAction(ac: Action) {
+      let intervention = `N/A`
+      if (ac.interventionParticipation) {
+        intervention = `${ac.interventionName} <br> <b>Type:</b> ${ac.interventionType}`
+      }
+      return `<p><br/> <b>Description:</b> ${ac.description} <br/>  <b>Intervention:</b> ${intervention}</p>`
+    }
+
+    const rows = objectivesList.objectives.map(it => [
+      { html: `<b>Description: </b>${it.description} <br><br><p><b>Motivation: </b>${it.motivation}</p>` },
+      {
+        html: `<b>Needs: </b>${it.needs
+          ?.map(n => needTypes.find(type => type.key === n.code).description)
+          .join(', ')} <br/><br/> ${allActions
+          .filter(action => it.id === action.objectiveId)
+          .map(ac => displayAction(ac))
+          .join('')}`,
+      },
+    ])
+    res.render('pages/sentencePlan/review', { sentencePlan, rows, head })
   })
 
   return router

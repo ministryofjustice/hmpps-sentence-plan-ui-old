@@ -2,6 +2,12 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "moj/components/task-list/macro.njk" import mojTaskList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
 
 {% set pageTitle = applicationName + " - Review" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -19,23 +25,24 @@
         <h1 class="govuk-heading-l">Sentence Plan Review</h1>
         <form method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            <ol class="govuk-heading-m">
+            <ol class="govuk-heading-l">
                 <li>
-                    <h2 class="govuk-heading-m">Write about the individual.</h2>
-                    <p class="govuk-label">Risk Factors that may affect engagement and compliance</p>
-                    <p class="govuk-input govuk-!-width-full">{{ sentencePlan.riskFactors }}</p>
-                    <p class="govuk-label">Protective Factors that may affect engagement and compliance</p>
-                    <p class="govuk-input govuk-!-width-full">{{ sentencePlan.protectiveFactors }}</p>
+                    <h2 class="govuk-heading-l">Write about the individual.</h2>
+                    <p class="govuk-heading-m">Risk Factors that may affect engagement and compliance</p>
+                    <p class="govuk-body">{{ sentencePlan.riskFactors }}</p>
+                    <p class="govuk-heading-m">Protective Factors that may affect engagement and compliance</p>
+                    <p class="govuk-body">{{ sentencePlan.protectiveFactors }}</p>
                 </li>
                 <li>
-                    <h2 class="govuk-heading-m">Objectives.</h2>
+                    <h2 class="govuk-heading-l">Objectives.</h2>
+                    {{ govukTable({ head: head, rows: rows }) }}
                 </li>
                 <li>
-                    <h2 class="govuk-heading-m">Final information.</h2>
-                    <p class="govuk-label">Your decisions</p>
-                    <p class="govuk-input govuk-!-width-full">{{ sentencePlan.practitionerComments }}</p>
-                    <p class="govuk-label">Individual's comments</p>
-                    <p class="govuk-input govuk-!-width-full">{{ sentencePlan.individualComments }}</p>
+                    <h2 class="govuk-heading-l">Final information.</h2>
+                    <p class="govuk-heading-m">Your decisions</p>
+                    <p class="govuk-body">{{ sentencePlan.practitionerComments }}</p>
+                    <p class="govuk-heading-m">Individual's comments</p>
+                    <p class="govuk-body">{{ sentencePlan.individualComments }}</p>
                 </li>
 
             </ol>
