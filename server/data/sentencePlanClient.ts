@@ -145,6 +145,8 @@ export interface NewAction extends Record<string, unknown> {
   individualOwner: boolean
   practitionerOwner: boolean
   otherOwner?: string
+  targetDateMonth: number
+  targetDateYear: number
 }
 
 export interface Action extends NewAction {
