@@ -13,8 +13,7 @@ export default class ActionPage extends Page {
     cy.get('#target-date-month').type('12')
     cy.get('#target-date-year').type('2100')
     cy.get('[name=owner]').check('individual')
-    cy.get('[name=other]').check('other')
-    cy.get('[name=other]').check('other')
+    cy.get('[name=owner]').check('other')
     cy.get('[name=other-owner]').type('Someone else')
     cy.get('[name=status]').check('to-do')
     return this
