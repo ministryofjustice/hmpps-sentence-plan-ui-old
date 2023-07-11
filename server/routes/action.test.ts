@@ -145,7 +145,7 @@ describe('GET /sentence-plan/objective/add-action', () => {
           interventionParticipation: true,
           interventionType: 'accredited-programme',
           interventionName: 'Building Better Relationships',
-          targetDateMonth: '12',
+          targetDateMonth: 12,
           targetDateYear: addYears(new Date(), 1).getFullYear(),
           individualOwner: false,
           practitionerOwner: false,
@@ -182,7 +182,7 @@ describe('GET /sentence-plan/objective/add-action', () => {
           individualOwner: true,
           practitionerOwner: false,
           otherOwner: null,
-          targetDateMonth: '12',
+          targetDateMonth: 12,
           targetDateYear: addYears(new Date(), 1).getFullYear(),
           status: 'to-do',
         }),
@@ -199,7 +199,7 @@ describe('GET /sentence-plan/objective/action', () => {
       interventionType: 'local',
       interventionName: 'Existing intervention name',
       otherOwner: 'Social Security',
-      targetDateMonth: '01',
+      targetDateMonth: 1,
       targetDateYear: addYears(new Date(), 1).getFullYear(),
     })
   })
@@ -249,8 +249,8 @@ describe('GET /sentence-plan/objective/action', () => {
           individualOwner: false,
           practitionerOwner: false,
           otherOwner: 'Legal Guardian',
-          targetDateMonth: '05',
-          targetDateYear: addYears(new Date(), 1).getFullYear().toString(),
+          targetDateMonth: 5,
+          targetDateYear: addYears(new Date(), 1).getFullYear(),
           status: 'to-do',
         }),
       )
