@@ -23,7 +23,7 @@
 {% block content %}
     <div class="govuk-!-width-two-thirds">
         <h1 class="govuk-heading-l">Sentence Plan Review</h1>
-        <form method="POST">
+        <form method="GET" action="/sentence-plan/{{ sentencePlan.id }}/confirmStart">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             <ol class="govuk-heading-l">
                 <li>

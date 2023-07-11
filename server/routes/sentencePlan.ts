@@ -6,7 +6,7 @@ import { Sentence } from '../data/prisonApiClient'
 import { InitialAppointment } from '../data/deliusClient'
 import { Need as OasysNeed } from '../data/oasysClient'
 import logger from '../../logger'
-import { Action } from '../data/sentencePlanClient'
+import { Action, Need as SPNeed } from '../data/sentencePlanClient'
 
 export default function sentencePlanRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -184,18 +184,32 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
       return `<p><br/> <b>Description:</b> ${ac.description} <br/>  <b>Intervention:</b> ${intervention}</p>`
     }
 
+    function displayNeeds(needs: SPNeed[]) {
+      let needDisplay = `N/A`
+
+      if (needs.length > 0) {
+        needDisplay = needs.map(n => needTypes.find(type => type.key === n.code).description).join(', ')
+      }
+      return needDisplay
+    }
+
     const rows = objectivesList.objectives.map(it => [
       { html: `<b>Description: </b>${it.description} <br><br><p><b>Motivation: </b>${it.motivation}</p>` },
       {
-        html: `<b>Needs: </b>${it.needs
-          ?.map(n => needTypes.find(type => type.key === n.code).description)
-          .join(', ')} <br/><br/> ${allActions
+        html: `<b>Needs: </b> ${displayNeeds(it.needs)} <br/> ${allActions
           .filter(action => it.id === action.objectiveId)
           .map(ac => displayAction(ac))
           .join('')}`,
       },
     ])
     res.render('pages/sentencePlan/review', { sentencePlan, rows, head })
+  })
+
+  get('/sentence-plan/:sentencePlanId/confirmStart', async function startSentencePlan(req, res) {
+    const { sentencePlanId } = req.params
+    res.render('pages/sentencePlan/confirmStartSentencePlan', {
+      ...(await loadSentencePlan(sentencePlanId)),
+    })
   })
 
   return router
