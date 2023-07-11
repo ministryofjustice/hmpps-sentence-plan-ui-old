@@ -118,14 +118,8 @@
                 },
                 errorMessage: errorMessages.targetDate,
                 items: [
-                    {
-                        name: "month",
-                        classes: "govuk-input--width-2", value: action.targetDateMonth
-                    },
-                    {
-                        name: "year",
-                        classes: "govuk-input--width-4", value: action.targetDateYear
-                    }
+                    { name: "month", classes: "govuk-input--width-2", value: action.targetDateMonth },
+                    { name: "year", classes: "govuk-input--width-4", value: action.targetDateYear }
                 ]
             }) }}
 
@@ -133,8 +127,7 @@
                 {{ govukCharacterCount({
                     name: "other-owner",
                     id: "other-owner",
-                    fieldset: { legend: {text: "Please provide more details", classes: "govuk-label--s" }
-                    },
+                    fieldset: { legend: {text: "Please provide more details", classes: "govuk-label--s" } },
                     maxwords: 50,
                     errorMessage: errorMessages.otherOwner,
                     value: action.otherOwner

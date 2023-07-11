@@ -1,5 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { addYears } from 'date-fns'
 import { appWithAllRoutes, mockServices } from './testutils/appSetup'
 
 let app: Express
@@ -130,7 +131,7 @@ describe('GET /sentence-plan/objective/add-action', () => {
         'intervention-type': 'accredited-programme',
         'ap-intervention-name': 'Building Better Relationships',
         month: '12',
-        year: '2024',
+        year: addYears(new Date(), 1).getFullYear(),
         owner: ['other'],
         'other-owner': 'Guardian',
         status: 'to-do',
@@ -145,7 +146,7 @@ describe('GET /sentence-plan/objective/add-action', () => {
           interventionType: 'accredited-programme',
           interventionName: 'Building Better Relationships',
           targetDateMonth: '12',
-          targetDateYear: '2024',
+          targetDateYear: addYears(new Date(), 1).getFullYear(),
           individualOwner: false,
           practitionerOwner: false,
           otherOwner: 'Guardian',
@@ -165,7 +166,7 @@ describe('GET /sentence-plan/objective/add-action', () => {
         'intervention-type': 'accredited-programme',
         'ap-intervention-name': 'Building Better Relationships',
         month: '12',
-        year: '2024',
+        year: addYears(new Date(), 1).getFullYear(),
         owner: ['individual'],
         status: 'to-do',
         'add-another': true,
@@ -180,8 +181,9 @@ describe('GET /sentence-plan/objective/add-action', () => {
           interventionName: 'Building Better Relationships',
           individualOwner: true,
           practitionerOwner: false,
+          otherOwner: null,
           targetDateMonth: '12',
-          targetDateYear: '2024',
+          targetDateYear: addYears(new Date(), 1).getFullYear(),
           status: 'to-do',
         }),
       )
@@ -198,7 +200,7 @@ describe('GET /sentence-plan/objective/action', () => {
       interventionName: 'Existing intervention name',
       otherOwner: 'Social Security',
       targetDateMonth: '01',
-      targetDateYear: '2025',
+      targetDateYear: addYears(new Date(), 1).getFullYear(),
     })
   })
 
@@ -213,7 +215,7 @@ describe('GET /sentence-plan/objective/action', () => {
       .expect(res => expect(res.text).toContain('Existing intervention name'))
       .expect(res => expect(res.text).toContain('Social Security'))
       .expect(res => expect(res.text).toContain('01'))
-      .expect(res => expect(res.text).toContain('2025'))
+      .expect(res => expect(res.text).toContain(addYears(new Date(), 1).getFullYear().toString()))
   })
 
   it('should save data', () => {
@@ -229,7 +231,7 @@ describe('GET /sentence-plan/objective/action', () => {
         owner: ['other'],
         'other-owner': 'Legal Guardian',
         month: '05',
-        year: '2027',
+        year: `${addYears(new Date(), 1).getFullYear()}`,
         status: 'to-do',
         continue: true,
       })
@@ -248,7 +250,7 @@ describe('GET /sentence-plan/objective/action', () => {
           practitionerOwner: false,
           otherOwner: 'Legal Guardian',
           targetDateMonth: '05',
-          targetDateYear: '2027',
+          targetDateYear: addYears(new Date(), 1).getFullYear().toString(),
           status: 'to-do',
         }),
       )

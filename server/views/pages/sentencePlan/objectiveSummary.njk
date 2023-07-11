@@ -71,13 +71,17 @@
                 },
                 rows: [
                     { key: { text: "Description" }, value: { text: action.description } },
-                    { key: { text: "Relates to an intervention" }, value: { text: 'Yes' if action.interventionParticipation else 'No' } },
-                    { key: { text: "Intervention" }, value: { text: action.interventionName if action.interventionParticipation else 'N/A' } },
-                    { key: { text: "Target Date" }, value: { text: action.targetDate } },
-                    { key: { text: "Is the individual responsible?" }, value: { text: 'Yes' if  action.individualOwner else 'No' } },
-                    { key: { text: "Is the probation practitioner responsible?" }, value: { text: 'Yes' if  action.practitionerOwner else 'No' } },
-                    { key: { text: "Is anyone else responsible?" }, value: { text: action.otherOwner if  action.otherOwner else 'N/A' } },
-                    { key: { text: "Current Status" }, value: { text: action.status  } }
+                    { key: { text: "Relates to an intervention" }, value: { text: "Yes" if action.interventionParticipation else "No" } },
+                    { key: { text: "Intervention" }, value: { text: action.interventionName if action.interventionParticipation else "N/A" } },
+                    { key: { text: "Target date" }, value: { text: action.targetDateMonth + "/" + action.targetDateYear } },
+                    { key: { text: "Who is involved?" }, value: {
+                        html: ([
+                            "Individual" if action.individualOwner else None,
+                            "Practitioner" if action.practitionerOwner else None,
+                            action.otherOwner if action.otherOwner else None
+                        ] | select("string") | join(",<br/>"))
+                    } },
+                    { key: { text: "Current status" }, value: { text: "To do" if action.status == "to-do" else ("In progress" if action.status == "in-progress" else action.status) } }
 
                 ]
             }) }}

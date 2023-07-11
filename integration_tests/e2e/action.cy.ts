@@ -30,10 +30,10 @@ context('Action', () => {
     cy.get('[data-qa="objective"]').should('contain', 'Test objective')
   })
 
-  it('navigates to action summary page on save', () => page.enterDetails())
+  it('navigates to action summary page on save', () => page.enterDetails().continue())
 
   it('auto-completes national interventions', () => {
-    cy.get('#description').type('Test action description')
+    page.enterDetails()
     cy.get('[name=relates-to-intervention]').check('yes')
     cy.get('[name=intervention-type]').check('national')
     cy.get('[name=national-intervention-name]').type('personal wellbeing{downArrow}{enter}')
@@ -41,13 +41,11 @@ context('Action', () => {
       'have.value',
       'Personal Wellbeing Services for Young Adults in Dyfed-Powys DA',
     )
-    cy.get('button[name=continue]').click()
-    cy.url().should('contain', '/summary')
+    page.continue()
   })
 
   it('can add another action', () => {
-    cy.get('#description').type('Test objective description')
-    cy.get('[name=relates-to-intervention]').check('no')
+    page.enterDetails()
     cy.get('button[name=add-another]').click()
     cy.url().should('contain', '/add-action')
   })

@@ -107,7 +107,7 @@ export default function actionRoutes(router: Router, service: Services): Router 
       status: req.body.status,
       individualOwner: req.body.owner?.includes('individual'),
       practitionerOwner: req.body.owner?.includes('practitioner'),
-      otherOwner: req.body['other-owner'],
+      otherOwner: req.body.owner?.includes('other') ? req.body['other-owner'] : null,
       targetDateMonth: req.body.month,
       targetDateYear: req.body.year,
     }
