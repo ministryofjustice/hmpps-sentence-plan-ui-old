@@ -1,10 +1,6 @@
-import IndexPage from '../pages/index'
 import Page from '../pages/page'
-import SearchPage from '../pages/search'
-import CasePage from '../pages/case'
 import SummaryPage from '../pages/summary'
 import ReviewAndStartPlan from '../pages/reviewAndStartPlan'
-import ObjectivePage from '../pages/objective'
 
 context('Review and start plan', () => {
   let page: ReviewAndStartPlan

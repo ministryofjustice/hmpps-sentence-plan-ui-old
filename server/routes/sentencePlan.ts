@@ -6,7 +6,6 @@ import { Sentence } from '../data/prisonApiClient'
 import { InitialAppointment } from '../data/deliusClient'
 import { Need as OasysNeed } from '../data/oasysClient'
 import logger from '../../logger'
-import { Action, Need as SPNeed } from '../data/sentencePlanClient'
 
 export default function sentencePlanRoutes(router: Router, service: Services): Router {
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
