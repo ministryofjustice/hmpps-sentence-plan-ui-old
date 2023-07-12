@@ -3,8 +3,6 @@ import SummaryPage from '../pages/summary'
 import ReviewAndStartPlan from '../pages/reviewAndStartPlan'
 
 context('Review and start plan', () => {
-  let page: ReviewAndStartPlan
-
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
