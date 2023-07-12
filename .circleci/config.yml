@@ -65,6 +65,9 @@ jobs:
 #      - restore_cache:
 #          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
+          name: Install Dependencies
+          command: npm ci --no-audit
+      - run:
           name: unit tests
           command: npm run test:ci
       - store_test_results:
@@ -86,6 +89,9 @@ jobs:
           command: sudo apt-get install libxss1
 #      - restore_cache:
 #          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci --no-audit
       - run:
           name: Get wiremock
           command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-jre8-standalone/2.35.0/wiremock-jre8-standalone-2.35.0.jar
