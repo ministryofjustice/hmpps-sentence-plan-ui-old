@@ -7,9 +7,10 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "moj/components/task-list/macro.njk" import mojTaskList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 
-{% set pageTitle = applicationName + " - Review" %}
+{% set pageTitle = applicationName + " - Review and Start Plan" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block banner %}
@@ -21,34 +22,103 @@
 {% endblock %}
 
 {% block content %}
-    <div class="govuk-!-width-two-thirds">
+
+    <div class="govuk-!-width-full">
         <h1 class="govuk-heading-l">Sentence Plan Review</h1>
         <form method="GET" action="/sentence-plan/{{ sentencePlan.id }}/confirmStart">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            <ol class="govuk-heading-l">
-                <li>
-                    <h2 class="govuk-heading-l">Write about the individual.</h2>
-                    <p class="govuk-heading-m">Risk Factors that may affect engagement and compliance</p>
-                    <p class="govuk-body">{{ sentencePlan.riskFactors }}</p>
-                    <p class="govuk-heading-m">Protective Factors that may affect engagement and compliance</p>
-                    <p class="govuk-body">{{ sentencePlan.protectiveFactors }}</p>
-                </li>
-                <li>
-                    <h2 class="govuk-heading-l">Objectives.</h2>
-                    {{ govukTable({ head: head, rows: rows }) }}
-                </li>
-                <li>
-                    <h2 class="govuk-heading-l">Final information.</h2>
-                    <p class="govuk-heading-m">Your decisions</p>
-                    <p class="govuk-body">{{ sentencePlan.practitionerComments }}</p>
-                    <p class="govuk-heading-m">Individual's comments</p>
-                    <p class="govuk-body">{{ sentencePlan.individualComments }}</p>
-                </li>
 
-            </ol>
+            {{ govukSummaryList({
+                card: {
+                    title: {
+                        text: "1. Write about the individual."
+                    }
+                },
+                rows: [
+                    {
+                        key: {
+                        text: "Risk Factors that may affect engagement and compliance"
+                    },
+                        value: {
+                        html: sentencePlan.riskFactors
+                    }
+                    },
+                    {
+                        key: {
+                        text: "Protective Factors that may affect engagement and compliance"
+                    },
+                        value: {
+                        html: sentencePlan.protectiveFactors
+                    }
+                    }
+                ]
+            }) }}
+
+            {% for objective in objectivesList.objectives %}
+                {{ govukSummaryList({
+                    card: {
+                        title: {
+                            text: "Objective "+ loop.index
+                        }
+                    },
+                    rows: [
+                        { key: { text: "Description" }, value: { text: objective.description } },
+                        { key: { text: "Needs" }, value: { text: (mappedNeeds[objective.id] | sort | join(", " )) if (mappedNeeds[objective.id]|length>0) else "N/A" } },
+                        { key: { text: "Motivation" }, value: { text: objective.motivation } }
+                    ]
+                }) }}
+                {% for action in allActions[objective.id] %}
+                    {{ govukSummaryList({
+                        card: {
+                            title: { text: "Action " + loop.index }
+                        },
+                        rows: [
+                            { key: { text: "Description" }, value: { text: action.description } },
+                            { key: { text: "Relates to an intervention" }, value: { text: "Yes" if action.interventionParticipation else "No" } },
+                            { key: { text: "Intervention" }, value: { text: action.interventionName if action.interventionParticipation else "N/A" } },
+                            { key: { text: "Target date" }, value: { text: action.targetDateMonth + "/" + action.targetDateYear } },
+                            { key: { text: "Who is involved?" }, value: {
+                                html: ([
+                                    "Individual" if action.individualOwner else None,
+                                    "Practitioner" if action.practitionerOwner else None,
+                                    action.otherOwner if action.otherOwner else None
+                                ] | select("string") | join(",<br/>"))
+                            } },
+                            { key: { text: "Current status" }, value: { text: "To do" if action.status == "to-do" else ("In progress" if action.status == "in-progress" else action.status) } }
+
+                        ]
+                    }) }}
+                {% endfor %}
+            {% endfor %}
 
 
-            {{ govukButton({ text: "Start Plan", type: "Submit" }) }}
+            {{ govukSummaryList({
+                card: {
+                    title: {
+                        text: "3. Final information."
+                    }
+                },
+                rows: [
+                    {
+                        key: {
+                        text: "Your decisions"
+                    },
+                        value: {
+                        html: sentencePlan.practitionerComments
+                    }
+                    },
+                    {
+                        key: {
+                        text: "Individual's comments"
+                    },
+                        value: {
+                        html: sentencePlan.individualComments
+                    }
+                    }
+                ]
+            }) }}
+
+            {{ govukButton({ text: "Start Plan", attributes: { "data-qa": "confirm-start-sentence-plan" }, type: "Submit" }) }}
             {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
         </form>
     </div>

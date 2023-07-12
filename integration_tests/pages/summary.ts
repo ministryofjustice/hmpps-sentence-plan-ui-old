@@ -12,4 +12,6 @@ export default class SummaryPage extends Page {
   individualsComments = () => cy.get('.moj-task-list__item').contains("Individual's comments")
 
   addObjectiveButton = () => cy.get('[data-qa=add-objective]')
+
+  startPlanLink = () => cy.get('[data-qa=review-start-plan]')
 }

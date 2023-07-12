@@ -160,49 +160,24 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
       service.sentencePlanClient.listObjectives(id),
     ])
 
+    const caseDetails = await service.deliusService.getCaseDetails(sentencePlan.crn)
     const objectiveIds = objectivesList.objectives?.map(o => o.id)
 
-    let allActions: Action[] = []
+    const allActions = {}
     // eslint-disable-next-line no-restricted-syntax
     for (const oId of objectiveIds) {
       // eslint-disable-next-line no-await-in-loop
-      allActions = allActions.concat((await service.sentencePlanClient.listActions(id, oId)).actions)
+      allActions[oId] = (await service.sentencePlanClient.listActions(id, oId)).actions
     }
-
-    const head = [
-      { text: 'Objective', classes: 'govuk-!-width-one-half' },
-      { text: 'Needs/Actions', classes: 'govuk-!-width-one-half' },
-    ]
 
     const needTypes = await loadNeeds(sentencePlan.crn)
-
-    function displayAction(ac: Action) {
-      let intervention = `N/A`
-      if (ac.interventionParticipation) {
-        intervention = `${ac.interventionName} <br> <b>Type:</b> ${ac.interventionType}`
-      }
-      return `<p><br/> <b>Description:</b> ${ac.description} <br/>  <b>Intervention:</b> ${intervention}</p>`
+    const mappedNeeds = {}
+    // eslint-disable-next-line no-restricted-syntax
+    for (const objective of objectivesList.objectives) {
+      mappedNeeds[objective.id] = objective.needs.map(it => needTypes.find(nt => nt.key === it.code).description)
     }
 
-    function displayNeeds(needs: SPNeed[]) {
-      let needDisplay = `N/A`
-
-      if (needs.length > 0) {
-        needDisplay = needs.map(n => needTypes.find(type => type.key === n.code).description).join(', ')
-      }
-      return needDisplay
-    }
-
-    const rows = objectivesList.objectives.map(it => [
-      { html: `<b>Description: </b>${it.description} <br><br><p><b>Motivation: </b>${it.motivation}</p>` },
-      {
-        html: `<b>Needs: </b> ${displayNeeds(it.needs)} <br/> ${allActions
-          .filter(action => it.id === action.objectiveId)
-          .map(ac => displayAction(ac))
-          .join('')}`,
-      },
-    ])
-    res.render('pages/sentencePlan/review', { sentencePlan, rows, head })
+    res.render('pages/sentencePlan/review', { sentencePlan, caseDetails, objectivesList, mappedNeeds, allActions })
   })
 
   get('/sentence-plan/:sentencePlanId/confirmStart', async function startSentencePlan(req, res) {
