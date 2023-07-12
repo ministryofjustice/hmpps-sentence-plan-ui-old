@@ -13,5 +13,5 @@ export default class SummaryPage extends Page {
 
   addObjectiveButton = () => cy.get('[data-qa=add-objective]')
 
-  startPlanLink = () => cy.get('[data-qa=review-start-plan]')
+  startPlanLink = () => cy.get('[data-qa="review-start-plan"]')
 }
