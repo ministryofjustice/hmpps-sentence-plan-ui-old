@@ -17,6 +17,8 @@ context('Review and start plan', () => {
   beforeEach(() => {
     cy.visit('/sentence-plan/00000000-0000-0000-0000-000000000003/summary')
     Page.verifyOnPage(SummaryPage).startPlanLink().click()
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000)
     Page.verifyOnPage(ReviewAndStartPlan)
   })
 
