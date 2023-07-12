@@ -21,6 +21,24 @@
 
 {% block content %}
     <div class="govuk-!-width-two-thirds">
+        {% set errorList = [
+            { text: errorMessages.description.text, href: "#description" } if errorMessages.description else None,
+            { text: errorMessages.relatesToIntervention.text, href: "#relates-to-intervention" } if errorMessages.relatesToIntervention else None,
+            { text: errorMessages.interventionType.text, href: "#intervention-type" } if errorMessages.interventionType else None,
+            { text: errorMessages.apInterventionName.text, href: "#ap-intervention-name" } if errorMessages.apInterventionName else None,
+            { text: errorMessages.localInterventionNameHtml.text, href: "#local-intervention-name" } if errorMessages.localInterventionNameHtml else None,
+            { text: errorMessages.nationalInterventionName.text, href: "#national-intervention-name" } if errorMessages.nationalInterventionName else None,
+            { text: errorMessages.otherInterventionName.text, href: "#other-intervention-name" } if errorMessages.otherInterventionName else None,
+            { text: errorMessages.targetDate.text, href: "#target-date-month" } if errorMessages.targetDate else None,
+            { text: errorMessages.owner.text, href: "#owner" } if errorMessages.owner else None,
+            { text: errorMessages.otherOwner.text, href: "#other-owner" } if errorMessages.otherOwner else None,
+            { text: errorMessages.status.text, href: "#status" } if errorMessages.status else None
+        ] | reject("undefined") %}
+        {% if errorList | length > 0 %}
+            {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+            {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorList }) }}
+        {% endif %}
+
         <span class="govuk-caption-l">Objectives</span>
         <h1 class="govuk-heading-l">Add an action</h1>
 
