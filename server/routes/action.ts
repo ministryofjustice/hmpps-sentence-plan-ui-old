@@ -75,7 +75,7 @@ export default function actionRoutes(router: Router, service: Services): Router 
     if (req.body.month === '' || req.body.year === '') {
       errorMessages.targetDate = { text: 'Please enter a target date' }
     } else {
-      const date = parseISO(`${req.body.year}-${req.body.month}-01`)
+      const date = parseISO(`${req.body.year}-${req.body.month?.padStart(2, '0')}-01`)
       if (!isValid(date)) {
         errorMessages.targetDate = {
           text: 'Please enter a valid date',
@@ -108,8 +108,8 @@ export default function actionRoutes(router: Router, service: Services): Router 
       individualOwner: req.body.owner?.includes('individual'),
       practitionerOwner: req.body.owner?.includes('practitioner'),
       otherOwner: req.body.owner?.includes('other') ? req.body['other-owner'] : null,
-      targetDateMonth: req.body.month,
-      targetDateYear: req.body.year,
+      targetDateMonth: +req.body.month,
+      targetDateYear: +req.body.year,
     }
   }
 
