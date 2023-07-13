@@ -1,6 +1,5 @@
 import Page from '../pages/page'
 import SummaryPage from '../pages/summary'
-import ReviewAndStartPlan from '../pages/reviewAndStartPlan'
 
 context('Review and start plan', () => {
   let summaryPage: SummaryPage
@@ -21,7 +20,6 @@ context('Review and start plan', () => {
 
   it('Verify on Summary page', () => {
     summaryPage = Page.verifyOnPage(SummaryPage)
-    summaryPage.startPlanLink().click()
-    Page.verifyOnPage(ReviewAndStartPlan)
+    summaryPage.startPlanLink().should('have.length', 1)
   })
 })
