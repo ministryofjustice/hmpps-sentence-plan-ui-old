@@ -58,9 +58,8 @@
             {% for objective in objectivesList.objectives %}
                 {{ govukSummaryList({
                     card: {
-                        title: {
-                            text: "Objective "+ loop.index
-                        }
+                        title: { text: "Objective " + loop.index },
+                        classes: "parent-card"
                     },
                     rows: [
                         { key: { text: "Description" }, value: { text: objective.description } },
@@ -71,7 +70,8 @@
                 {% for action in allActions[objective.id] %}
                     {{ govukSummaryList({
                         card: {
-                            title: { text: "Action " + loop.index }
+                            title: { text: "Action " + loop.index },
+                            classes: "child-card"
                         },
                         rows: [
                             { key: { text: "Description" }, value: { text: action.description } },
