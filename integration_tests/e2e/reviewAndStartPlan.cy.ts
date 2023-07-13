@@ -1,7 +1,9 @@
 import Page from '../pages/page'
 import SummaryPage from '../pages/summary'
+import ReviewAndStartPlan from '../pages/reviewAndStartPlan'
 
 context('Review and start plan', () => {
+  let summaryPage: SummaryPage
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -18,6 +20,8 @@ context('Review and start plan', () => {
   })
 
   it('Verify on Summary page', () => {
-    Page.verifyOnPage(SummaryPage)
+    summaryPage = Page.verifyOnPage(SummaryPage)
+    summaryPage.startPlanLink().click()
+    Page.verifyOnPage(ReviewAndStartPlan)
   })
 })
