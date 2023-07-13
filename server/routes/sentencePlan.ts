@@ -193,7 +193,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     const mappedNeeds = {}
     // eslint-disable-next-line no-restricted-syntax
     for (const objective of objectivesList.objectives) {
-      mappedNeeds[objective.id] = objective.needs.map(it => needTypes.find(nt => nt.key === it.code).description)
+      mappedNeeds[objective.id] = objective.needs?.map(it => needTypes?.find(nt => nt.key === it.code).description)
     }
 
     res.render('pages/sentencePlan/review', { sentencePlan, caseDetails, objectivesList, mappedNeeds, allActions })
