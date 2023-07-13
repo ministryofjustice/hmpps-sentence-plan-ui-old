@@ -4,6 +4,7 @@ import ReviewAndStartPlan from '../pages/reviewAndStartPlan'
 
 context('Review and start plan', () => {
   let summaryPage: SummaryPage
+  let reviewStartPlan: ReviewAndStartPlan
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -16,12 +17,20 @@ context('Review and start plan', () => {
   })
 
   beforeEach(() => {
-    cy.visit('/sentence-plan/00000000-0000-0000-0000-000000000003/summary')
+    cy.visit('/sentence-plan/00000000-0000-0000-0000-000000000001/summary')
   })
 
-  it('Verify on Summary page', () => {
+  it('Verify review page', () => {
     summaryPage = Page.verifyOnPage(SummaryPage)
     summaryPage.startPlanLink().click()
-    Page.verifyOnPage(ReviewAndStartPlan)
+    reviewStartPlan = Page.verifyOnPage(ReviewAndStartPlan)
+    reviewStartPlan.startPlanButton().should('be.visible')
+    cy.get('form').should('contain.text', 'Write about the individual')
+    cy.get('form').should('contain.text', 'Objective 1')
+    cy.get('form').should('contain.text', 'Objective 2')
+    cy.get('form').should('contain.text', 'Objective 3')
+    cy.get('form').should('contain.text', 'Final information.')
+    cy.get('form').submit()
+    cy.url().should('contain', '/confirmStart')
   })
 })

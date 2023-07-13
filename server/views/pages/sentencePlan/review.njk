@@ -119,7 +119,7 @@
                 ]
             }) }}
 
-            {{ govukButton({ text: "Start Plan", attributes: { "data-qa": "confirm-start-sentence-plan" }, type: "Submit" }) }}
+            {{ govukButton({ text: "Start Plan", name: "start-plan", attributes: { "data-qa": "confirm-start-sentence-plan" }, type: "Submit" }) }}
             {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
         </form>
     </div>
