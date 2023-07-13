@@ -1,0 +1,126 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "moj/components/task-list/macro.njk" import mojTaskList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+
+{% set pageTitle = applicationName + " - Review and Start Plan" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block banner %}
+    {% include "../../partials/caseDetailsBanner.njk" %}
+{% endblock %}
+
+{% block beforeContent %}
+    {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-!-width-full">
+        <h1 class="govuk-heading-l">Sentence Plan Review</h1>
+
+        <form method="GET" action="/sentence-plan/{{ sentencePlan.id }}/confirmStart">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+            {{ govukSummaryList({
+                card: {
+                    title: {
+                        text: "Write about the individual."
+                    }
+                },
+                rows: [
+                    {
+                        key: {
+                        text: "Risk Factors that may affect engagement and compliance"
+                    },
+                        value: {
+                        html: sentencePlan.riskFactors
+                    }
+                    },
+                    {
+                        key: {
+                        text: "Protective Factors that may affect engagement and compliance"
+                    },
+                        value: {
+                        html: sentencePlan.protectiveFactors
+                    }
+                    }
+                ]
+            }) }}
+
+            {% for objective in objectivesList.objectives %}
+                {{ govukSummaryList({
+                    card: {
+                        title: { text: "Objective " + loop.index },
+                        classes: "parent-card"
+                    },
+                    rows: [
+                        { key: { text: "Description" }, value: { text: objective.description } },
+                        { key: { text: "Needs" }, value: { text: (mappedNeeds[objective.id] | sort | join(", " )) if (mappedNeeds[objective.id]|length>0) else "N/A" } },
+                        { key: { text: "Motivation" }, value: { text: objective.motivation } }
+                    ]
+                }) }}
+                {% for action in allActions[objective.id] %}
+                    {{ govukSummaryList({
+                        card: {
+                            title: { text: "Action " + loop.index },
+                            classes: "child-card"
+                        },
+                        rows: [
+                            { key: { text: "Description" }, value: { text: action.description } },
+                            { key: { text: "Relates to an intervention" }, value: { text: "Yes" if action.interventionParticipation else "No" } },
+                            { key: { text: "Intervention" }, value: { text: action.interventionName if action.interventionParticipation else "N/A" } },
+                            { key: { text: "Target date" }, value: { text: action.targetDateMonth + "/" + action.targetDateYear } },
+                            { key: { text: "Who is involved?" }, value: {
+                                html: ([
+                                    "Individual" if action.individualOwner else None,
+                                    "Practitioner" if action.practitionerOwner else None,
+                                    action.otherOwner if action.otherOwner else None
+                                ] | select("string") | join(",<br/>"))
+                            } },
+                            { key: { text: "Current status" }, value: { text: "To do" if action.status == "to-do" else ("In progress" if action.status == "in-progress" else action.status) } }
+
+                        ]
+                    }) }}
+                {% endfor %}
+            {% endfor %}
+
+
+            {{ govukSummaryList({
+                card: {
+                    title: {
+                        text: "Final information."
+                    }
+                },
+                rows: [
+                    {
+                        key: {
+                        text: "Your decisions"
+                    },
+                        value: {
+                        html: sentencePlan.practitionerComments
+                    }
+                    },
+                    {
+                        key: {
+                        text: "Individual's comments"
+                    },
+                        value: {
+                        html: sentencePlan.individualComments
+                    }
+                    }
+                ]
+            }) }}
+
+            {{ govukButton({ text: "Start Plan", name: "start-plan", attributes: { "data-qa": "confirm-start-sentence-plan" }, type: "Submit" }) }}
+            {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
+        </form>
+    </div>
+{% endblock %}

@@ -4,6 +4,7 @@ import type { Services } from '../services'
 import { formatDate } from '../utils/utils'
 import { Sentence } from '../data/prisonApiClient'
 import { InitialAppointment } from '../data/deliusClient'
+import { Need as OasysNeed } from '../data/oasysClient'
 import logger from '../../logger'
 
 export default function sentencePlanRoutes(router: Router, service: Services): Router {
@@ -162,6 +163,45 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   get('/sentence-plan/:sentencePlanId/confirmDelete', async function deleteAction(req, res) {
     const { sentencePlanId } = req.params
     res.render('pages/sentencePlan/confirmDeleteSentencePlan', {
+      ...(await loadSentencePlan(sentencePlanId)),
+    })
+  })
+
+  async function loadNeeds(crn: string): Promise<OasysNeed[]> {
+    const needs = await service.oasysClient.getNeeds(crn)
+    return needs.criminogenicNeeds
+  }
+
+  get('/sentence-plan/:id/start-review', async (req, res) => {
+    const { id } = req.params
+    const [sentencePlan, objectivesList] = await Promise.all([
+      service.sentencePlanClient.getSentencePlan(id),
+      service.sentencePlanClient.listObjectives(id),
+    ])
+
+    const caseDetails = await service.deliusService.getCaseDetails(sentencePlan.crn)
+    const objectiveIds = objectivesList.objectives?.map(o => o.id)
+
+    const allActions = {}
+    // eslint-disable-next-line no-restricted-syntax
+    for (const oId of objectiveIds) {
+      // eslint-disable-next-line no-await-in-loop
+      allActions[oId] = (await service.sentencePlanClient.listActions(id, oId)).actions
+    }
+
+    const needTypes = await loadNeeds(sentencePlan.crn)
+    const mappedNeeds = {}
+    // eslint-disable-next-line no-restricted-syntax
+    for (const objective of objectivesList.objectives) {
+      mappedNeeds[objective.id] = objective.needs?.map(it => needTypes?.find(nt => nt.key === it.code).description)
+    }
+
+    res.render('pages/sentencePlan/review', { sentencePlan, caseDetails, objectivesList, mappedNeeds, allActions })
+  })
+
+  get('/sentence-plan/:sentencePlanId/confirmStart', async function startSentencePlan(req, res) {
+    const { sentencePlanId } = req.params
+    res.render('pages/sentencePlan/confirmStartSentencePlan', {
       ...(await loadSentencePlan(sentencePlanId)),
     })
   })

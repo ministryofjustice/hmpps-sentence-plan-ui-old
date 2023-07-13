@@ -145,6 +145,33 @@
     {
       "request": {
         "method": "GET",
+        "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000001/objective/([^/]*)"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "00000000-0000-0000-0000-000000000000",
+          "sentencePlanId": "00000000-0000-0000-0000-000000000001",
+          "description": "Test objective",
+          "needs": [
+            {
+              "code": "accommodation"
+            },
+            {
+              "code": "employability"
+            }
+          ],
+          "motivation": "Action"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
         "urlPattern": "/sentence-plan-api/sentence-plan/00000000-0000-0000-0000-000000000003"
       },
       "response": {
