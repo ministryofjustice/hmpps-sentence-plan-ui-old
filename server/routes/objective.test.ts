@@ -171,12 +171,16 @@ describe('GET /sentence-plan/objective/summary', () => {
           id: '3',
           description: 'First action',
           interventionParticipation: false,
+          targetDateMonth: 7,
+          targetDateYear: 2023,
         },
         {
           id: '4',
           description: 'Second action',
           interventionParticipation: true,
           interventionName: 'My intervention',
+          targetDateMonth: 12,
+          targetDateYear: 2024,
         },
       ],
     })
@@ -186,6 +190,7 @@ describe('GET /sentence-plan/objective/summary', () => {
     return request(app)
       .get('/sentence-plan/1/objective/2/summary')
       .expect('Content-Type', /html/)
+      .expect(res => expect(res.text).toContain('12 / 2024'))
       .expect(res => expect(res.text).toContain('Existing text'))
       .expect(res => expect(res.text).toContain('Drug misuse'))
       .expect(res => expect(res.text).toContain('First action'))

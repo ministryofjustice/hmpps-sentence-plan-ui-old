@@ -136,7 +136,7 @@
                 },
                 errorMessage: errorMessages.targetDate,
                 items: [
-                    { name: "month", classes: "govuk-input--width-2", value: '%02d' % action.targetDateMonth },
+                    { name: "month", classes: "govuk-input--width-2", value: (action.targetDateMonth|string).padStart(2, "0") if action.targetDateMonth else "" },
                     { name: "year", classes: "govuk-input--width-4", value: action.targetDateYear }
                 ]
             }) }}

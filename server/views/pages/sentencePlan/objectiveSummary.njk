@@ -73,7 +73,7 @@
                     { key: { text: "Description" }, value: { text: action.description } },
                     { key: { text: "Relates to an intervention" }, value: { text: "Yes" if action.interventionParticipation else "No" } },
                     { key: { text: "Intervention" }, value: { text: action.interventionName if action.interventionParticipation else "N/A" } },
-                    { key: { text: "Target date" }, value: { text: ('%02d' % action.targetDateMonth) + "/" + action.targetDateYear } },
+                    { key: { text: "Target date" }, value: { text: (action.targetDateMonth|string).padStart(2, "0") + " / " + action.targetDateYear } },
                     { key: { text: "Who is involved?" }, value: {
                         html: ([
                             "Individual" if action.individualOwner else None,
