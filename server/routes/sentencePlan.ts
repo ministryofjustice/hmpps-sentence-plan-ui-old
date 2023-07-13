@@ -93,12 +93,27 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   post('/sentence-plan/:id/engagement-and-compliance', async function updateEngagementAndCompliance(req, res) {
     const { id } = req.params
     const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
-    await service.sentencePlanClient.updateSentencePlan({
-      ...existingSentencePlan,
-      riskFactors: req.body['risk-factors'],
-      protectiveFactors: req.body['protective-factors'],
-    })
-    res.redirect(`/sentence-plan/${id}/summary`)
+    const errorMessages: { [key: string]: { text: string } } = {}
+    if (req.body['risk-factors'].length === 0) errorMessages.riskFactors = { text: 'Please enter risk factors' }
+    if (req.body['risk-factors'].length > 5000)
+      errorMessages.riskFactors = { text: 'Risk factors must be 5000 characters or less' }
+    if (req.body['protective-factors'].length === 0)
+      errorMessages.protectiveFactors = { text: 'Please enter protective factors' }
+    if (req.body['protective-factors'].length > 5000)
+      errorMessages.protectiveFactors = { text: 'Protective factors must be 5000 characters or less' }
+    if (Object.keys(errorMessages).length > 0) {
+      await res.render('pages/sentencePlan/engagementAndCompliance', {
+        ...(await loadSentencePlan(req.params.id)),
+        errorMessages,
+      })
+    } else {
+      await service.sentencePlanClient.updateSentencePlan({
+        ...existingSentencePlan,
+        riskFactors: req.body['risk-factors'],
+        protectiveFactors: req.body['protective-factors'],
+      })
+      res.redirect(`/sentence-plan/${id}/summary`)
+    }
   })
 
   get('/sentence-plan/:id/your-decisions', async (req, res) => {
@@ -108,13 +123,15 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   post('/sentence-plan/:id/your-decisions', async function updatePractitionerComments(req, res) {
     const { id } = req.params
     const practitionerComments = req.body['practitioner-comments']
-    if (practitionerComments.length === 0) await errorMessage('Please enter your decisions', 'yourDecisions', req, res)
-    if (practitionerComments.length > 5000)
+    if (practitionerComments.length === 0) {
+      await errorMessage('Please enter your decisions', 'yourDecisions', req, res)
+    } else if (practitionerComments.length > 5000) {
       await errorMessage('Your decisions must be 5000 characters or less', 'yourDecisions', req, res)
-
-    const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
-    await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, practitionerComments })
-    res.redirect(`/sentence-plan/${id}/summary`)
+    } else {
+      const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
+      await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, practitionerComments })
+      res.redirect(`/sentence-plan/${id}/summary`)
+    }
   })
 
   get('/sentence-plan/:id/individuals-comments', async (req, res) => {
@@ -124,12 +141,15 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   post('/sentence-plan/:id/individuals-comments', async function updateIndividualsComments(req, res) {
     const { id } = req.params
     const individualComments = req.body['individual-comments']
-    if (individualComments.length > 5000)
+    if (individualComments.length === 0) {
+      await errorMessage("Please enter the individual's comments", 'individualsComments', req, res)
+    } else if (individualComments.length > 5000) {
       await errorMessage("Individual's comments must be 5000 characters or less", 'individualsComments', req, res)
-
-    const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
-    await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, individualComments })
-    res.redirect(`/sentence-plan/${id}/summary`)
+    } else {
+      const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(id)
+      await service.sentencePlanClient.updateSentencePlan({ ...existingSentencePlan, individualComments })
+      res.redirect(`/sentence-plan/${id}/summary`)
+    }
   })
 
   post('/sentence-plan/:sentencePlanId/delete', async function deleteAction(req, res) {

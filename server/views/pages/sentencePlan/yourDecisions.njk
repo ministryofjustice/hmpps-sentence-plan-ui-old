@@ -15,6 +15,14 @@
 {% endblock %}
 
 {% block content %}
+    {% set errorList = [
+        { text: errorMessage.text, href: "#practitioner-comments" } if errorMessage else None
+    ] | reject("undefined") %}
+    {% if errorList | length > 0 %}
+        {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+        {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorList }) }}
+    {% endif %}
+
     <div class="govuk-!-width-two-thirds">
         <span class="govuk-caption-l">Final information</span>
         <form method="POST">

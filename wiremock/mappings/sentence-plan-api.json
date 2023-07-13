@@ -328,7 +328,8 @@
               "description": "Do a thing",
               "interventionParticipation": false,
               "status": "In progress",
-              "targetDate": "02 2024",
+              "targetDateMonth": 2,
+              "targetDateYear": 2024,
               "individualOwner": true,
               "practitionerOwner": false
             },
@@ -339,7 +340,8 @@
               "interventionParticipation": true,
               "interventionName": "Some intervention",
               "status": "To Do",
-              "targetDate": "12 2025",
+              "targetDateMonth": 12,
+              "targetDateYear": 2025,
               "individualOwner": true,
               "practitionerOwner": false,
               "otherOwner": "Some other owner"
@@ -364,7 +366,8 @@
           "description": "Do a thing",
           "interventionParticipation": false,
           "status": "In progress",
-          "targetDate": "02 2024",
+          "targetDateMonth": 2,
+          "targetDateYear": 2024,
           "individualOwner": true,
           "practitionerOwner": false
         }

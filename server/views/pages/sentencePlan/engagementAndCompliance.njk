@@ -15,6 +15,15 @@
 {% endblock %}
 
 {% block content %}
+    {% set errorList = [
+        { text: errorMessages.riskFactors.text, href: "#risk-factors" } if errorMessages.riskFactors else None,
+        { text: errorMessages.protectiveFactors.text, href: "#protective-factors" } if errorMessages.protectiveFactors else None
+    ] | reject("undefined") %}
+    {% if errorList | length > 0 %}
+        {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+        {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorList }) }}
+    {% endif %}
+
     <div class="govuk-!-width-two-thirds">
         <span class="govuk-caption-l">Write about the individual</span>
         <h1 class="govuk-heading-l">Engagement and Compliance</h1>
@@ -31,6 +40,7 @@
                 value: sentencePlan.riskFactors,
                 threshold: 50,
                 maxlength: 5000,
+                errorMessage: errorMessages.riskFactors,
                 label: { text: "Identify risk factors which may affect engagement and compliance", classes: "govuk-label--m" },
                 hint: { text: "For example: any learning difficulties or disabilities, mental well-being, difficult relationships, or diversity issues." }
             }) }}
@@ -40,6 +50,7 @@
                 value: sentencePlan.protectiveFactors,
                 threshold: 50,
                 maxlength: 5000,
+                errorMessage: errorMessages.protectiveFactors,
                 label: { text: "Identify protective factors to be maintained or developed", classes: "govuk-label--m" },
                 hint: { text: "Describe any protective factors and strengths that could positively affect achievement of the sentence plan." }
             }) }}
