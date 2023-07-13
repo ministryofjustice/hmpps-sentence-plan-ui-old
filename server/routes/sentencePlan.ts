@@ -111,7 +111,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     } else {
       await service.sentencePlanClient.updateSentencePlan({
         ...existingSentencePlan,
-        ac: req.body['risk-factors'],
+        riskFactors: req.body['risk-factors'],
         protectiveFactors: req.body['protective-factors'],
       })
       res.redirect(`/sentence-plan/${id}/summary`)
@@ -218,7 +218,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   post('/sentence-plan/:sentencePlanId/start', async function deleteAction(req, res) {
     const { sentencePlanId } = req.params
     const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
-    const updatedSP = await service.sentencePlanClient.updateSentencePlan({
+    await service.sentencePlanClient.updateSentencePlan({
       ...existingSentencePlan,
       activeDate: formatISO(new Date()),
     })
