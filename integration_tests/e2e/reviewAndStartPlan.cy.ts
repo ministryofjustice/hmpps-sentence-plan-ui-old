@@ -16,10 +16,9 @@ context('Review and start plan', () => {
 
   beforeEach(() => {
     cy.visit('/sentence-plan/00000000-0000-0000-0000-000000000003/summary')
-    Page.verifyOnPage(ReviewAndStartPlan)
   })
 
-  it('displays start plan button', () => {
+  it('Verify on Summary page', () => {
     Page.verifyOnPage(SummaryPage)
   })
 })
