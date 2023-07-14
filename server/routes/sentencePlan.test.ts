@@ -1,5 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { formatISO } from 'date-fns'
 import { appWithAllRoutes, mockServices } from './testutils/appSetup'
 
 let app: Express
@@ -155,5 +156,33 @@ describe('GET /sentence-plan/engagement-and-compliance', () => {
       .expect(302)
       .expect('Location', '/case/123')
       .expect(_ => expect(api).toBeCalledWith('1'))
+  })
+
+  it('should start sentence plan', () => {
+    const startDate = formatISO(new Date())
+
+    services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({
+      id: '123',
+      crn: '123',
+      status: 'Draft',
+      createdDate: '2023-05-01',
+    })
+
+    const updateApi = jest.fn().mockResolvedValue({})
+    services.sentencePlanClient.updateSentencePlan = updateApi
+    return request(app)
+      .post('/sentence-plan/123/start')
+      .send({ activeDate: startDate })
+      .expect(302)
+      .expect('Location', '/case/123')
+      .expect(_ =>
+        expect(updateApi).toBeCalledWith({
+          id: '123',
+          crn: '123',
+          status: 'Draft',
+          createdDate: '2023-05-01',
+          activeDate: startDate,
+        }),
+      )
   })
 })
