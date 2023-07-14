@@ -1,5 +1,4 @@
 import Page from '../pages/page'
-import SummaryPage from '../pages/summary'
 import ReviewAndStartPlan from '../pages/reviewAndStartPlan'
 import ConfirmStartPlan from '../pages/confirmStartPlan'
 import CasePage from '../pages/case'
