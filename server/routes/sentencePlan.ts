@@ -208,14 +208,14 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     res.render('pages/sentencePlan/review', { sentencePlan, caseDetails, objectivesList, mappedNeeds, allActions })
   })
 
-  get('/sentence-plan/:sentencePlanId/confirmStart', async function startSentencePlan(req, res) {
+  get('/sentence-plan/:sentencePlanId/confirmStart', async function confirmStartSentencePlan(req, res) {
     const { sentencePlanId } = req.params
     res.render('pages/sentencePlan/confirmStartSentencePlan', {
       ...(await loadSentencePlan(sentencePlanId)),
     })
   })
 
-  post('/sentence-plan/:sentencePlanId/start', async function deleteAction(req, res) {
+  post('/sentence-plan/:sentencePlanId/start', async function startSentencePlan(req, res) {
     const { sentencePlanId } = req.params
     const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
     await service.sentencePlanClient.updateSentencePlan({

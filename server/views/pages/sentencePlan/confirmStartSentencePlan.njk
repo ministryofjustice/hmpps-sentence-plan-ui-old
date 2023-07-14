@@ -3,7 +3,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set pageTitle = applicationName + " - confirm start sentence plan" %}
+{% set pageTitle = applicationName + " - Confirm Start Sentence Plan" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block banner %}
@@ -29,7 +29,7 @@
 <form method="POST" action="/sentence-plan/{{ sentencePlan.id }}/start">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
   <div class="govuk-button-group">
-      {{ govukButton({ text: "Start Sentence Plan", attributes: { "data-qa": "start-sentence-plan-button" } }) }}
+      {{ govukButton({ text: "Start Sentence Plan", name: "confirm-start-plan", attributes: { "data-qa": "start-sentence-plan-button" } }) }}
       {{ govukButton({ text: "Cancel", classes: "govuk-button--secondary", "href": "/sentence-plan/" + sentencePlan.id + "/start-review" }) }}
   </div>
 </form>
