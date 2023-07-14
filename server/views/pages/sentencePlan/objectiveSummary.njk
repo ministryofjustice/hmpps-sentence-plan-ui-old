@@ -46,7 +46,7 @@
         }) }}
 
         {% for action in actions %}
-        <form method="POST" action="/sentence-plan/{{ sentencePlan.id }}/objective/{{ objective.id }}/action/{{ action.id }}/delete">
+        <form method="GET" action="/sentence-plan/{{ sentencePlan.id }}/objective/{{ objective.id }}/action/{{ action.id }}/confirmDelete">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             {{ govukSummaryList({
                 card: {

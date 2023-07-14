@@ -169,13 +169,6 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     })
   })
 
-  get('/sentence-plan/:sentencePlanId/confirmDelete', async function deleteAction(req, res) {
-    const { sentencePlanId } = req.params
-    res.render('pages/sentencePlan/confirmDeleteSentencePlan', {
-      ...(await loadSentencePlan(sentencePlanId)),
-    })
-  })
-
   async function loadNeeds(crn: string): Promise<OasysNeed[]> {
     const needs = await service.oasysClient.getNeeds(crn)
     return needs.criminogenicNeeds
