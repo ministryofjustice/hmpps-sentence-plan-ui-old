@@ -55,7 +55,10 @@ context('Objective summary', () => {
 
   it('can delete action details', () => {
     cy.get('[data-qa=delete-action-2]').click()
-    cy.url().should('contain', 'objective/00000000-0000-0000-0000-000000000000/summary')
+    cy.url().should(
+      'contain',
+      'objective/00000000-0000-0000-0000-000000000000/action/00000000-0000-0000-0000-000000000000/confirmDelete',
+    )
   })
 
   it('can delete objective', () => {
