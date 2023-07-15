@@ -172,6 +172,16 @@ export default function actionRoutes(router: Router, service: Services): Router 
     }
   })
 
+  get(
+    '/sentence-plan/:sentencePlanId/objective/:objectiveId/action/:actionId/confirmDelete',
+    async function deleteAction(req, res) {
+      const { sentencePlanId, objectiveId, actionId } = req.params
+      res.render('pages/sentencePlan/confirmDeleteAction', {
+        ...(await loadAction(sentencePlanId, objectiveId, actionId)),
+      })
+    },
+  )
+
   post(
     '/sentence-plan/:sentencePlanId/objective/:objectiveId/action/:actionId/delete',
     async function deleteAction(req, res) {
