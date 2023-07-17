@@ -51,13 +51,6 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
       }
     }
 
-    function displayDelete(it: SentencePlan): string {
-      if (it.status === 'Draft') {
-        return ` | <a href='/sentence-plan/${it.id}/confirmDelete'>Delete</a>`
-      }
-      return ``
-    }
-
     res.render('pages/case', {
       caseDetails,
       head: [{ text: 'Date' }, { text: 'Status' }, {}],
@@ -73,6 +66,13 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
       initialAppointmentDate,
       arrivalIntoCustodyDate,
     })
+
+    function displayDelete(sp: SentencePlan): string {
+      if (sp.status === 'Draft') {
+        return ` | <a href='/sentence-plan/${sp.id}/confirmDelete'>Delete</a>`
+      }
+      return ``
+    }
   })
 
   get('/case/:crn/create-sentence-plan', async function createSentencePlan(req, res) {
