@@ -82,6 +82,27 @@ describe('GET /case', () => {
   })
 })
 
+it('should display active sentence plan with no delete button', () => {
+  services.sentencePlanClient.listSentencePlans = jest.fn().mockResolvedValue({
+    sentencePlans: [
+      {
+        id: '123',
+        crn: '123',
+        status: 'Active',
+        createdDate: '2023-05-01',
+      },
+    ],
+  })
+  return request(app)
+    .get('/case/123')
+    .expect('Content-Type', /html/)
+    .expect(res => {
+      expect(res.text).toContain('Active')
+      expect(res.text).toContain('2023-05-01')
+      expect(res.text).not.toContain('Delete')
+    })
+})
+
 describe('GET /sentence-plan', () => {
   it('should show no completed sections initially', () => {
     services.sentencePlanClient.getSentencePlan = jest.fn().mockResolvedValue({ crn: '123' })
