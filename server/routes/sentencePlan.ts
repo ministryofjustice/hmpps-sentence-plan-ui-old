@@ -93,7 +93,16 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
       href: `./objective/${it.id}/summary`,
       attributes: { 'data-actions': it.actionsCount || 0 },
     }))
-    res.render('pages/sentencePlan/summary', { caseDetails, sentencePlan, objectives })
+
+    const canBeCompleted =
+      sentencePlan.status === 'Draft' &&
+      objectives.length > 0 &&
+      sentencePlan.riskFactors &&
+      sentencePlan.protectiveFactors &&
+      sentencePlan.practitionerComments &&
+      sentencePlan.individualComments
+
+    res.render('pages/sentencePlan/summary', { caseDetails, sentencePlan, objectives, canBeCompleted })
   })
 
   get('/sentence-plan/:id/engagement-and-compliance', async (req, res) => {
