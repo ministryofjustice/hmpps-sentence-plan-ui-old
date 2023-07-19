@@ -191,7 +191,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     return needs.criminogenicNeeds
   }
 
-  get('/sentence-plan/:id/start-review', async (req, res) => {
+  get('/sentence-plan/:id/view-plan', async (req, res) => {
     const { id } = req.params
     const [sentencePlan, objectivesList] = await Promise.all([
       service.sentencePlanClient.getSentencePlan(id),
