@@ -18,7 +18,7 @@ context('confirm start plan', () => {
   })
 
   beforeEach(() => {
-    cy.visit('/sentence-plan/00000000-0000-0000-0000-000000000001/start-review')
+    cy.visit('/sentence-plan/00000000-0000-0000-0000-000000000001/view-plan')
   })
 
   it('Verify start plan page', () => {

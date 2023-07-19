@@ -10,7 +10,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 
-{% set pageTitle = applicationName + " - Review and Start Plan" %}
+{% set pageTitle = applicationName + (" - Review and Start Plan" if sentencePlan.status == 'Draft' else "- View Plan" ) %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block banner %}
@@ -23,8 +23,9 @@
 
 {% block content %}
 
+    {% set heading = ("Sentence Plan Review" if sentencePlan.status == 'Draft' else "Sentence Plan" ) %}
     <div class="govuk-!-width-full">
-        <h1 class="govuk-heading-l">Sentence Plan Review</h1>
+        <h1 class="govuk-heading-l">{{ heading }}</h1>
 
         <form method="GET" action="/sentence-plan/{{ sentencePlan.id }}/confirmStart">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -32,7 +33,7 @@
             {{ govukSummaryList({
                 card: {
                     title: {
-                        text: "Write about the individual."
+                        text: "About the individual."
                     }
                 },
                 rows: [
@@ -118,9 +119,10 @@
                     }
                 ]
             }) }}
-
+            {% if sentencePlan.status === 'Draft' %}
             {{ govukButton({ text: "Start Plan", name: "start-plan", attributes: { "data-qa": "confirm-start-sentence-plan" }, type: "Submit" }) }}
             {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
+            {% endif %}
         </form>
     </div>
 {% endblock %}

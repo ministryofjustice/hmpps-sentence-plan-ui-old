@@ -25,7 +25,7 @@ context('Review and start plan', () => {
     summaryPage.startPlanLink().click()
     reviewStartPlan = Page.verifyOnPage(ReviewAndStartPlan)
     reviewStartPlan.startPlanButton().should('be.visible')
-    cy.get('form').should('contain.text', 'Write about the individual')
+    cy.get('form').should('contain.text', 'About the individual')
     cy.get('form').should('contain.text', 'Objective 1')
     cy.get('form').should('contain.text', 'Objective 2')
     cy.get('form').should('contain.text', 'Objective 3')
