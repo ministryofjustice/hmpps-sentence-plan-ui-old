@@ -95,7 +95,9 @@
           "createdDate": "2023-04-28T11:08:58.283748+01:00[Europe/London]",
           "activeDate": "2023-04-30T09:57:02.774310+01:00[Europe/London]",
           "riskFactors": "Dummy data",
-          "protectiveFactors": "More dummy data"
+          "protectiveFactors": "More dummy data",
+          "practitionerComments": "Dummy data",
+          "individualComments": "More dummy data"
         },
         "transformers": ["response-template"]
       }

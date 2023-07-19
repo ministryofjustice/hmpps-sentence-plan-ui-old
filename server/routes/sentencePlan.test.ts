@@ -109,7 +109,7 @@ describe('GET /sentence-plan', () => {
     return request(app)
       .get('/sentence-plan/123/summary')
       .expect('Content-Type', /html/)
-      .expect(res => expect(res.text).not.toContain('completed'))
+      .expect(res => expect(res.text).not.toContain('Completed'))
   })
 
   it('should tag completed sections', () => {
