@@ -67,10 +67,13 @@
             {% if(sentencePlan.status === 'Active')  %}
             <li class="moj-task-list__item"> <a href='./view-plan' data-qa='review-start-plan'>View plan</a> <strong class="govuk-tag--green moj-task-list__task-completed">Started</strong></li>
             {% endif %}
-            {% if(sentencePlan.status !== 'Active' and canBeCompleted)  %}
+            {% if(sentencePlan.status === 'Closed')  %}
+                <li class="moj-task-list__item"> <a href='./view-plan' data-qa='review-start-plan'>View plan</a> <strong class="govuk-tag--red moj-task-list__task-completed">Closed</strong></li>
+            {% endif %}
+            {% if(sentencePlan.status !== 'Closed' and sentencePlan.status !== 'Active' and canBeCompleted)  %}
                 <li class="moj-task-list__item"> <a href='./view-plan' data-qa='review-start-plan'>Review & start plan</a> <strong class="govuk-tag--yellow moj-task-list__task-completed">Pending</strong></li>
             {% endif %}
-            {% if(sentencePlan.status !== 'Active' and not canBeCompleted)  %}
+            {% if(sentencePlan.status !== 'Closed' and sentencePlan.status !== 'Active' and not canBeCompleted)  %}
                     <li class="moj-task-list__item"> Please complete all sections <strong class="govuk-tag--grey moj-task-list__task-completed">Inactive</strong></li>
             {% endif %}
         </ul>
