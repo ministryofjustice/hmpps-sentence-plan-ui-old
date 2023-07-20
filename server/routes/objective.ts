@@ -52,6 +52,9 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     if (req.body.motivation == null) {
       errorMessages.motivation = { text: 'Please select a motivation level' }
     }
+    if (req.body.status == null) {
+      errorMessages.status = { text: 'Please select the status of the objective' }
+    }
     if (Object.keys(errorMessages).length > 0) {
       res.render('pages/sentencePlan/objective', { errorMessages, ...(await loadObjective(sentencePlanId)), objective })
       return false
@@ -76,6 +79,7 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     const objective = {
       description: req.body.description,
       motivation: req.body.motivation,
+      status: req.body.status,
       needs: getNeeds(req),
     }
 
@@ -95,6 +99,7 @@ export default function objectiveRoutes(router: Router, service: Services): Rout
     const objective = {
       description: req.body.description,
       motivation: req.body.motivation,
+      status: req.body.status,
       needs: getNeeds(req),
     }
     if (await validateObjective(objective, sentencePlanId, req, res)) {

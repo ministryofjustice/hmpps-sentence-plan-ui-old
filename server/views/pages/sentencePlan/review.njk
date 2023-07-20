@@ -65,7 +65,8 @@
                     rows: [
                         { key: { text: "Description" }, value: { text: objective.description } },
                         { key: { text: "Needs" }, value: { text: (mappedNeeds[objective.id] | sort | join(", " )) if (mappedNeeds[objective.id]|length>0) else "N/A" } },
-                        { key: { text: "Motivation" }, value: { text: objective.motivation } }
+                        { key: { text: "Motivation" }, value: { text: objective.motivation } },
+                        { key: { text: "Status" }, value: { text: "Not Started" if objective.status == "not-started" else ("In progress" if objective.status == "in-progress" else ("Completed" if objective.status == "completed" else objective.status)) } }
                     ]
                 }) }}
                 {% for action in allActions[objective.id] %}

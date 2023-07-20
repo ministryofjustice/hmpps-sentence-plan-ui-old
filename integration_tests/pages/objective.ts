@@ -10,6 +10,7 @@ export default class ObjectivePage extends Page {
     cy.get('#relates-to-needs').check('yes')
     cy.get('[name=needs\\[\\]]').check('relationships')
     cy.get('[name=motivation]').check('Action')
+    cy.get('[name=status]').check('in-progress')
     cy.get('form').submit()
     cy.url().should('contain', '/add-action')
   }
