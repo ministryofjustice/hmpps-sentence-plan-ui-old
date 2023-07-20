@@ -82,10 +82,17 @@ describe('GET /sentence-plan/add-objective', () => {
     services.sentencePlanClient.createObjective = updateApi
     return request(app)
       .post('/sentence-plan/1/add-objective')
-      .send({ description: 'New text', 'relates-to-needs': 'no', motivation: 'Action' })
+      .send({ description: 'New text', 'relates-to-needs': 'no', motivation: 'Action', status: 'completed' })
       .expect(302)
       .expect('Location', '/sentence-plan/1/objective/2/add-action')
-      .expect(_ => expect(updateApi).toBeCalledWith('1', { description: 'New text', needs: [], motivation: 'Action' }))
+      .expect(_ =>
+        expect(updateApi).toBeCalledWith('1', {
+          description: 'New text',
+          needs: [],
+          motivation: 'Action',
+          status: 'completed',
+        }),
+      )
   })
 })
 
@@ -144,7 +151,13 @@ describe('GET /sentence-plan/objective', () => {
     services.sentencePlanClient.updateObjective = updateApi
     return request(app)
       .post('/sentence-plan/1/objective/2')
-      .send({ description: 'New text', 'relates-to-needs': 'no', needs: [], motivation: 'Contemplation' })
+      .send({
+        description: 'New text',
+        'relates-to-needs': 'no',
+        needs: [],
+        motivation: 'Contemplation',
+        status: 'completed',
+      })
       .expect(302)
       .expect('Location', '/sentence-plan/1/objective/2/summary')
       .expect(_ =>
@@ -153,6 +166,7 @@ describe('GET /sentence-plan/objective', () => {
           description: 'New text',
           needs: [],
           motivation: 'Contemplation',
+          status: 'completed',
         }),
       )
   })

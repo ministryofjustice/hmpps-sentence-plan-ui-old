@@ -23,7 +23,8 @@
         { text: errorMessages.description.text, href: "#description" } if errorMessages.description else None,
         { text: errorMessages.relatesToNeeds.text, href: "#relates-to-needs" } if errorMessages.relatesToNeeds else None,
         { text: errorMessages.needs.text, href: "#needs[]" } if errorMessages.needs else None,
-        { text: errorMessages.motivation.text, href: "#motivation" } if errorMessages.motivation else None
+        { text: errorMessages.motivation.text, href: "#motivation" } if errorMessages.motivation else None,
+        { text: errorMessages.status.text, href: "#status" } if errorMessages.status else None
     ] | reject("undefined") %}
     {% if errorList | length > 0 %}
         {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -93,6 +94,19 @@
                     { value: "Action", text: "Action", checked: objective.motivation == "Action" },
                     { value: "Maintenance", text: "Maintenance", checked: objective.motivation == "Maintenance" },
                     { value: "Relapse", text: "Relapse", checked: objective.motivation == "Relapse" }
+                ]
+            }) }}
+
+            {{ govukRadios({
+                name: "status",
+                fieldset: {
+                    legend: { text: "What is the current status of this objective?", classes: "govuk-fieldset__legend--m" }
+                },
+                errorMessage: errorMessages.status,
+                items: [
+                    { text: "Not Started", value: "not-started", checked: objective.status == "not-started" },
+                    { text: "In Progress", value: "in-progress", checked: objective.status == "in-progress" },
+                    { text: "Completed", value: "completed", checked: objective.status == "completed" }
                 ]
             }) }}
 
