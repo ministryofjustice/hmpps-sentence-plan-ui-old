@@ -2,6 +2,9 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% set pageTitle = applicationName + " - Close a sentence plan" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -15,9 +18,21 @@
 {% endblock %}
 
 {% block content %}
+
+    <div class="govuk-!-width-two-thirds">
+    {% set errorList = [
+      { text: errorMessages.closureReason.text, href: "#closure-reason" } if errorMessages.closureReason else None,
+      { text: errorMessages.closureInfo.text, href: "#closure-info" } if errorMessages.closureInfo else None
+    ] | reject("undefined") %}
+    {% if errorList | length > 0 %}
+      {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+      {{ govukErrorSummary({ titleText: "There is a problem", errorList: errorList }) }}
+    {% endif %}
+
 {% set html %}
-  <p class="govuk-notification-banner__heading">You have selected to close this sentence plan</p>
-  <p>If you do not want to close this sentence plan, select the cancel button.</p>
+  <p class="govuk-notification-banner__heading">If you want to continue to close this sentence plan, please select a reason and include a comment below.</p>
+  <p class="govuk-notification-banner__heading"> If you do not want to close this sentence plan, select the cancel button.</p>
+
 {% endset %}
 
 {{ govukNotificationBanner({
@@ -26,6 +41,32 @@
 
 <form method="POST" action="/sentence-plan/{{ sentencePlan.id }}/close">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+  {{ govukRadios({
+    name: "closure-reason",
+    id: "closure-reason",
+    fieldset: {
+      legend: { text: "Reason for closing the plan", classes: "govuk-fieldset__legend--m" }
+    },
+    errorMessage: errorMessages.closureReason,
+    value: closureReason,
+    items: [
+      { text: "Completed", value: "completed" },
+      { text: "Part completed", value: "part-completed" },
+      { text: "Abandoned", value: "abandoned" }
+    ]
+  }) }}
+  {{ govukCharacterCount({
+    name: "closure-info",
+    id: "closure-info",
+    label: { text: "Please provide details", classes: "govuk-label--m" },
+    hint: { text: "Provide details for the closure reason." },
+    value: closureNotes,
+    maxwords: 50,
+    errorMessage: errorMessages.closureInfo
+  }) }}
+
+
       <div class="govuk-button-group">
           {{ govukButton({ text: "Continue", attributes: { "data-qa": "close-sentence-plan" } }) }}
           {{ govukButton({ text: "Cancel", classes: "govuk-button--secondary", "href": "/case/" + sentencePlan.crn }) }}

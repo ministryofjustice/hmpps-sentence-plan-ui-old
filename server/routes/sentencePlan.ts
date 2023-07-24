@@ -101,6 +101,8 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     }))
     const objectivesWithActions = objectivesList.objectives.filter(it => it.actionsCount > 0)
 
+    console.log(JSON.stringify(sentencePlan))
+
     const canBeCompleted =
       sentencePlan.status === 'Draft' &&
       objectivesWithActions.length > 0 &&
@@ -252,11 +254,30 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
   post('/sentence-plan/:sentencePlanId/close', async function closeSentencePlan(req, res) {
     const { sentencePlanId } = req.params
     const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
-    await service.sentencePlanClient.updateSentencePlan({
-      ...existingSentencePlan,
-      closedDate: formatISO(new Date()),
-    })
-    res.redirect(`/case/${existingSentencePlan.crn}`)
+    const errorMessages: { [key: string]: { text: string } } = {}
+
+    if (req.body['closure-reason'] === undefined || req.body['closure-reason'].length === 0)
+      errorMessages.closureReason = { text: 'Please choose a closure reason' }
+    if (req.body['closure-info'].length > 5000)
+      errorMessages.closureInfo = { text: 'Closure info must be 5000 characters or less' }
+    if (req.body['closure-info'] === undefined || req.body['closure-info'].length === 0)
+      errorMessages.closureInfo = { text: 'Please enter closure details' }
+    if (Object.keys(errorMessages).length > 0) {
+      await res.render('pages/sentencePlan/confirmCloseSentencePlan', {
+        ...(await loadSentencePlan(sentencePlanId)),
+        errorMessages,
+        closureReason: req.body['closure-reason'],
+        closureNotes: req.body['closure-info'],
+      })
+    } else {
+      await service.sentencePlanClient.updateSentencePlan({
+        ...existingSentencePlan,
+        closureReason: req.body['closure-reason'],
+        closureNotes: req.body['closure-info'],
+        closedDate: formatISO(new Date()),
+      })
+      res.redirect(`/case/${existingSentencePlan.crn}`)
+    }
   })
 
   return router
