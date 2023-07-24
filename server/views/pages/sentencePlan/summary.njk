@@ -74,7 +74,24 @@
                 <li class="moj-task-list__item"> <a href='./view-plan' data-qa='review-start-plan'>Review & start plan</a> <strong class="govuk-tag--yellow moj-task-list__task-completed">Pending</strong></li>
             {% endif %}
             {% if(sentencePlan.status !== 'Closed' and sentencePlan.status !== 'Active' and not canBeCompleted)  %}
-                    <li class="moj-task-list__item"> Please complete all sections <strong class="govuk-tag--grey moj-task-list__task-completed">Inactive</strong></li>
+                {% set completeHtml %}
+                <div class="govuk-!-width-two-thirds">
+                    Complete each section of the sentence plan including at least one objective with an action.
+                </div>
+                {% endset %}
+                <table class="govuk-!-width-full">
+                    <tr class="moj-task-list__item">
+                    <td>
+                        {{ govukDetails({
+                            summaryText: "Please complete all sections",
+                            html: completeHtml
+                        }) }}
+                    </td>
+                    <td>
+                        <strong class="govuk-tag--grey moj-task-list__task-completed">Inactive</strong>
+                    </td>
+                    </tr>
+                   </table
             {% endif %}
         </ul>
 

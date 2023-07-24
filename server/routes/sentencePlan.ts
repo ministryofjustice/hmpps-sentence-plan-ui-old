@@ -99,10 +99,11 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
       href: `./objective/${it.id}/summary`,
       attributes: { 'data-actions': it.actionsCount || 0 },
     }))
+    const objectivesWithActions = objectivesList.objectives.filter(it => it.actionsCount > 0)
 
     const canBeCompleted =
       sentencePlan.status === 'Draft' &&
-      objectives.length > 0 &&
+      objectivesWithActions.length > 0 &&
       sentencePlan.riskFactors &&
       sentencePlan.protectiveFactors &&
       sentencePlan.practitionerComments &&
