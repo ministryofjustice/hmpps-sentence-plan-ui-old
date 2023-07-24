@@ -101,8 +101,6 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     }))
     const objectivesWithActions = objectivesList.objectives.filter(it => it.actionsCount > 0)
 
-    console.log(JSON.stringify(sentencePlan))
-
     const canBeCompleted =
       sentencePlan.status === 'Draft' &&
       objectivesWithActions.length > 0 &&
