@@ -7,7 +7,7 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 
-{% set pageTitle = applicationName + (" - a sentence Plan" if sentencePlan.status == 'Draft' else "- View Plan" ) %}
+{% set pageTitle = applicationName + (" - Create a sentence plan" if sentencePlan.status == 'Draft' else " - View Plan" ) %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block banner %}
@@ -18,7 +18,7 @@
     {{ govukBackLink({ text: "Back", href: "/case/" + sentencePlan.crn }) }}
 {% endblock %}
 
-    {% set heading = ("Create a sentence Plan" if sentencePlan.status == 'Draft' else "Sentence Plan" ) %}
+    {% set heading = ("Create a sentence plan" if sentencePlan.status == 'Draft' else "Sentence Plan" ) %}
 {% block content %}
     <h2 class="govuk-heading-xl">{{ heading }}</h2>
 
