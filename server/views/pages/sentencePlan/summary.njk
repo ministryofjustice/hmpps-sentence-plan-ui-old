@@ -7,7 +7,7 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 
-{% set pageTitle = applicationName + " - Create a sentence plan" %}
+{% set pageTitle = applicationName + (" - Create a sentence plan" if sentencePlan.status == 'Draft' else " - View Plan" ) %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block banner %}
@@ -18,14 +18,17 @@
     {{ govukBackLink({ text: "Back", href: "/case/" + sentencePlan.crn }) }}
 {% endblock %}
 
+    {% set heading = ("Create a sentence plan" if sentencePlan.status == 'Draft' else "Sentence Plan" ) %}
 {% block content %}
-    <h2 class="govuk-heading-xl">Create a sentence plan</h2>
+    <h2 class="govuk-heading-xl">{{ heading }}</h2>
 
     <div class="govuk-!-width-two-thirds">
         {{ govukDetails({
             summaryText: "What should I include in a sentence plan?",
             text: "Details to be confirmed."
         }) }}
+
+        {% set addButtonHtml = "" if sentencePlan.status == "Closed" else "<a href='./add-objective' role='button' class='govuk-button govuk-button--secondary' data-qa='add-objective'>" + ("Add an objective" if objectives.length == 0 else "Add another") + "</a>" %}
 
         {{ mojTaskList({
             sections: [
@@ -40,7 +43,7 @@
                 {
                     heading: { text: "Set objectives" },
                     items: objectives.concat({
-                        html: "<a href='./add-objective' role='button' class='govuk-button govuk-button--secondary' data-qa='add-objective'>" + ("Add an objective" if objectives.length == 0 else "Add another") + "</a>"
+                        html: addButtonHtml
                     })
                 },
                 {
@@ -74,7 +77,24 @@
                 <li class="moj-task-list__item"> <a href='./view-plan' data-qa='review-start-plan'>Review & start plan</a> <strong class="govuk-tag--yellow moj-task-list__task-completed">Pending</strong></li>
             {% endif %}
             {% if(sentencePlan.status !== 'Closed' and sentencePlan.status !== 'Active' and not canBeCompleted)  %}
-                    <li class="moj-task-list__item"> Please complete all sections <strong class="govuk-tag--grey moj-task-list__task-completed">Inactive</strong></li>
+                {% set completeHtml %}
+                <div class="govuk-!-width-two-thirds">
+                    Complete each section of the sentence plan including at least one objective with an action.
+                </div>
+                {% endset %}
+                <table class="govuk-!-width-full">
+                    <tr class="moj-task-list__item">
+                    <td>
+                        {{ govukDetails({
+                            summaryText: "Please complete all sections",
+                            html: completeHtml
+                        }) }}
+                    </td>
+                    <td>
+                        <strong class="govuk-tag--grey moj-task-list__task-completed">Inactive</strong>
+                    </td>
+                    </tr>
+                   </table
             {% endif %}
         </ul>
 

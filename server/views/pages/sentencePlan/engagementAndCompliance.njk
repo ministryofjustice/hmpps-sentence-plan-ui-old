@@ -54,7 +54,9 @@
                 label: { text: "Identify protective factors to be maintained or developed", classes: "govuk-label--m" },
                 hint: { text: "Describe any protective factors and strengths that could positively affect achievement of the sentence plan." }
             }) }}
+            {% if sentencePlan.status != "Closed" %}
             {{ govukButton({ text: "Continue" }) }}
+            {% endif %}
             {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
         </form>
     </div>

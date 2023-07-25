@@ -8,7 +8,7 @@
 {% from "moj/components/task-list/macro.njk" import mojTaskList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% set pageTitle = applicationName + (" - Review and Start Plan" if sentencePlan.status == 'Draft' else "- View Plan" ) %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -18,10 +18,23 @@
 {% endblock %}
 
 {% block beforeContent %}
+    {% if sentencePlan.status == "Closed" %}
+    {{ govukBackLink({ text: "Back", href: "/case/" + sentencePlan.crn }) }}
+    {% else %}
     {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
+
+
+    {% set html %}
+        <p class="govuk-notification-banner__heading">
+        This sentence plan is now closed.<br>
+        Reason: {{ sentencePlan.closureReason }} <br>
+        Detail: {{ sentencePlan.closureInfo }}
+        </p>
+    {% endset %}
 
     {% set heading = ("Sentence Plan Review" if sentencePlan.status == 'Draft' else "Sentence Plan" ) %}
     <div class="govuk-!-width-full">
@@ -29,6 +42,12 @@
 
         <form method="GET" action="/sentence-plan/{{ sentencePlan.id }}/confirmStart">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+            {% if sentencePlan.status == 'Closed'  %}
+            {{ govukNotificationBanner({
+                html: html
+            }) }}
+            {% endif %}
 
             {{ govukSummaryList({
                 card: {
