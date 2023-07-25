@@ -18,7 +18,11 @@
 {% endblock %}
 
 {% block beforeContent %}
+    {% if sentencePlan.status == "Closed" %}
+    {{ govukBackLink({ text: "Back", href: "/case/" + sentencePlan.crn }) }}
+    {% else %}
     {{ govukBackLink({ text: "Back", href: "/sentence-plan/" + sentencePlan.id + "/summary" }) }}
+    {% endif %}
 {% endblock %}
 
 {% block content %}

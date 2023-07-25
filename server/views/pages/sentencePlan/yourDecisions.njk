@@ -37,7 +37,10 @@
                 label: { text: "Your decisions", classes: "govuk-label--l", isPageHeading: true },
                 hint: { text: "Record the reasoning behind any decisions you have made. Include any key points from conversations with the individual that are relevant to the completion of this sentence plan. For example, why you might not deal with a particular need at this time, or why you chose to include a particular objective or action." }
             }) }}
-            {{ govukButton({ text: "Continue", type: "Submit" }) }}
+
+            {% if sentencePlan.status != "Closed" %}
+                {{ govukButton({ text: "Continue", type: "Submit" }) }}
+            {% endif %}
             {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
         </form>
     </div>

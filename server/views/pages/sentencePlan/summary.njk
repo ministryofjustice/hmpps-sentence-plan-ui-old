@@ -28,6 +28,8 @@
             text: "Details to be confirmed."
         }) }}
 
+        {% set addButtonHtml = "" if sentencePlan.status == "Closed" else "<a href='./add-objective' role='button' class='govuk-button govuk-button--secondary' data-qa='add-objective'>" + ("Add an objective" if objectives.length == 0 else "Add another") + "</a>" %}
+
         {{ mojTaskList({
             sections: [
                 {
@@ -41,7 +43,7 @@
                 {
                     heading: { text: "Set objectives" },
                     items: objectives.concat({
-                        html: "<a href='./add-objective' role='button' class='govuk-button govuk-button--secondary' data-qa='add-objective'>" + ("Add an objective" if objectives.length == 0 else "Add another") + "</a>"
+                        html: addButtonHtml
                     })
                 },
                 {

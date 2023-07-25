@@ -37,7 +37,9 @@
                 label: { text: "Individual's comments", classes: "govuk-label--l", isPageHeading: true },
                 hint: { text: "Record anything the individual wants to say about their plan. Include any points they want to make or clarify." }
             }) }}
-            {{ govukButton({ text: "Continue", type: "Submit" }) }}
+            {% if sentencePlan.status != "Closed" %}
+                {{ govukButton({ text: "Continue", type: "Submit" }) }}
+            {% endif %}
             {{ govukButton({ text: "Cancel", href: "/sentence-plan/" + sentencePlan.id + "/summary", classes: "govuk-button--secondary" }) }}
         </form>
     </div>

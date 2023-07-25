@@ -58,7 +58,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         { html: `<span title='${it.createdDate}'>${formatDate(it.createdDate)}</span>` },
         { html: `<strong class='moj-badge'>${it.status}</strong>` },
         {
-          html: `<a href='/sentence-plan/${it.id}/summary'>View</a>${displayDelete(it)}${displayClose(it)}`,
+          html: `${displayView(it)}${displayDelete(it)}${displayClose(it)}`,
         },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
@@ -66,6 +66,13 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
       initialAppointmentDate,
       arrivalIntoCustodyDate,
     })
+
+    function displayView(sp: SentencePlan): string {
+      if (sp.status === 'Closed') {
+        return `<a href='/sentence-plan/${sp.id}/view-plan'>View</a>`
+      }
+      return `<a href='/sentence-plan/${sp.id}/summary'>View</a>`
+    }
 
     function displayDelete(sp: SentencePlan): string {
       if (sp.status === 'Draft') {
