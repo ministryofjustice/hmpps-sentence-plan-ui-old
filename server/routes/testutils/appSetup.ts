@@ -8,7 +8,7 @@ import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import { DeliusService, Services, UserService } from '../../services'
-import { ProbationSearchClient, SentencePlanClient } from '../../data'
+import { HmppsAuthClient, SentencePlanClient } from '../../data'
 import InterventionsClient from '../../data/interventionsClient'
 import OasysClient from '../../data/oasysClient'
 import PrisonApiClient from '../../data/prisonApiClient'
@@ -28,9 +28,9 @@ export const flashProvider = jest.fn()
 
 export function mockServices(): Services {
   return {
+    hmppsAuthClient: new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>,
     userService: new UserService(null) as jest.Mocked<UserService>,
     deliusService: new DeliusService(null) as jest.Mocked<DeliusService>,
-    probationSearchClient: new ProbationSearchClient(null) as jest.Mocked<ProbationSearchClient>,
     sentencePlanClient: new SentencePlanClient(null) as jest.Mocked<SentencePlanClient>,
     interventionsClient: new InterventionsClient(null) as jest.Mocked<InterventionsClient>,
     oasysClient: new OasysClient(null) as jest.Mocked<OasysClient>,

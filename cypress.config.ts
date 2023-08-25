@@ -2,7 +2,6 @@ import { defineConfig } from 'cypress'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
-import probationSearch from './integration_tests/mockApis/probationSearch'
 import deliusIntegration from './integration_tests/mockApis/deliusIntegration'
 import sentencePlanApi from './integration_tests/mockApis/sentencePlanApi'
 import interventionApi from './integration_tests/mockApis/interventionApi'
@@ -29,7 +28,6 @@ export default defineConfig({
         ...auth,
         ...tokenVerification,
         ...sentencePlanApi,
-        ...probationSearch,
         ...deliusIntegration,
         ...interventionApi,
         ...oasysIntegration,

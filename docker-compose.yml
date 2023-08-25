@@ -44,7 +44,6 @@ services:
       - REDIS_HOST=redis
       - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
       - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
-      - PROBATION_SEARCH_API_URL=http://wiremock:8080/probation-search
       - API_CLIENT_ID=sentence-plan-client
       - API_CLIENT_SECRET=sentence-plan-client
       - SYSTEM_CLIENT_ID=sentence-plan-api-client

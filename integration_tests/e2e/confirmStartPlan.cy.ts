@@ -10,7 +10,6 @@ context('confirm start plan', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubProbationSearch')
     cy.task('stubDeliusIntegration')
     cy.task('stubSentencePlanApi')
     cy.task('stubOasysIntegration')

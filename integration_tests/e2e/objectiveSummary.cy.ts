@@ -9,7 +9,6 @@ context('Objective summary', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubProbationSearch')
     cy.task('stubDeliusIntegration')
     cy.task('stubOasysIntegration')
     cy.task('stubSentencePlanApi')

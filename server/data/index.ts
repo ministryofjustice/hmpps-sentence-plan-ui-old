@@ -7,7 +7,6 @@ import { buildAppInsightsClient, initialiseAppInsights } from '../utils/azureApp
 import HmppsAuthClient from './hmppsAuthClient'
 import { createRedisClient } from './redisClient'
 import TokenStore from './tokenStore'
-import ProbationSearchClient from './probationSearchClient'
 import SentencePlanClient from './sentencePlanClient'
 import DeliusClient from './deliusClient'
 import InterventionsClient from './interventionsClient'
@@ -22,7 +21,6 @@ export const dataAccess = () => {
   return {
     hmppsAuthClient,
     sentencePlanClient: new SentencePlanClient(hmppsAuthClient),
-    probationSearchClient: new ProbationSearchClient(hmppsAuthClient),
     deliusClient: new DeliusClient(hmppsAuthClient),
     interventionsClient: new InterventionsClient(hmppsAuthClient),
     oasysClient: new OasysClient(hmppsAuthClient),
@@ -32,4 +30,4 @@ export const dataAccess = () => {
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { HmppsAuthClient, ProbationSearchClient, SentencePlanClient, DeliusClient }
+export { HmppsAuthClient, SentencePlanClient, DeliusClient }

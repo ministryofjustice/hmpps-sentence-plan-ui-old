@@ -9,7 +9,6 @@ context('Search', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubProbationSearch')
     cy.signIn()
     Page.verifyOnPage(IndexPage).startButton().click()
     page = Page.verifyOnPage(SearchPage)
@@ -45,37 +44,5 @@ context('Search', () => {
     page.results().first().find('a').click()
 
     cy.url().should('contain', '/case/X000001')
-  })
-})
-
-context('Pagination', () => {
-  let page: SearchPage
-
-  beforeEach(() => {
-    cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubAuthUser')
-    cy.task('stubPaginatedSearchResults')
-    cy.signIn()
-    Page.verifyOnPage(IndexPage).startButton().click()
-    page = Page.verifyOnPage(SearchPage)
-  })
-
-  it('displays the first page of results', () => {
-    page.search()
-
-    page.pageNumber().should('contain.text', '1')
-    page.resultSummary().should('contain.text', 'Showing 1 to 10 of 86 results')
-    page.results().should('have.length', 10)
-  })
-
-  it('can navigate to the next page', () => {
-    page.search()
-
-    cy.get('a[rel=next]').click()
-
-    page.pageNumber().should('contain.text', '2')
-    page.resultSummary().should('contain.text', 'Showing 11 to 20 of 86 results')
-    page.results().should('have.length', 10)
   })
 })
