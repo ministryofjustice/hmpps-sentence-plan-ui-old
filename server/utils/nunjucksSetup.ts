@@ -31,6 +31,7 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       'node_modules/govuk-frontend/components/',
       'node_modules/@ministryofjustice/frontend/',
       'node_modules/@ministryofjustice/frontend/moj/components/',
+      'node_modules/@ministryofjustice/probation-search-frontend/components',
     ],
     {
       autoescape: true,

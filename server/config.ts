@@ -32,6 +32,7 @@ export interface ApiConfig {
 export default {
   production,
   https: production,
+  env: get('ENVIRONMENT', 'local', requiredInProduction) as 'local' | 'dev' | 'preprod' | 'prod',
   staticResourceCacheDuration: '1h',
   redis: {
     host: get('REDIS_HOST', 'localhost', requiredInProduction),
@@ -73,14 +74,6 @@ export default {
         deadline: Number(get('SENTENCE_PLAN_API_TIMEOUT_DEADLINE', 5000)),
       },
       agent: new AgentConfig(Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 5000))),
-    },
-    probationSearch: {
-      url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8081/probation-search', requiredInProduction),
-      timeout: {
-        response: Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 5000)),
-      },
-      agent: new AgentConfig(Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 5000))),
     },
     delius: {
       url: get('DELIUS_INTEGRATION_API_URL', 'http://localhost:8081/delius', requiredInProduction),
