@@ -126,7 +126,7 @@
   "devDependencies": {
     "@types/bunyan": "^1.8.8",
     "@types/bunyan-format": "^0.2.5",
-    "@types/compression": "^1.7.2",
+    "@types/compression": "^1.7.3",
     "@types/connect-flash": "0.0.37",
     "@types/cookie-session": "^2.0.45",
     "@types/csurf": "^1.11.2",
