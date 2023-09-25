@@ -5,7 +5,9 @@ import HmppsAuthClient from './hmppsAuthClient'
 export default class DeliusClient {
   private restClient = (token: string) => new RestClient('DeliusClient', config.apis.delius, token)
 
-  constructor(private hmppsAuthClient: HmppsAuthClient) {}
+  constructor(private hmppsAuthClient: HmppsAuthClient) {
+    // nothing to do
+  }
 
   async getCaseDetails(crn: string): Promise<CaseDetailsResponse> {
     const token = await this.hmppsAuthClient.getSystemClientToken()

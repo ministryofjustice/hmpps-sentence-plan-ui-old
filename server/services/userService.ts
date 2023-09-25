@@ -7,7 +7,9 @@ interface UserDetails {
 }
 
 export default class UserService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {
+    // nothing to do
+  }
 
   async getUser(token: string): Promise<UserDetails> {
     const user = await this.hmppsAuthClient.getUser(token)
