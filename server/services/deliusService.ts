@@ -17,7 +17,9 @@ interface InitialAppointment {
 }
 
 export default class DeliusService {
-  constructor(private readonly deliusClient: DeliusClient) {}
+  constructor(private readonly deliusClient: DeliusClient) {
+    // nothing to do
+  }
 
   async getCaseDetails(crn: string): Promise<CaseDetails> {
     const details = await this.deliusClient.getCaseDetails(crn)

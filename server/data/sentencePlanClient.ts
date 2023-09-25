@@ -5,7 +5,9 @@ import HmppsAuthClient from './hmppsAuthClient'
 export default class SentencePlanClient {
   private restClient = (token: string) => new RestClient('SentencePlanClient', config.apis.sentencePlan, token)
 
-  constructor(private hmppsAuthClient: HmppsAuthClient) {}
+  constructor(private hmppsAuthClient: HmppsAuthClient) {
+    // nothing to do
+  }
 
   async listSentencePlans(crn: string): Promise<SentencePlanListResponse> {
     const token = await this.hmppsAuthClient.getSystemClientToken()

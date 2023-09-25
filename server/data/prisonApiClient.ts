@@ -6,7 +6,9 @@ import logger from '../../logger'
 export default class PrisonApiClient {
   private restClient = (token: string) => new RestClient('PrisonApiClient', config.apis.prisonApi, token)
 
-  constructor(private hmppsAuthClient: HmppsAuthClient) {}
+  constructor(private hmppsAuthClient: HmppsAuthClient) {
+    // nothing to do
+  }
 
   async getArrivalIntoCustodyDate(nomsNumber: string): Promise<Sentence> {
     logger.debug(`Prison api url:`, config.apis.prisonApi.url)

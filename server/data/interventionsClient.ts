@@ -5,7 +5,9 @@ import HmppsAuthClient from './hmppsAuthClient'
 export default class InterventionsClient {
   private restClient = (token: string) => new RestClient('InterventionsClient', config.apis.interventions, token)
 
-  constructor(private hmppsAuthClient: HmppsAuthClient) {}
+  constructor(private hmppsAuthClient: HmppsAuthClient) {
+    // nothing to do
+  }
 
   async getNationalInterventionNames(): Promise<string[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken()
