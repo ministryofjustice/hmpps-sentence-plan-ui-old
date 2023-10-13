@@ -92,7 +92,7 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^1.6.6",
+    "@ministryofjustice/frontend": "^1.8.0",
     "@ministryofjustice/probation-search-frontend": "^0.4.0",
     "accessible-autocomplete": "^2.0.4",
     "agentkeepalive": "^4.3.0",
