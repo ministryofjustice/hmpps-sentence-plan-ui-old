@@ -24,6 +24,9 @@ describe('GET /search', () => {
   })
 
   it('should redirect on post', () => {
-    return request(app).post('/search').send({ search: 'test' }).expect('Location', '/search?q=test')
+    return request(app)
+      .post('/search')
+      .send({ 'probation-search-input': 'test' })
+      .expect('Location', /\/search\?q=test/)
   })
 })
