@@ -6,7 +6,7 @@ import sentencePlanRoutes from './sentencePlan'
 import objectiveRoutes from './objective'
 import actionRoutes from './action'
 import config from '../config'
-import localData from '../data/probation-search-api'
+import localData from '../data/probationSearchTestData'
 
 export default function routes(service: Services): Router {
   const router = Router()
