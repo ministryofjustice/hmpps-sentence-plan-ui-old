@@ -24,7 +24,7 @@ context('Search', () => {
     page.search()
 
     page.pageNumber().should('not.exist')
-    page.resultSummary().should('contain.text', 'Showing 1 to 2 of 2 results')
+    page.resultsContainer().should('contain.text', 'Showing 1 to 2 of 2 results')
     page
       .results()
       .should('have.length', 2)
