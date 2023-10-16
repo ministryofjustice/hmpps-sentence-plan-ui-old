@@ -25,7 +25,7 @@ export default class SearchPage extends Page {
 
   pageNumber = () => cy.get('.govuk-pagination__item--current')
 
-  resultSummary = () => cy.get('[data-qa=result-summary]')
+  resultsContainer = () => cy.get('#search-results-container')
 
   results = () => cy.get('tbody tr')
 }
