@@ -120,6 +120,6 @@ If these are not desired in the cloned project, remove references to `check_outd
 
 ## Support
 
-For any issues or questions, please contact the Probation Integration team via
-the [#probation-integration-tech](https://mojdt.slack.com/archives/C02HQ4M2YQN) Slack channel. Or feel free to create
+For any issues or questions, please contact the Sentence Planning team via
+the [#hmpps-sentence-plan-dev](https://moj.enterprise.slack.com/archives/C066M6CK5HV) Slack channel. Or feel free to create
 a [new issue](https://github.com/ministryofjustice/hmpps-sentence-plan-ui/issues/new) in this repository.
