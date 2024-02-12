@@ -3,6 +3,7 @@ import express, { Express } from 'express'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
 
+import CaseSearchService from '@ministryofjustice/probation-search-frontend/service/caseSearchService'
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
@@ -31,6 +32,7 @@ export function mockServices(): Services {
     hmppsAuthClient: new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>,
     userService: new UserService(null) as jest.Mocked<UserService>,
     deliusService: new DeliusService(null) as jest.Mocked<DeliusService>,
+    searchService: new CaseSearchService(null) as jest.Mocked<CaseSearchService>,
     sentencePlanClient: new SentencePlanClient(null) as jest.Mocked<SentencePlanClient>,
     interventionsClient: new InterventionsClient(null) as jest.Mocked<InterventionsClient>,
     oasysClient: new OasysClient(null) as jest.Mocked<OasysClient>,
@@ -63,7 +65,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
 
 export function appWithAllRoutes({
   production = false,
-  services = {},
+  services = mockServices(),
   userSupplier = () => user,
 }: {
   production?: boolean
