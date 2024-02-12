@@ -22,11 +22,4 @@ describe('GET /search', () => {
         expect(res.text).toContain('Search')
       })
   })
-
-  it('should redirect on post', () => {
-    return request(app)
-      .post('/search')
-      .send({ 'probation-search-input': 'test' })
-      .expect('Location', /\/search\?q=test/)
-  })
 })

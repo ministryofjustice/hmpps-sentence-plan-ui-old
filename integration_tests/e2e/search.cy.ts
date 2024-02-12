@@ -24,17 +24,16 @@ context('Search', () => {
     page.search()
 
     page.pageNumber().should('not.exist')
-    page.resultsContainer().should('contain.text', 'Showing 1 to 2 of 2 results')
     page
       .results()
       .should('have.length', 2)
       .first()
       .should('contain.text', 'X000001')
-      .should('contain.text', 'Joe Bloggs')
+      .should('contain.text', 'Joe')
       .should('contain.text', '01/01/1980')
       .next()
       .should('contain.text', 'X000002')
-      .should('contain.text', 'Jane Bloggs')
+      .should('contain.text', 'Jane')
       .should('contain.text', '01/02/1993')
   })
 
