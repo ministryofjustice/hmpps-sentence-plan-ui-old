@@ -1,20 +1,18 @@
 import { type RequestHandler, Router } from 'express'
-import asyncMiddleware from '../middleware/asyncMiddleware'
-import type { Services } from '../services'
-import sentencePlanRoutes from './sentencePlan'
-import objectiveRoutes from './objective'
-import actionRoutes from './action'
-import searchRoutes from './search'
 
-export default function routes(service: Services): Router {
+import asyncMiddleware from '../middleware/asyncMiddleware'
+import formRouter from '../../app/router'
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function routes(): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/', (req, res) => res.render('pages/index'))
-  searchRoutes(router, service)
-  sentencePlanRoutes(router, service)
-  objectiveRoutes(router, service)
-  actionRoutes(router, service)
+  router.use('/form', formRouter())
+
+  get('/', (req, res, next) => {
+    res.render('pages/index')
+  })
 
   return router
 }

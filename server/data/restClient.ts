@@ -1,6 +1,6 @@
-import { Readable } from 'stream'
 import superagent from 'superagent'
 import Agent, { HttpsAgent } from 'agentkeepalive'
+import { Readable } from 'stream'
 
 import logger from '../../logger'
 import sanitiseError from '../sanitisedError'
@@ -13,6 +13,22 @@ interface GetRequest {
   query?: string
   headers?: Record<string, string>
   responseType?: string
+  raw?: boolean
+}
+
+interface DeleteRequest {
+  path?: string
+  query?: string
+  headers?: Record<string, string>
+  responseType?: string
+  raw?: boolean
+}
+
+interface PutRequest {
+  path?: string
+  headers?: Record<string, string>
+  responseType?: string
+  data?: Record<string, unknown>
   raw?: boolean
 }
 
@@ -49,7 +65,7 @@ export default class RestClient {
     return this.config.timeout
   }
 
-  async get<T>({ path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest): Promise<T> {
+  async get({ path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest): Promise<unknown> {
     logger.info(`Get using user credentials: calling ${this.name}: ${path} ${query}`)
     try {
       const result = await superagent
@@ -74,38 +90,17 @@ export default class RestClient {
     }
   }
 
-  async post<T>({
+  async post({
     path = null,
     headers = {},
     responseType = '',
     data = {},
     raw = false,
-  }: PostRequest = {}): Promise<T> {
+  }: PostRequest = {}): Promise<unknown> {
     logger.info(`Post using user credentials: calling ${this.name}: ${path}`)
     try {
       const result = await superagent
         .post(`${this.apiUrl()}${path}`)
-        .send(data)
-        .agent(this.agent)
-        .use(restClientMetricsMiddleware)
-        .auth(this.token, { type: 'bearer' })
-        .set(headers)
-        .responseType(responseType)
-        .timeout(this.timeoutConfig())
-
-      return raw ? result : result.body
-    } catch (error) {
-      const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
-      throw sanitisedError
-    }
-  }
-
-  async put<T>({ path = null, headers = {}, responseType = '', data = {}, raw = false }: PostRequest = {}): Promise<T> {
-    logger.info(`Put using user credentials: calling ${this.name}: ${path}`)
-    try {
-      const result = await superagent
-        .put(`${this.apiUrl()}${path}`)
         .send(data)
         .agent(this.agent)
         .use(restClientMetricsMiddleware)
@@ -121,22 +116,53 @@ export default class RestClient {
       return raw ? result : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'PUT'`)
+      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
       throw sanitisedError
     }
   }
 
-  async delete<T>({
+  async delete({
+    path = null,
+    query = '',
+    headers = {},
+    responseType = '',
+    raw = false,
+  }: DeleteRequest): Promise<unknown> {
+    logger.info(`Delete using user credentials: calling ${this.name}: ${path} ${query}`)
+    try {
+      const result = await superagent
+        .delete(`${this.apiUrl()}${path}`)
+        .agent(this.agent)
+        .use(restClientMetricsMiddleware)
+        .retry(2, (err, res) => {
+          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          return undefined // retry handler only for logging retries, not to influence retry logic
+        })
+        .query(query)
+        .auth(this.token, { type: 'bearer' })
+        .set(headers)
+        .responseType(responseType)
+        .timeout(this.timeoutConfig())
+
+      return raw ? result : result.body
+    } catch (error) {
+      const sanitisedError = sanitiseError(error)
+      logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'DELETE'`)
+      throw sanitisedError
+    }
+  }
+
+  async put({
     path = null,
     headers = {},
     responseType = '',
     data = {},
     raw = false,
-  }: PostRequest = {}): Promise<T> {
+  }: PutRequest = {}): Promise<unknown> {
     logger.info(`Put using user credentials: calling ${this.name}: ${path}`)
     try {
       const result = await superagent
-        .delete(`${this.apiUrl()}${path}`)
+        .put(`${this.apiUrl()}${path}`)
         .send(data)
         .agent(this.agent)
         .use(restClientMetricsMiddleware)

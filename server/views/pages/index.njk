@@ -1,27 +1,11 @@
 {% extends "../partials/layout.njk" %}
-{%- from "govuk/components/button/macro.njk" import govukButton -%}
 
-{% set pageTitle = applicationName + " - Start" %}
+{% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-    <h1 class="govuk-heading-xl">Manage a Sentence Plan</h1>
 
-    <p>Use this service to:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>create or update a sentence plan</li>
-        <li>set objectives to be completed during a person's sentence</li>
-        <li>review a person's progress against their objectives</li>
-    </ul>
+  <h1>This site is under construction...</h1>
+  <p>Please check back later when there is content to view.</p>
 
-    <p>A <strong>sentence plan</strong> should:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>contain relevant and achievable objectives</li>
-        <li>relate to a person's risks and needs</li>
-        <li>be reviewed throughout the length of the sentence</li>
-    </ul>
-
-    <p>The information in this service comes from NDelius and OASys.</p>
-
-    {{ govukButton({ text: "Start now", href: "/search", isStartButton: true }) }}
 {% endblock %}

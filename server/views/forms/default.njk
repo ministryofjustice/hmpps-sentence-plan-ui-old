@@ -1,0 +1,56 @@
+{% extends "./layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "components/question/macro.njk" import renderQuestion %}
+
+{% block formContent %}
+  <div class="govuk-!-width-three-quarters">
+    <form id="form" method="post" action="{{ action }}">
+      <input type="hidden" name="x-csrf-token" value="{{ getCsrf() }}">
+      {% set fieldsOnThisPage = form.fields | removeSectionCompleteFields %}
+      {% for fieldCode in fieldsOnThisPage %}
+        {% set field = options.fields[fieldCode] %}
+
+        {% if fieldsOnThisPage.length == 1 %}
+          {% if field.type === "RADIO" or field.type === "CHECKBOX" %}
+            {% set labelClasses = "govuk-fieldset__legend--l" %}
+          {% else %}
+            {% set labelClasses = "govuk-label--l" %}
+          {% endif %}
+        {% else %}
+          {% set labelClasses = field.labelClasses %}
+        {% endif %}
+
+        {% set fieldOptions = {
+          text: field.text,
+          code: field.code,
+          id: field.id,
+          hint: field.hint,
+          type: field.type,
+          options: field.options,
+          value: field.value,
+          labelClasses: labelClasses,
+          characterCountMax: field.characterCountMax,
+          classes: field.classes
+        } %}
+
+        {{ renderQuestion(fieldOptions, errors, action) }}
+      {% endfor %}
+
+      <div class="questiongroup-action-buttons">
+        {{ govukButton({
+          text: buttonText | default('Save and continue'),
+          classes: 'govuk-!-margin-bottom-3 govuk-!-margin-right-1'
+        }) }}
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  <script type="module" src="/assets/govuk/govuk-frontend.min.js"></script>
+  <script type="module" src="/assets/govukFrontendInit.js"></script>
+  <script src="/assets/moj/all.js"></script>
+  <script src="/assets/save-on-exit.js"></script>
+{% endblock %}

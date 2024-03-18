@@ -135,7 +135,16 @@
     @include govuk-font($size: 19, $weight: 'normal');
   }
 
+
   @media print {
     display: none;
   }
+}
+
+.header__user-details {
+  color: govuk-colour('white');
+}
+
+.phase-tag {
+  margin-left: govuk-spacing(3);
 }

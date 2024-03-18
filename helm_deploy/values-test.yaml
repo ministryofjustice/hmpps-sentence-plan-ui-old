@@ -1,0 +1,22 @@
+---
+# Per environment values which override defaults in hmpps-strengths-based-needs-assessments-ui/values.yaml
+
+generic-service:
+  replicaCount: 2
+
+  ingress:
+    host: sentence-plan-dev.hmpps.service.justice.gov.uk
+
+  env:
+    ENVIRONMENT: dev
+    INGRESS_URL: "https://sentence-plan-dev.hmpps.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    SENTENCE_PLAN_API_URL: "https://sentence-plan-api-dev.hmpps.service.justice.gov.uk"
+    DELIUS_INTEGRATION_API_URL: "https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk"
+    OASYS_INTEGRATION_API_URL: "https://sentence-plan-and-oasys-dev.hmpps.service.justice.gov.uk"
+    INTERVENTIONS_API_URL: "https://hmpps-interventions-service-dev.apps.live-1.cloud-platform.service.justice.gov.uk"
+    PRISON_API_URL: "https://prison-api-dev.prison.service.justice.gov.uk"
+
+generic-prometheus-alerts:
+  alertSeverity: hmpps-strengths-based-needs-assessments

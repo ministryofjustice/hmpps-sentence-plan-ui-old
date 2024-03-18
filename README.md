@@ -1,125 +1,66 @@
-# HMPPS Sentence Plan UI
-[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-sentence-plan-ui)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#hmpps-sentence-plan-ui "Link to report")
-[![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-sentence-plan-ui/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-sentence-plan-ui)
+# hmpps-strengths-based-needs-assessments-ui
+[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.message&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv2%2Fcompliant-repository%2Fhmpps-strengths-based-needs-assessments-ui)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-report/hmpps-strengths-based-needs-assessments-ui "Link to report")
+[![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-strengths-based-needs-assessments-ui/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-strengths-based-needs-assessments-ui)
+[![Docker Repository on Quay](https://quay.io/repository/hmpps/hmpps-strengths-based-needs-assessments-ui/status "Docker Repository on Quay")](https://quay.io/repository/hmpps/hmpps-strengths-based-needs-assessments-ui)
 
-User interface for the HMPPS Sentence Plan service.
-The back-end API code can be found in https://github.com/ministryofjustice/hmpps-sentence-plan.
+UI for the Strengths and Needs assessment service.
 
-* Dev: https://sentence-plan-dev.hmpps.service.justice.gov.uk
+Libraries this service uses include:
+- [GOV.UK Frontend](https://github.com/alphagov/govuk-frontend) for general UI elements and styling
+- [MOJ Frontend](https://github.com/ministryofjustice/moj-frontend) for domain specific UI elements and styling
+- [HMPO Form Wizard](https://github.com/HMPO/hmpo-form-wizard) for forms based on JSON configuration
+- [Jest](https://github.com/jestjs/jest) for unit testing
+- [Cypress](https://www.cypress.io/) for end-to-end testing
 
-## Get started
+## Running the service
 
-### Pre-requisites
+The service and all of its dependencies are run in [Docker](https://www.docker.com/get-started/) containers.
 
-You'll need to install:
+To start it, run:
 
-* [Node 18.x](https://nodejs.org/download/release/latest-v18.x)*
-* [Docker](https://www.docker.com/)
+`make up`
 
-*If you're already using [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), run:
-`nvm install --latest-npm` at the project root to install the correct Node version automatically.
+The entry point for the service is http://localhost:3000/form/oastub/start
 
-### Dependencies
+To update containers
 
-Install NPM package dependencies:
+`make down update up`
 
-```shell
-npm install
-```
+## Development
 
-Pull the latest Docker image versions:
+To start the UI in development mode with live-reload enabled, run:
 
-```shell
-docker-compose pull
-```
+`make dev-up`
 
-### Run the service
+A remote debugger can be attached to Node.js on port 9229
 
-To run the service locally, with dependencies in Docker:
+![debugger.png](.readme/debugger.png)
 
-```shell
-# Start the dependencies only
-docker-compose up -d --scale=app=0
-
-# Start the UI service and watch for changes
-npm run start:dev
-```
-
-Open http://localhost:3000 in your browser, and login with the following credentials:
-
-* Username: `AUTH_USER`
-* Password: `password123456`
-
-### Integrate with dev services
-
-Alternatively, you can integrate your local UI with the dev/test services deployed on MOJ Cloud Platform using a personal HMPPS Auth client.
-If you don't already have a personal client, request one in the [#hmpps-auth-audit-registers](https://mojdt.slack.com/archives/C02S71KUBED) Slack channel.
-
-You'll need the following roles:
-* `ROLE_COMMUNITY` for searching probation cases
-* `ROLE_SENTENCE_PLAN_RW` for accessing sentence plans and Delius case information
-
-Create an `.env` file at the root of the project:
-```properties
-NODE_ENV=development
-REDIS_HOST=localhost
-HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
-SENTENCE_PLAN_API_URL=https://sentence-plan-api-dev.hmpps.service.justice.gov.uk
-DELIUS_INTEGRATION_API_URL=https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk
-OASYS_INTEGRATION_API_URL=https://sentence-plan-and-oasys-dev.hmpps.service.justice.gov.uk
-INTERVENTIONS_API_URL=https://hmpps-interventions-service-dev.apps.live-1.cloud-platform.service.justice.gov.uk
-PRISON_API_URL=https://prison-api-dev.prison.service.justice.gov.uk
-
-# Add your personal client credentials below:
-API_CLIENT_ID=clientid
-API_CLIENT_SECRET=clientsecret
-SYSTEM_CLIENT_ID=clientid
-SYSTEM_CLIENT_SECRET=clientsecret
-```
-
-Then, start the UI service:
-```shell
-# Start Redis only
-docker-compose up -d redis
-
-# Start the UI service and watch for changes
-npm run start:dev
-```
+Run `make` to see the full list of dev commands.
 
 ## Testing
-### Run linter
 
-`npm run lint`
+`make lint` to run the linter.
 
-### Run tests
+`make lint-fix` to automatically fix linting issues.
 
-`npm run test`
+`make test` to run the unit test suite.
 
-### Running integration tests
+`make e2e` to run the end-to-end tests in the Cypress app.
 
-To run the Cypress integration tests locally:
+## Deployment
 
-```shell
-# Start dependencies
-docker-compose -f docker-compose-test.yml up -d
+Deployments of the main branch to Development -> Preproduction -> Production are automated through the [build-test-and-deploy](https://app.circleci.com/pipelines/github/ministryofjustice/hmpps-strengths-based-needs-assessments-ui/1871/workflows/8d211da5-7ed9-48d2-8dc2-c0f1b4836a9a) workflow in CircleCI.
 
-# Start the UI in test mode
-npm run start-feature:dev
+To deploy a branch manually to the Test environment, open the project in CircleCI and follow these steps:
 
-# Run the tests in headless mode:
-npm run int-test
+1. Select the branch you wish to deploy
+2. Press the "Trigger Pipeline" button
+3. Add a string parameter named "deploy" with value "test"
+4. Press "Trigger Pipeline"
 
-# Or, run the tests with the Cypress UI:
-npm run int-test-ui
-```
+## Service dependencies
 
-### Dependency Checks
-
-The template project has implemented some scheduled checks to ensure that key dependencies are kept up to date.
-If these are not desired in the cloned project, remove references to `check_outdated` job from `.circleci/config.yml`
-
-## Support
-
-For any issues or questions, please contact the Sentence Planning team via
-the [#hmpps-sentence-plan-dev](https://moj.enterprise.slack.com/archives/C066M6CK5HV) Slack channel. Or feel free to create
-a [new issue](https://github.com/ministryofjustice/hmpps-sentence-plan-ui/issues/new) in this repository.
+* [hmpps-strengths-based-needs-assessments-api](https://github.com/ministryofjustice/hmpps-strengths-based-needs-assessments-api) - backend API
+* [hmpps-auth](https://github.com/ministryofjustice/hmpps-auth) - for authentication using OAuth/JWT
+* Redis - session store and token caching

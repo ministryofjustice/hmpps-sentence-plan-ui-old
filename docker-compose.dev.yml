@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  postgres:
+    ports:
+      - "5432:5432"
+
+  hmpps-auth:
+    ports:
+      - "9090:9090"
+
+  api:
+    ports:
+      - "8080:8080"
+
+  ui:
+    build:
+      target: development
+    command: npm run start:dev
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://ui:3000/health" ]
+      interval: 5s
+      retries: 20
+    volumes:
+      - ./:/app

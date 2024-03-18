@@ -2,6 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>ministryofjustice/hmpps-renovate-config:node"],
   "prBodyTemplate": "{{{table}}}{{{notes}}}{{{warnings}}}{{{controls}}}",
+  "prCreation": "immediate",
+  "automerge": true,
+  "automergeType": "pr",
   "packageRules": [
     {
       "matchManagers": ["npm"],

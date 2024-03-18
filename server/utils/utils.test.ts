@@ -1,4 +1,4 @@
-import { convertToTitleCase, initialiseName, pagination } from './utils'
+import { convertToTitleCase, initialiseName } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -26,20 +26,5 @@ describe('initialise name', () => {
     ['Double barrelled', 'Robert-John Smith-Jones-Wilson', 'R. Smith-Jones-Wilson'],
   ])('%s initialiseName(%s, %s)', (_: string, a: string, expected: string) => {
     expect(initialiseName(a)).toEqual(expected)
-  })
-})
-
-describe('pagination', () => {
-  it.each([
-    { currentPage: 1, totalPages: 1, maxPagesToShow: 7, expected: [1] },
-    { currentPage: 2, totalPages: 3, maxPagesToShow: 7, expected: [1, 2, 3] },
-    { currentPage: 3, totalPages: 10, maxPagesToShow: 7, expected: [1, 2, 3, 4, 5, 6, '...'] },
-    { currentPage: 4, totalPages: 10, maxPagesToShow: 5, expected: ['...', 2, 3, 4, 5, 6, '...'] },
-    { currentPage: 5, totalPages: 5, maxPagesToShow: 2, expected: ['...', 4, 5] },
-    { currentPage: 1, totalPages: 5, maxPagesToShow: 2, expected: [1, 2, '...'] },
-  ])('pagination items: %s', ({ currentPage, totalPages, maxPagesToShow, expected }) => {
-    const paginationItems = pagination(currentPage, totalPages, 100, () => '', maxPagesToShow).items
-    const pageNumbers = paginationItems.map(item => ('ellipsis' in item ? '...' : item.number))
-    expect(pageNumbers).toEqual(expected)
   })
 })

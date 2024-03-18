@@ -1,0 +1,84 @@
+.summary-details-list {
+  & span {
+    display: block;
+  }
+}
+
+.drugs-summary-table {
+  width: 100%;
+  margin-top: govuk-spacing(3);
+  margin-bottom: govuk-spacing(3);
+  border: 1px solid $govuk-border-colour;
+
+  caption {
+    margin-bottom: govuk-spacing(3);
+  }
+
+  th, td {
+    padding: govuk-spacing(3) !important;
+  }
+}
+
+.normal-font-weight {
+  font-weight: normal;
+}
+
+.clearfix {
+  @include govuk-clearfix;
+}
+
+.border-bottom {
+  border-bottom: 1px solid $govuk-border-colour;
+
+  th, td {
+    border-bottom: none;
+  }
+}
+
+.as-block {
+  display: block;
+  width: 100%;
+}
+
+.to-the-left {
+  float: left;
+  text-align: left;
+}
+
+.to-the-right {
+  float: right;
+  text-align: right;
+}
+
+.with-text-right {
+  text-align: right;
+}
+
+.summary-value {
+  width: 40%;
+}
+
+.summary__panel {
+  border: none !important;
+  padding: govuk-spacing(6) 0px !important;
+}
+
+.summary__label {
+  @include govuk-font(19, "bold");
+}
+
+.summary__answer {
+  @include govuk-font(19);
+}
+
+.summary__answer--secondary {
+  @include govuk-font(16);
+}
+
+.analysis__answer {
+  @include govuk-font(24);
+}
+
+.analysis__answer--secondary {
+  @include govuk-font(19);
+}

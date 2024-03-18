@@ -1,5 +1,5 @@
 import { convertToTitleCase } from '../utils/utils'
-import type HmppsAuthClient from '../data/hmppsAuthClient'
+import getHmppsAuthClient, { HmppsAuthClient } from '../data/hmppsAuthClient'
 
 interface UserDetails {
   name: string
@@ -7,8 +7,10 @@ interface UserDetails {
 }
 
 export default class UserService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {
-    // nothing to do
+  hmppsAuthClient
+
+  constructor(_hmppsAuthClient?: HmppsAuthClient) {
+    this.hmppsAuthClient = _hmppsAuthClient || getHmppsAuthClient()
   }
 
   async getUser(token: string): Promise<UserDetails> {

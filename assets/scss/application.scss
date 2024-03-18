@@ -8,7 +8,10 @@ $govuk-page-width: $moj-page-width;
 @import 'moj/all';
 
 @import './components/header-bar';
-@import './components/banner';
-@import './components/task-list';
-@import './components/summary-list';
+@import './components/offender-details';
+@import './components/form';
+@import './components/navigation';
+@import './components/summary';
+@import './components/oastub';
 @import 'assets/scss/local';
+@import './components/practitioner-analysis-screen';

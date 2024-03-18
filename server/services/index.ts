@@ -1,36 +1,16 @@
-import CaseSearchService from '@ministryofjustice/probation-search-frontend/service/caseSearchService'
-import { dataAccess } from '../data'
-import HmppsAuthClient from '../data/hmppsAuthClient'
+import StrengthsBasedNeedsAssessmentsApiService from './strengthsBasedNeedsService'
 import UserService from './userService'
-import SentencePlanClient from '../data/sentencePlanClient'
-import DeliusService from './deliusService'
-import config from '../config'
-import localData from '../data/probationSearchTestData'
 
 export const services = () => {
-  const { hmppsAuthClient, sentencePlanClient, deliusClient, interventionsClient, oasysClient, prisonApiClient } =
-    dataAccess()
-
-  const userService = new UserService(hmppsAuthClient)
-  const deliusService = new DeliusService(deliusClient)
-  const searchService = new CaseSearchService({
-    oauthClient: hmppsAuthClient,
-    environment: config.env,
-    localData,
-  })
+  const userService = new UserService()
+  const apiClient = new StrengthsBasedNeedsAssessmentsApiService()
 
   return {
-    hmppsAuthClient,
     userService,
-    deliusService,
-    searchService,
-    sentencePlanClient,
-    interventionsClient,
-    oasysClient,
-    prisonApiClient,
+    apiService: apiClient,
   }
 }
 
 export type Services = ReturnType<typeof services>
 
-export { HmppsAuthClient, UserService, SentencePlanClient, DeliusService }
+export { UserService }
