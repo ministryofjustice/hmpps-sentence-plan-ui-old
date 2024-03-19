@@ -19,4 +19,4 @@ generic-service:
     PRISON_API_URL: "https://prison-api-dev.prison.service.justice.gov.uk"
 
 generic-prometheus-alerts:
-  alertSeverity: hmpps-strengths-based-needs-assessments
+  alertSeverity: hmpps-sentence-plan
