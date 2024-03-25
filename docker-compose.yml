@@ -48,7 +48,9 @@ services:
       FORM_CONFIG_BASE_URL: http://ui:3000/form
 
   ui:
-    build: .
+    build:
+      context: .
+      target: production
     networks:
       - hmpps
     depends_on:

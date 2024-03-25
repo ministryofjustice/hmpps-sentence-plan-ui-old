@@ -134,6 +134,9 @@ declare module 'hmpo-form-wizard' {
         hint?: { text: string } | { html: string }
         behaviour?: string
         kind: 'option'
+        summary?: {
+          displayFn?: (text: string, value: string) => string
+        }
       }
 
       type Divider = {
@@ -179,6 +182,10 @@ declare module 'hmpo-form-wizard' {
       labelClasses?: string
       characterCountMax?: number
       classes?: string
+      summary?: {
+        displayFn?: (value: string) => string
+        displayAlways?: boolean
+      }
     }
 
     interface Fields {

@@ -10,6 +10,16 @@ export const getQuestion = (title: string) => {
     .closest('fieldset, .govuk-form-group')
 }
 
+export const getNextQuestion = (subject: JQuery) => {
+  return cy
+    .wrap(subject)
+    .closest('.form-group')
+    .next('.form-group')
+    .find('> fieldset, > div > .govuk-form-group')
+    .should('be.visible')
+    .and('have.length', 1)
+}
+
 export const hasTitle = (subject: JQuery, title: string) => {
   cy.wrap(subject)
     .find('> legend, > label')
@@ -31,19 +41,24 @@ export const isQuestionNumber = (subject: JQuery, position: number) => {
   return cy.wrap(subject)
 }
 
-export const hasHint = (subject: JQuery, hint: string) => {
-  if (hint) {
-    cy.wrap(subject).children('.govuk-hint:not(.govuk-character-count__message)').should('contain.text', hint)
-  } else {
-    cy.wrap(subject).children('.govuk-hint:not(.govuk-character-count__message)').should('not.exist')
-  }
+export const hasHint = (subject: JQuery, ...hints: string[]) => {
+  hints.forEach(hint => {
+    if (hint) {
+      cy.wrap(subject)
+        .children('.govuk-hint:not(.govuk-character-count__message)')
+        .should('have.length', 1)
+        .and('contain.text', hint)
+    } else {
+      cy.wrap(subject).children('.govuk-hint:not(.govuk-character-count__message)').should('not.exist')
+    }
+  })
   return cy.wrap(subject)
 }
 
 export const hasLimit = (subject: JQuery, limit: number) => {
   cy.wrap(subject)
     .children('.govuk-character-count__message')
-    .should('contain.text', `You have ${limit} characters remaining`)
+    .should('contain.text', `You have ${limit.toLocaleString()} characters remaining`)
   return cy.wrap(subject)
 }
 

@@ -13,12 +13,25 @@ import {
 } from './common'
 
 const hasBeenEmployedBeforeOptions: FormWizard.Field.Options = [
-  { text: 'Yes, has been employed before', value: 'YES', kind: 'option' },
-  { text: 'No, has never been employed', value: 'NO', kind: 'option' },
+  {
+    text: 'Yes, has been employed before',
+    summary: { displayFn: () => 'Has been employed before' },
+    value: 'YES',
+    kind: 'option',
+  },
+  {
+    text: 'No, has never been employed',
+    summary: { displayFn: () => 'Has never been employed' },
+    value: 'NO',
+    kind: 'option',
+  },
 ]
 
-const createExperienceOfFields = (label: string, prefix: string): Array<FormWizard.Field> => {
-  const parentFieldCode = fieldCodeWith(prefix, 'experience')
+const createErrorForExperienceOfFields = (subject: string, prefix?: string) =>
+  ['Select their', prefix, 'experience of', subject].filter(it => it !== undefined && it !== null).join(' ')
+
+const createExperienceOfFields = (label: string, subject: string, prefix?: string): Array<FormWizard.Field> => {
+  const parentFieldCode = fieldCodeWith(subject, 'experience')
   const optionsWithDetails: Array<FormWizard.Field.Option> = [
     { text: 'Positive', value: 'POSITIVE', kind: 'option' },
     { text: 'Mostly positive', value: 'MOSTLY_POSITIVE', kind: 'option' },
@@ -32,7 +45,7 @@ const createExperienceOfFields = (label: string, prefix: string): Array<FormWiza
       text: label,
       code: parentFieldCode,
       type: FieldType.Radio,
-      validate: [{ type: ValidationType.Required, message: `Select their experience of ${prefix}` }],
+      validate: [{ type: ValidationType.Required, message: createErrorForExperienceOfFields(subject, prefix) }],
       options: [...optionsWithDetails, { text: 'Unknown', value: 'UNKNOWN', kind: 'option' }],
       labelClasses: getMediumLabelClassFor(FieldType.Radio),
     },
@@ -188,18 +201,22 @@ export const employmentHistory: Array<FormWizard.Field> = [
 
 export const educationFields: Array<FormWizard.Field> = [
   {
-    text: 'Does [subject] have any other responsibilities?',
+    text: 'Does [subject] have any additional day-to-day commitments?',
     hint: { text: 'Select all that apply.', kind: 'text' },
     code: 'employment_other_responsibilities',
     type: FieldType.CheckBox,
     multiple: true,
     validate: [
-      { type: ValidationType.Required, message: "Select if they have any other responsibilities, or select 'None'" },
+      {
+        type: ValidationType.Required,
+        message: 'Select if they have any additional day-to-day commitments, or select ‘None’',
+      },
     ],
     options: [
-      { text: 'Carer', value: 'CARER', kind: 'option' },
-      { text: 'Volunteer', value: 'VOLUNTEER', kind: 'option' },
-      { text: 'Student', value: 'STUDENT', kind: 'option' },
+      { text: 'Caring responsibilities', value: 'CARER', kind: 'option' },
+      { text: 'Child responsibilities', value: 'CHILD', kind: 'option' },
+      { text: 'Studying', value: 'STUDYING', kind: 'option' },
+      { text: 'Volunteering', value: 'VOLUNTEER', kind: 'option' },
       { text: 'Other', value: 'OTHER', kind: 'option' },
       orDivider,
       { text: 'None', value: 'NONE', kind: 'option', behaviour: 'exclusive' },
@@ -214,6 +231,17 @@ export const educationFields: Array<FormWizard.Field> = [
     dependent: {
       field: 'employment_other_responsibilities',
       value: 'CARER',
+      displayInline: true,
+    },
+  },
+  {
+    text: 'Give details (optional)',
+    code: 'employment_other_responsibilities_child_details',
+    type: FieldType.TextArea,
+    validate: [],
+    dependent: {
+      field: 'employment_other_responsibilities',
+      value: 'CHILD',
       displayInline: true,
     },
   },
@@ -240,10 +268,12 @@ export const educationFields: Array<FormWizard.Field> = [
     },
   },
   {
-    text: 'Select the highest level of education [subject] has completed',
+    text: 'Select the highest level of academic qualification [subject] has completed',
     code: 'education_highest_level_completed',
     type: FieldType.Radio,
-    validate: [{ type: ValidationType.Required, message: 'Select the highest level of education completed' }],
+    validate: [
+      { type: ValidationType.Required, message: 'Select the highest level of academic qualification completed' },
+    ],
     options: [
       {
         text: 'Entry level',
@@ -471,6 +501,7 @@ export const educationFields: Array<FormWizard.Field> = [
 export const experienceOfEmployment = createExperienceOfFields(
   "What is [subject]'s overall experience of employment?",
   'employment',
+  'overall',
 )
 export const experienceOfEducation = createExperienceOfFields(
   "What is [subject]'s experience of education?",

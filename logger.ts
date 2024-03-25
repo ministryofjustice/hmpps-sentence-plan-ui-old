@@ -5,7 +5,7 @@ import config from './server/config'
 const formatOut = bunyanFormat({ outputMode: 'short', color: !config.production })
 
 const logger = bunyan.createLogger({
-  name: 'HMPPS Strengths Based Needs Assessments UI',
+  name: 'HMPPS Sentence Plan UI',
   stream: formatOut,
   level: 'debug',
 })

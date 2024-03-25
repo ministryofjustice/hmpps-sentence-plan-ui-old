@@ -1,4 +1,4 @@
-import { createAssessment, saveAndContinue } from './commands/assessment'
+import { createAssessment, markAsComplete, saveAndContinue } from './commands/assessment'
 import {
   assertQuestionUrl,
   assertSectionIs,
@@ -16,10 +16,11 @@ import {
   isOptionNumber,
   clickLabel,
 } from './commands/option'
-import { assertQuestionCount } from './commands/page'
+import { assertQuestionCount, sectionMarkedAsComplete, sectionNotMarkedAsComplete } from './commands/page'
 import {
   enterDate,
   getCheckbox,
+  getNextQuestion,
   getQuestion,
   getRadio,
   hasCheckboxes,
@@ -32,13 +33,33 @@ import {
   isQuestionNumber,
 } from './commands/question'
 import { clickChange, getAnswer, getSummary, hasNoSecondaryAnswer, hasSecondaryAnswer } from './commands/summary'
+import 'cypress-axe'
+import { checkAccessibility } from './commands/accessibility'
+import {
+  clickChangeAnalysis,
+  getAnalysisAnswer,
+  getAnalysisSummary,
+  hasNoSecondaryAnalysisAnswer,
+  hasSecondaryAnalysisAnswer,
+} from './commands/analysisSummary'
 
 declare global {
   namespace Cypress {
     interface Chainable {
+      // accessibility
+      checkAccessibility(): Chainable
+
+      // analysis summary
+      getAnalysisSummary(question: string): Chainable
+      clickChangeAnalysis(): Chainable
+      getAnalysisAnswer(answer: string): Chainable
+      hasSecondaryAnalysisAnswer(answer: string): Chainable
+      hasNoSecondaryAnalysisAnswer(): Chainable
+
       // assessment
       createAssessment(): Chainable
       saveAndContinue(): Chainable
+      markAsComplete(): Chainable
 
       // navigation
       visitSection(name: string): Chainable
@@ -59,12 +80,15 @@ declare global {
 
       // page
       assertQuestionCount(count: number): Chainable
+      sectionMarkedAsComplete(section: string): Chainable
+      sectionNotMarkedAsComplete(section: string): Chainable
 
       // question
       getQuestion(title: string): Chainable
+      getNextQuestion(): Chainable
       hasTitle(title: string): Chainable
       isQuestionNumber(position: number): Chainable
-      hasHint(hint: string): Chainable
+      hasHint(...hints: string[]): Chainable
       hasLimit(limit: number): Chainable
       hasRadios(options: string[]): Chainable
       hasCheckboxes(options: string[]): Chainable
@@ -84,9 +108,20 @@ declare global {
   }
 }
 
+// accessibility
+Cypress.Commands.add('checkAccessibility', checkAccessibility)
+
+// analysis summary
+Cypress.Commands.add('getAnalysisSummary', getAnalysisSummary)
+Cypress.Commands.add('clickChangeAnalysis', { prevSubject: true }, clickChangeAnalysis)
+Cypress.Commands.add('getAnalysisAnswer', { prevSubject: true }, getAnalysisAnswer)
+Cypress.Commands.add('hasSecondaryAnalysisAnswer', { prevSubject: true }, hasSecondaryAnalysisAnswer)
+Cypress.Commands.add('hasNoSecondaryAnalysisAnswer', { prevSubject: true }, hasNoSecondaryAnalysisAnswer)
+
 // assessment
 Cypress.Commands.add('createAssessment', createAssessment)
 Cypress.Commands.add('saveAndContinue', saveAndContinue)
+Cypress.Commands.add('markAsComplete', markAsComplete)
 
 // navigation
 Cypress.Commands.add('visitSection', visitSection)
@@ -107,9 +142,12 @@ Cypress.Commands.add('getConditionalQuestion', { prevSubject: true }, getConditi
 
 // page
 Cypress.Commands.add('assertQuestionCount', assertQuestionCount)
+Cypress.Commands.add('sectionMarkedAsComplete', sectionMarkedAsComplete)
+Cypress.Commands.add('sectionNotMarkedAsComplete', sectionNotMarkedAsComplete)
 
 // question
 Cypress.Commands.add('getQuestion', getQuestion)
+Cypress.Commands.add('getNextQuestion', { prevSubject: true }, getNextQuestion)
 Cypress.Commands.add('hasTitle', { prevSubject: true }, hasTitle)
 Cypress.Commands.add('isQuestionNumber', { prevSubject: true }, isQuestionNumber)
 Cypress.Commands.add('hasHint', { prevSubject: true }, hasHint)
@@ -128,3 +166,6 @@ Cypress.Commands.add('clickChange', { prevSubject: true }, clickChange)
 Cypress.Commands.add('getAnswer', { prevSubject: true }, getAnswer)
 Cypress.Commands.add('hasSecondaryAnswer', { prevSubject: true }, hasSecondaryAnswer)
 Cypress.Commands.add('hasNoSecondaryAnswer', { prevSubject: true }, hasNoSecondaryAnswer)
+
+// take full-page screenshots on failure
+Cypress.Screenshot.defaults({ capture: 'fullPage' })

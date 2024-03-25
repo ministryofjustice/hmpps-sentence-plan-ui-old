@@ -1,6 +1,6 @@
 import FormWizard, { FieldType } from 'hmpo-form-wizard'
 import { whereSelectable } from '../../app/common/controllers/saveAndContinue.utils'
-import { removePractitionerAnalysisFields, removeSectionCompleteFields } from './nunjucks.utils'
+import { formatDateForDisplay, removePractitionerAnalysisFields, removeSectionCompleteFields } from './nunjucks.utils'
 
 export interface SummaryField {
   field: FormWizard.Field
@@ -37,6 +37,9 @@ export function getAnswers(field: string, ctx: Context): string[] {
   }
 }
 
+const isDisplayable = (ctx: Context, field: FormWizard.Field) =>
+  field && (getAnswers(field.code, ctx) !== undefined || field.summary?.displayAlways)
+
 export default function getSummaryFields(ctx: Context): SummaryField[] {
   const summaryFields: SummaryField[] = []
 
@@ -52,7 +55,7 @@ export default function getSummaryFields(ctx: Context): SummaryField[] {
 
     for (const fieldId of fieldIds) {
       const field = ctx.options.allFields[fieldId]
-      if (!field || getAnswers(field.code, ctx) === undefined) {
+      if (!isDisplayable(ctx, field)) {
         continue
       }
       if (field.dependent !== undefined) {
@@ -110,11 +113,21 @@ export function getSummaryFieldAnswers(field: FormWizard.Field, ctx: Context): S
         .filter(o => whereSelectable(o) && getAnswers(field.code, ctx)?.includes(o.value))
         .map(o => {
           return {
-            text: whereSelectable(o) ? o.text : '',
+            text: whereSelectable(o) ? o.summary?.displayFn(o.text, o.value) || o.text : '',
             value: whereSelectable(o) ? o.value : '',
             nestedFields: [],
           } as SummaryFieldAnswer
         })
+    case FieldType.Date:
+      return [
+        {
+          text: field.summary?.displayFn
+            ? field.summary?.displayFn(ctx.answers[field.code] as string)
+            : formatDateForDisplay(ctx.answers[field.code] as string) || '',
+          value: formatDateForDisplay(ctx.answers[field.code] as string) || '',
+          nestedFields: [],
+        },
+      ]
     default:
       return [
         {
